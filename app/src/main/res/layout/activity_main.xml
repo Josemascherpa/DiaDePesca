@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Altura Rio Parana en Santa Fe"
-            android:textSize="20dp"
+            android:textSize="19dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="30dp"
             android:textColor="@color/colorTitles"
@@ -35,6 +35,7 @@
             android:textStyle="bold"
             android:textSize="20dp"
             android:layout_marginTop="15dp"
+            android:textColor="@color/black"
             />
         <TextView
             android:id="@+id/ubicacion"
@@ -44,6 +45,7 @@
             android:layout_marginHorizontal="100dp"
             android:textStyle="bold"
             android:textSize="18dp"
+            android:textColor="@color/black"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -51,7 +53,9 @@
             android:text="Altura: "
             android:textStyle="bold"
             android:textSize="20dp"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:textColor="@color/black"/>
+
         <TextView
             android:id="@+id/altura"
             android:layout_width="wrap_content"
@@ -60,6 +64,7 @@
             android:layout_marginHorizontal="63dp"
             android:textStyle="bold"
             android:textSize="18dp"
+            android:textColor="@color/black"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -67,7 +72,8 @@
             android:text="Variacion: "
             android:textStyle="bold"
             android:textSize="20dp"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:textColor="@color/black"/>
         <TextView
             android:id="@+id/variacion"
             android:layout_width="wrap_content"
@@ -76,6 +82,7 @@
             android:layout_marginHorizontal="93dp"
             android:textStyle="bold"
             android:textSize="18dp"
+            android:textColor="@color/black"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -83,7 +90,8 @@
             android:text="Ultima Actualizacion: "
             android:textStyle="bold"
             android:textSize="20dp"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/ultimaActua"
@@ -92,14 +100,16 @@
             android:layout_marginHorizontal="195dp"
             android:layout_marginTop="-25dp"
             android:textSize="18dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Estado:"
             android:textStyle="bold"
             android:textSize="20dp"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:textColor="@color/black"/>
         <TextView
             android:id="@+id/estado"
             android:layout_width="wrap_content"
@@ -107,14 +117,16 @@
             android:layout_marginHorizontal="70dp"
             android:layout_marginTop="-25dp"
             android:textSize="18dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Altura Anterior:"
             android:textStyle="bold"
             android:textSize="20dp"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:textColor="@color/black"/>
         <TextView
             android:id="@+id/altAnterior"
             android:layout_width="wrap_content"
@@ -122,14 +134,16 @@
             android:layout_marginHorizontal="143dp"
             android:layout_marginTop="-25dp"
             android:textSize="18dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fecha Anterior:"
             android:textStyle="bold"
             android:textSize="20dp"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:textColor="@color/black"/>
         <TextView
             android:id="@+id/fechaAnterior"
             android:layout_width="215dp"
@@ -137,7 +151,8 @@
             android:layout_marginHorizontal="145dp"
             android:layout_marginTop="-25dp"
             android:textSize="18dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 

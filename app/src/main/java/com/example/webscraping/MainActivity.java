@@ -32,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
         estado_tv = (TextView) findViewById(R.id.estado);
         alturaAnt_tv = (TextView) findViewById(R.id.altAnterior);
         fechaAnt_tv = (TextView) findViewById(R.id.fechaAnterior);
-        LoadData();
+        LoadDataRio();
     }
 
-    public void LoadData(){
+    public void LoadDataRio(){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -70,8 +70,10 @@ public class MainActivity extends AppCompatActivity {
 
                             if(Float.parseFloat(variacion)<0){
                                 variacion_tv.setTextColor(Color.parseColor("#D24545"));
+                                estado_tv.setTextColor(Color.parseColor("#D24545"));
                             }else{
                                 variacion_tv.setTextColor(Color.parseColor("#557C55"));
+                                estado_tv.setTextColor(Color.parseColor("#557C55"));
                             }
 
 
