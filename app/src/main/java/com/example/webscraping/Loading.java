@@ -12,14 +12,20 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class Loading extends AppCompatActivity {
     String urlWeb = "https://contenidosweb.prefecturanaval.gob.ar/alturas/";
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loadingui);
         LoadDataRio();
-        //LoadDataWind();
+
     }
 
     private void LoadDataWind(){
@@ -78,7 +84,7 @@ public class Loading extends AppCompatActivity {
                             bundle.putString("fechaAnterior", fechaAnterior);
                             intent.putExtras(bundle);
                             startActivity(intent);
-
+                            finish();
                         }
                     });
 
