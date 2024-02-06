@@ -29,7 +29,7 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
-
+    String versionApp = "Version 0.5.3";
     String CHANNEL_ID="mi_canal_01";
     CharSequence CHANNEL_NAME = "Notificaciones";
     TextView ubicacion_tv;
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     TextView estado_tv;
     TextView alturaAnt_tv;
     TextView fechaAnt_tv;
+    TextView versionTV;
     Timer timerNotification = new Timer();
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+        versionTV = (TextView)findViewById(R.id.version);
+        versionTV.setText(versionApp);
         ubicacion_tv = (TextView) findViewById(R.id.ubicacion);
         altura_tv = (TextView) findViewById(R.id.altura);
         variacion_tv = (TextView) findViewById(R.id.variacion);
