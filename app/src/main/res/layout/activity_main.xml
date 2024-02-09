@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Altura Rio Parana en Santa Fe"
         android:textSize="15dp"
-        android:textColor="@color/colorTitles"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:fontFamily="@font/lemonmilkbold"
         app:layout_constraintVertical_bias="0.1"
@@ -24,7 +24,6 @@
         android:autoSizeTextType="uniform"
         android:maxLines="1"
         />
-
     <TextView
         android:id="@+id/tv_ubicacion"
         android:layout_width="wrap_content"
@@ -40,7 +39,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleApp"
         />
-
     <TextView
         android:id="@+id/ubicacion"
         android:layout_width="0dp"
@@ -56,7 +54,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:autoSizeTextType="uniform"
         />
-
     <TextView
         android:id="@+id/tv_altura"
         android:layout_width="wrap_content"
@@ -71,7 +68,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_ubicacion"
         app:layout_constraintVertical_bias="0.03" />
-
     <TextView
         android:id="@+id/altura"
         android:layout_width="0dp"
@@ -130,7 +126,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_variacion"
         app:layout_constraintVertical_bias="0.03"/>
-
     <TextView
         android:id="@+id/ultimaActua"
         android:layout_width="0dp"
@@ -174,7 +169,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:autoSizeTextType="uniform"/>
-
     <TextView
         android:id="@+id/tv_alturaAnterior"
         android:layout_width="wrap_content"
@@ -243,8 +237,245 @@
         app:layout_constraintVertical_bias="0.98"
 
         />
+    <TextView
+        android:id="@+id/tv_Ultimos10Registros"
+        android:text="Ultimos 10 registros"
+        android:textSize="15dp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:fontFamily="@font/lemonmilkbold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias="0.05"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fechaAnterior"
+        android:autoSizeTextType="uniform"
+        android:maxLines="1"
+        />
+    <TextView
+        android:id="@+id/tv_numUlt10Regis"
+        android:text="#"
+        android:textSize="13dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:fontFamily="@font/lemonmilkbold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintVertical_bias="0.02"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_fechaUlt10Regis"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Ultimos10Registros"
+        android:autoSizeTextType="uniform"
+        android:maxLines="1"
+        />
+    <TextView
+        android:id="@+id/tv_fechaUlt10Regis"
+        android:text="Fecha"
+        android:textSize="13dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:fontFamily="@font/lemonmilkbold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintVertical_bias="0.02"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_regisUlt10Regis"
+        app:layout_constraintStart_toEndOf="@id/tv_numUlt10Regis"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Ultimos10Registros"
+        android:autoSizeTextType="uniform"
+        android:maxLines="1"
+        />
+    <TextView
+        android:id="@+id/tv_regisUlt10Regis"
+        android:text="Registro"
+        android:textSize="13dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:fontFamily="@font/lemonmilkbold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintVertical_bias="0.02"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_fechaUlt10Regis"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Ultimos10Registros"
+        android:maxLines="1"
+        />
+
+    <LinearLayout
+        android:id="@+id/ln_num"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintHorizontal_bias="0.118"
+        app:layout_constraintTop_toBottomOf="@id/tv_numUlt10Regis"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:autoSizeTextType="uniform"
 
 
+        >
+        <TextView
+            android:text="Registro"
+            android:textSize="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/lemonmilkbold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_gravity="center"
+
+            />
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Registro"
+            android:textSize="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/lemonmilkbold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            />
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+        android:text="Registro"
+            android:textSize="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:fontFamily="@font/lemonmilkbold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        />
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Registro"
+            android:textSize="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/lemonmilkbold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            />
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Registro"
+            android:textSize="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/lemonmilkbold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            />
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Registro"
+            android:textSize="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/lemonmilkbold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            />
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Registro"
+            android:textSize="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/lemonmilkbold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            />
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Registro"
+            android:textSize="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/lemonmilkbold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            />
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Registro"
+            android:textSize="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/lemonmilkbold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+
+            />
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Registro"
+            android:textSize="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/lemonmilkbold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            />
+       </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ln_fecha"
+        android:layout_width="150dp"
+        android:layout_height="300dp"
+        app:layout_constraintHorizontal_bias="0.42"
+        app:layout_constraintTop_toBottomOf="@id/tv_fechaUlt10Regis"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical">
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_height="300dp"
+        app:layout_constraintHorizontal_bias="0.99"
+        app:layout_constraintTop_toBottomOf="@id/tv_regisUlt10Regis"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

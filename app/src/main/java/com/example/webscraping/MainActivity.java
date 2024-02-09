@@ -28,15 +28,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        versionTV = (TextView)findViewById(R.id.version);
-        versionTV.setText(versionApp);
-        ubicacion_tv = (TextView) findViewById(R.id.ubicacion);
-        altura_tv = (TextView) findViewById(R.id.altura);
-        variacion_tv = (TextView) findViewById(R.id.variacion);
-        fecha_tv = (TextView) findViewById(R.id.ultimaActua);
-        estado_tv = (TextView) findViewById(R.id.estado);
-        alturaAnt_tv = (TextView) findViewById(R.id.altAnterior);
-        fechaAnt_tv = (TextView) findViewById(R.id.fechaAnterior);
+        IdsTextViewsRio();
+        IdsTVUltimosRegistros();
         ActualizarUI(bundle);
         //notiManager.CreateChannelNotification("channel_id","channel_name","description_channel",this);
         //.SendNotify("tituo","texto notificacion",1,this);
@@ -74,6 +67,22 @@ public class MainActivity extends AppCompatActivity {
             variacion_tv.setTextColor(Color.parseColor("#557C55"));
             estado_tv.setTextColor(Color.parseColor("#557C55"));
         }
+    }
+    private void IdsTextViewsRio(){
+        versionTV = (TextView)findViewById(R.id.version);
+        versionTV.setText(versionApp);
+        ubicacion_tv = (TextView) findViewById(R.id.ubicacion);
+        altura_tv = (TextView) findViewById(R.id.altura);
+        variacion_tv = (TextView) findViewById(R.id.variacion);
+        fecha_tv = (TextView) findViewById(R.id.ultimaActua);
+        estado_tv = (TextView) findViewById(R.id.estado);
+        alturaAnt_tv = (TextView) findViewById(R.id.altAnterior);
+        fechaAnt_tv = (TextView) findViewById(R.id.fechaAnterior);
+    }
+
+    private void IdsTVUltimosRegistros(){
+
+
     }
 
 
