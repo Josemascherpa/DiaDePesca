@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     NotificationsManager notiManager = new NotificationsManager();
-    String versionApp = "Version 0.5.3";
+    String versionApp = "Version 0.5.4";
     TextView ubicacion_tv;
     TextView altura_tv;
     TextView variacion_tv;
@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         alturaAnt_tv = (TextView) findViewById(R.id.altAnterior);
         fechaAnt_tv = (TextView) findViewById(R.id.fechaAnterior);
         ActualizarUI(bundle);
-        notiManager.CreateChannelNotification("channel_id","channel_name","description_channel",this);
-        notiManager.SendNotify("tituo","texto notificacion",1,this);
+        //notiManager.CreateChannelNotification("channel_id","channel_name","description_channel",this);
+        //.SendNotify("tituo","texto notificacion",1,this);
     }
     @Override
     protected void onResume() {
@@ -62,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
         ubicacion_tv.setText(bundle.getString("location"));
         altura_tv.setText(bundle.getString("altura"));
         variacion_tv.setText(bundle.getString("variacion"));
-        fecha_tv.setText(bundle.getString("fecha"));
+        fecha_tv.setText(bundle.getString("fecha").replace(" ",""));
         estado_tv.setText(bundle.getString("estado"));
         alturaAnt_tv.setText(bundle.getString("variacionAnterior"));
-        fechaAnt_tv.setText(bundle.getString("fechaAnterior"));
+        fechaAnt_tv.setText(bundle.getString("fechaAnterior").replace(" ",""));
 
         if(Float.parseFloat(variacion_tv.getText().toString())<0){
             variacion_tv.setTextColor(Color.parseColor("#D24545"));

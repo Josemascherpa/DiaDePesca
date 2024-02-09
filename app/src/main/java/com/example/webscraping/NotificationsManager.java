@@ -18,11 +18,8 @@ import java.util.concurrent.TimeUnit;
 public class NotificationsManager{
     Timer timerNotification = new Timer();
     private String CHANNEL_ID;
-
     private NotificationChannel canal;
     NotificationManager manager;
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void CreateChannelNotification(String channel_id,CharSequence channel_name,String description ,Context context){
