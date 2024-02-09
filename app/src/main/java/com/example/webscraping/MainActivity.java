@@ -4,14 +4,21 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     NotificationsManager notiManager = new NotificationsManager();
-    String versionApp = "Version 0.5.4";
+    ArrayList<TextView> tv_RegistrosNum = new ArrayList<TextView>();
+    ArrayList<TextView> tv_RegistrosFechas = new ArrayList<TextView>();
+    ArrayList<TextView> tv_RegistrosMts = new ArrayList<TextView>();
     TextView ubicacion_tv;
     TextView altura_tv;
     TextView variacion_tv;
@@ -19,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     TextView estado_tv;
     TextView alturaAnt_tv;
     TextView fechaAnt_tv;
-    TextView versionTV;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -29,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         IdsTextViewsRio();
-        IdsTVUltimosRegistros();
+        ObtainTvTableRegisters();
         ActualizarUI(bundle);
         //notiManager.CreateChannelNotification("channel_id","channel_name","description_channel",this);
         //.SendNotify("tituo","texto notificacion",1,this);
@@ -69,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void IdsTextViewsRio(){
-        versionTV = (TextView)findViewById(R.id.version);
-        versionTV.setText(versionApp);
         ubicacion_tv = (TextView) findViewById(R.id.ubicacion);
         altura_tv = (TextView) findViewById(R.id.altura);
         variacion_tv = (TextView) findViewById(R.id.variacion);
@@ -80,8 +85,22 @@ public class MainActivity extends AppCompatActivity {
         fechaAnt_tv = (TextView) findViewById(R.id.fechaAnterior);
     }
 
-    private void IdsTVUltimosRegistros(){
+    private void ObtainTvTableRegisters(){
+        int id;
+        TextView tv;
+        for (int i=0;i<10;i++){
+            id = getResources().getIdentifier(String.format("tv_numRegistro%s", i), "id", getPackageName());
+            tv = (TextView)findViewById(id);
+            tv_RegistrosNum.add(tv);
 
+            id = getResources().getIdentifier(String.format("tv_numRegistroFecha%s", i), "id", getPackageName());
+            tv = (TextView)findViewById(id);
+            tv_RegistrosFechas.add(tv);
+
+            id = getResources().getIdentifier(String.format("tv_numRegistroMts%s", i), "id", getPackageName());
+            tv= (TextView)findViewById(id);
+            tv_RegistrosMts.add(tv);
+        }
 
     }
 

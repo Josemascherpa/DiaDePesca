@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,11 +21,15 @@ import java.util.TimeZone;
 
 public class Loading extends AppCompatActivity {
     String urlWeb = "https://contenidosweb.prefecturanaval.gob.ar/alturas/";
+    TextView versionTV;
+    String versionApp = "Version 0.5.4";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loadingui);
         LoadDataRio();
+        versionTV = (TextView)findViewById(R.id.version);
+        versionTV.setText(versionApp);
 
     }
 
