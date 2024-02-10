@@ -240,28 +240,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fechaAnterior"
-        android:autoSizeTextType="uniform"
         android:maxLines="1"
         />
+
     <TextView
         android:id="@+id/tv_numUlt10Regis"
-        android:text="#"
-        android:textSize="11dp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:autoSizeTextType="uniform"
         android:fontFamily="@font/lemonmilkbold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:translationX="5dp"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.02"
+        android:maxLines="1"
+        android:text="#"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="11dp"
+        android:textStyle="bold"
+        android:translationX="3.6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_fechaUlt10Regis"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_Ultimos10Registros"
-        android:autoSizeTextType="uniform"
-        android:maxLines="1"
-        />
+        app:layout_constraintVertical_bias="0.02" />
+
     <TextView
         android:id="@+id/tv_fechaUlt10Regis"
         android:text="Fecha"
@@ -271,7 +272,7 @@
         android:fontFamily="@font/lemonmilkbold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:translationX="25dp"
+        android:translationX="22dp"
         app:layout_constraintVertical_bias="0.02"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_regisUlt10Regis"
@@ -472,10 +473,13 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:fontFamily="@font/lemonmilkbold"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_gravity="center"
+            android:ellipsize="end"
+            android:singleLine="true"
+
             />
         <TextView
             android:id="@+id/tv_numRegistroFecha1"
@@ -485,11 +489,13 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:fontFamily="@font/lemonmilkbold"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:maxLines="1"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+
             />
         <TextView
             android:id="@+id/tv_numRegistroFecha2"
@@ -499,11 +505,13 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:fontFamily="@font/lemonmilkbold"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             />
         <TextView
             android:id="@+id/tv_numRegistroFecha3"
@@ -513,11 +521,13 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:fontFamily="@font/lemonmilkbold"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             />
         <TextView
             android:id="@+id/tv_numRegistroFecha4"
@@ -527,11 +537,13 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:fontFamily="@font/lemonmilkbold"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             />
         <TextView
             android:id="@+id/tv_numRegistroFecha5"
@@ -541,11 +553,13 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:fontFamily="@font/lemonmilkbold"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             />
         <TextView
             android:id="@+id/tv_numRegistroFecha6"
@@ -555,11 +569,13 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:fontFamily="@font/lemonmilkbold"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             />
         <TextView
             android:id="@+id/tv_numRegistroFecha7"
@@ -569,11 +585,13 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:fontFamily="@font/lemonmilkbold"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             />
         <TextView
             android:id="@+id/tv_numRegistroFecha8"
@@ -583,11 +601,13 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:fontFamily="@font/lemonmilkbold"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             />
         <TextView
             android:id="@+id/tv_numRegistroFecha9"
@@ -597,11 +617,13 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:fontFamily="@font/lemonmilkbold"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             />
 
     </LinearLayout>

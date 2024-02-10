@@ -10,11 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    String urlWebRegistros = "https://contenidosweb.prefecturanaval.gob.ar/alturas/?page=historico&tiempo=7&id=240";
+
     NotificationsManager notiManager = new NotificationsManager();
     ArrayList<TextView> tv_RegistrosNum = new ArrayList<TextView>();
     ArrayList<TextView> tv_RegistrosFechas = new ArrayList<TextView>();
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         IdsTextViewsRio();
         ObtainTvTableRegisters();
+        ObtainDatesRegisters();
         ActualizarUI(bundle);
         //notiManager.CreateChannelNotification("channel_id","channel_name","description_channel",this);
         //.SendNotify("tituo","texto notificacion",1,this);
@@ -86,22 +93,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void ObtainTvTableRegisters(){
-        int id;
-        TextView tv;
         for (int i=0;i<10;i++){
-            id = getResources().getIdentifier(String.format("tv_numRegistro%s", i), "id", getPackageName());
-            tv = (TextView)findViewById(id);
+            int id = getResources().getIdentifier(String.format("tv_numRegistro%s", i), "id", getPackageName());
+            TextView tv = (TextView)findViewById(id);
             tv_RegistrosNum.add(tv);
 
-            id = getResources().getIdentifier(String.format("tv_numRegistroFecha%s", i), "id", getPackageName());
-            tv = (TextView)findViewById(id);
-            tv_RegistrosFechas.add(tv);
+            int id1 = getResources().getIdentifier(String.format("tv_numRegistroFecha%s", i), "id", getPackageName());
+            TextView tv1 = (TextView)findViewById(id1);
+            tv_RegistrosFechas.add(tv1);
 
-            id = getResources().getIdentifier(String.format("tv_numRegistroMts%s", i), "id", getPackageName());
-            tv= (TextView)findViewById(id);
-            tv_RegistrosMts.add(tv);
+            int id2 = getResources().getIdentifier(String.format("tv_numRegistroMts%s", i), "id", getPackageName());
+            TextView tv2= (TextView)findViewById(id2);
+            tv_RegistrosMts.add(tv2);
         }
 
+    }
+
+    private void ObtainDatesRegisters(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Document doc = Jsoup.connect(urlWebRegistros).get();
+                    Element tabla = doc.select("table.fpTable").first();
+                    Elements filas = tabla.select("tbody tr");
+                    int max = Math.min(10, filas.size());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(int i=0; i < max; i++) {
+                                tv_RegistrosNum.get(i).setText(filas.get(i).child(0).text());
+                                String fecha = filas.get(i).child(1).text().substring(5);//Giro de fecha, DD-MM
+                                String twoFirstChar = fecha.substring(0,2);
+                                String twoSecondChar = fecha.substring(3,5);
+                                String time = fecha.substring(5,11);
+                                tv_RegistrosFechas.get(i).setText(twoSecondChar+"-"+twoFirstChar+time);
+                                tv_RegistrosMts.get(i).setText(filas.get(i).child(2).text());
+                            }
+
+                        }
+                    });
+                } catch (IOException e) {
+                    Log.i("Error", e.getMessage() + " "+"ERRORRR");
+                }
+            }
+        }).start();
     }
 
 

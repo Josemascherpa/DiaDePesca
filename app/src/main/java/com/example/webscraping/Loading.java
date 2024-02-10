@@ -1,7 +1,6 @@
 package com.example.webscraping;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -13,16 +12,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 public class Loading extends AppCompatActivity {
     String urlWeb = "https://contenidosweb.prefecturanaval.gob.ar/alturas/";
+
     TextView versionTV;
-    String versionApp = "Version 0.5.4";
+    String versionApp = "Version 0.5.5";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,10 +35,6 @@ public class Loading extends AppCompatActivity {
                 try {
                     Document doc = Jsoup.connect("https://www.windguru.cz/105315").get();
                     Element td = doc.getElementsByClass("tcell day1").first();
-
-
-
-
                 } catch (IOException e) {
                     Log.i("Error", e.getMessage() + " "+"ERRORRR");
                 }
@@ -51,7 +42,6 @@ public class Loading extends AppCompatActivity {
 
         }).start();
     }
-
 
     public void LoadDataRio(){
         new Thread(new Runnable() {
@@ -88,6 +78,7 @@ public class Loading extends AppCompatActivity {
                             bundle.putString("variacionAnterior", variacionAnterior);
                             bundle.putString("fechaAnterior", fechaAnterior);
                             intent.putExtras(bundle);
+
                             startActivity(intent);
                             finish();
                         }
