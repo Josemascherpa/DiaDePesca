@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/tv_rioParana"
+        android:textAlignment="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rio Parana(Santa Fe)"
+        android:textColor="@color/whiteBlack"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintVertical_bias="0.048"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+    </TextView>
+    <ImageView
+        android:id="@+id/f_variacion"
+        android:layout_width="35dp"
+        android:layout_height="60dp"
+        android:src="@drawable/fbajando"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_altura"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_rioParana"
+        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintVertical_bias="0.04"
+        >
+    </ImageView>
+    <TextView
+        android:id="@+id/tv_altura"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/whiteBlack"
+        android:textSize="55sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_rioParana"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintVertical_bias="0.02"
+        tools:text="0.30">
+    </TextView>
+    <TextView
+        android:id="@+id/tv_varConst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Var:"
+        android:textColor="@color/whiteBlack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_altura"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintHorizontal_bias="0.25"
+        >
+    </TextView>
+    <TextView
+        android:id="@+id/tv_variacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="-0.23"
+        android:textColor="@color/whiteBlack"
+        app:layout_constraintTop_toBottomOf="@+id/tv_altura"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_varConst"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintHorizontal_bias="0.01"
+        >
+    </TextView>
+    <TextView
+        android:id="@+id/tv_fechaConst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fecha:"
+        android:textColor="@color/whiteBlack"
+        app:layout_constraintTop_toBottomOf="@+id/tv_altura"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_variacion"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintHorizontal_bias="0.015"
+        >
+    </TextView>
+    <TextView
+        android:id="@+id/tv_fechaUltimoRegistro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="15/FEB/24-0000"
+        android:textColor="@color/whiteBlack"
+        app:layout_constraintTop_toBottomOf="@+id/tv_altura"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_fechaConst"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintHorizontal_bias="0.02"
+        >
+    </TextView>
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graphview"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_fechaConst">
+
+    </com.jjoe64.graphview.GraphView>
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

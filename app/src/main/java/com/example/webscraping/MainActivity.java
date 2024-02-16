@@ -5,10 +5,15 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,78 +23,88 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 public class MainActivity extends AppCompatActivity {
     String urlWebRegistros = "https://contenidosweb.prefecturanaval.gob.ar/alturas/?page=historico&tiempo=7&id=240";
 
-    NotificationsManager notiManager = new NotificationsManager();
     ArrayList<TextView> tv_RegistrosNum = new ArrayList<TextView>();
     ArrayList<TextView> tv_RegistrosFechas = new ArrayList<TextView>();
     ArrayList<TextView> tv_RegistrosMts = new ArrayList<TextView>();
-    TextView ubicacion_tv;
+
     TextView altura_tv;
     TextView variacion_tv;
     TextView fecha_tv;
-    TextView estado_tv;
-    TextView alturaAnt_tv;
-    TextView fechaAnt_tv;
+    ImageView flecha_iv;
+    GraphView graph;
+
+
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         IdsTextViewsRio();
         ObtainTvTableRegisters();
         ObtainDatesRegisters();
         ActualizarUI(bundle);
-        //notiManager.CreateChannelNotification("channel_id","channel_name","description_channel",this);
-        //.SendNotify("tituo","texto notificacion",1,this);
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+        graph.getGridLabelRenderer().setNumHorizontalLabels(20);
+        graph.addSeries(series);
+
+
     }
     @Override
     protected void onResume() {
         super.onResume();
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        ubicacion_tv = (TextView) findViewById(R.id.ubicacion);
-        altura_tv = (TextView) findViewById(R.id.altura);
-        variacion_tv = (TextView) findViewById(R.id.variacion);
-        fecha_tv = (TextView) findViewById(R.id.ultimaActua);
-        estado_tv = (TextView) findViewById(R.id.estado);
-        alturaAnt_tv = (TextView) findViewById(R.id.altAnterior);
-        fechaAnt_tv = (TextView) findViewById(R.id.fechaAnterior);
-        ActualizarUI(bundle);
+        //Intent intent = getIntent();
+        //Bundle bundle = intent.getExtras();
+        //altura_tv = (TextView) findViewById(R.id.tv_altura);
+        //variacion_tv = (TextView) findViewById(R.id.tv_variacion);
+        //fecha_tv = (TextView) findViewById(R.id.tv_fechaUltimoRegistro);
+        //ActualizarUI(bundle);
 
     }
 
     private void ActualizarUI(Bundle bundle){
         // actualizar UI
-        ubicacion_tv.setText(bundle.getString("location"));
+
         altura_tv.setText(bundle.getString("altura"));
         variacion_tv.setText(bundle.getString("variacion"));
-        fecha_tv.setText(bundle.getString("fecha").replace(" ",""));
-        estado_tv.setText(bundle.getString("estado"));
-        alturaAnt_tv.setText(bundle.getString("variacionAnterior"));
-        fechaAnt_tv.setText(bundle.getString("fechaAnterior").replace(" ",""));
+
+
+        String fecha = bundle.getString("fecha").replace(" ","");
+        String hora = fecha.substring(fecha.length()-4);
+        hora = hora.substring(0,2)+":"+hora.substring(2);
+        fecha = fecha.substring(0,fecha.length()-4)+hora;
+        fecha_tv.setText(fecha);
 
         if(Float.parseFloat(variacion_tv.getText().toString())<0){
             variacion_tv.setTextColor(Color.parseColor("#D24545"));
-            estado_tv.setTextColor(Color.parseColor("#D24545"));
+            flecha_iv.setImageResource(R.drawable.fbajando);
         }else{
             variacion_tv.setTextColor(Color.parseColor("#557C55"));
-            estado_tv.setTextColor(Color.parseColor("#557C55"));
+            flecha_iv.setImageResource(R.drawable.fsubiendo);
         }
     }
     private void IdsTextViewsRio(){
-        ubicacion_tv = (TextView) findViewById(R.id.ubicacion);
-        altura_tv = (TextView) findViewById(R.id.altura);
-        variacion_tv = (TextView) findViewById(R.id.variacion);
-        fecha_tv = (TextView) findViewById(R.id.ultimaActua);
-        estado_tv = (TextView) findViewById(R.id.estado);
-        alturaAnt_tv = (TextView) findViewById(R.id.altAnterior);
-        fechaAnt_tv = (TextView) findViewById(R.id.fechaAnterior);
+        flecha_iv =(ImageView)findViewById(R.id.f_variacion);
+        graph = (GraphView) findViewById(R.id.graphview);
+        altura_tv = (TextView) findViewById(R.id.tv_altura);
+        variacion_tv = (TextView) findViewById(R.id.tv_variacion);
+        fecha_tv = (TextView) findViewById(R.id.tv_fechaUltimoRegistro);
+
     }
 
     private void ObtainTvTableRegisters(){
