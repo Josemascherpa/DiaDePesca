@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class MainActivity extends AppCompatActivity {
     String urlWebRegistros = "https://contenidosweb.prefecturanaval.gob.ar/alturas/?page=historico&tiempo=7&id=240";
@@ -114,33 +115,39 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void ObtainDatesRegisters(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Document doc = Jsoup.connect(urlWebRegistros).get();
-                    Element tabla = doc.select("table.fpTable").first();
-                    Elements filas = tabla.select("tbody tr");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for(int i=0; i < 10; i++) {
-                                //0 numero de colas 1 numero de fecha 2 altuas
-                                floatPoints[i] = Float.valueOf(filas.get(i).child(2).text().substring(0,4));
-                            }
-
-                            List<Float> list = Arrays.asList(floatPoints);
-                            Collections.reverse(list);
-                            floatPoints = (Float[]) list.toArray();
-                            CreateGraphs(floatPoints);
-                        }
-                    });
-                } catch (IOException e) {
-                    Log.i("Error", e.getMessage() + " "+"ERRORRR");
+        CountDownLatch latch = new CountDownLatch(1);
+        new Thread(()->{
+            try{
+                Document doc = Jsoup.connect(urlWebRegistros).get();
+                Element tabla = doc.select("table.fpTable").first();
+                Elements filas = tabla.select("tbody tr");
+                for(int i=0; i < 10; i++) {
+                    //0 numero de colas 1 numero de fecha 2 altuas
+                    floatPoints[i] = Float.valueOf(filas.get(i).child(2).text().substring(0,4));
                 }
+
+                List<Float> list = Arrays.asList(floatPoints);
+                Collections.reverse(list);
+                floatPoints = (Float[]) list.toArray();
+                latch.countDown();
+
+            }catch (IOException e){
+
             }
         }).start();
+        try {
+             latch.await();
+             CreateGraphs(floatPoints);
+        } catch (InterruptedException e ) {
+            Thread.currentThread().interrupt();
+            Log.i("Error", e.getMessage() + " "+"ERRORRR");
+        }
     }
+
+
+
+
+
 
     private void CreateGraphs(Float[] flpoints){
         //puntos en el grafico
