@@ -40,5 +40,5 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("org.jsoup:jsoup:1.14.3")
-    implementation ("com.jjoe64:graphview:4.2.2")
+    implementation ("com.androidplot:androidplot-core:1.5.10")
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:ap="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
     android:background="@color/black">
 
@@ -16,11 +17,12 @@
         android:textColor="@color/whiteBlack"
         android:textSize="20dp"
         android:textStyle="bold"
-        app:layout_constraintVertical_bias="0.048"
+        app:layout_constraintVertical_bias="0.08"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
     </TextView>
     <ImageView
         android:id="@+id/f_variacion"
@@ -107,15 +109,57 @@
         >
     </TextView>
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graphview"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_fechaConst">
 
-    </com.jjoe64.graphview.GraphView>
+
+    <FrameLayout
+        android:id="@+id/framePosicionamiento"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/muestraAltura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/whiteBlack"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0.34"
+            android:layout_gravity="center"></TextView>
+
+        <com.androidplot.xy.XYPlot
+            style="@style/APDefacto.Dark"
+            android:id="@+id/plot"
+            android:layout_width="match_parent"
+            android:layout_height="270dp"
+            android:layout_gravity="center"
+            app:marginLeft="-15dp"
+            android:layout_marginTop="70dp"
+            ap:lineLabelTextSizeLeft="10sp"
+            ap:lineLabelTextSizeBottom = "0sp"
+            ap:legendVisible="false"
+            ap:domainLineColor="@color/ap_transparent"
+            ap:rangeLineColor="@color/ap_transparent"
+            ap:domainOriginLineColor="@color/ap_transparent"
+            ap:rangeOriginLineColor="@color/ap_transparent"
+            ap:graphMarginLeft="5dp"
+            ap:graphMarginRight="5dp"
+            ap:graphMarginTop="10dp"
+            ap:graphMarginBottom="0dp"
+            />
+
+
+
+    </FrameLayout>
+
+
+
 
 
 

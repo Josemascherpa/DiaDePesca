@@ -2,6 +2,7 @@ package com.example.webscraping;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,9 +12,13 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
+import com.androidplot.util.PixelUtils;
+import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.PointLabelFormatter;
+import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYSeries;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,11 +27,14 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     String urlWebRegistros = "https://contenidosweb.prefecturanaval.gob.ar/alturas/?page=historico&tiempo=7&id=240";
 
+    ArrayList<String> arrayDate = new ArrayList<String>();
     ArrayList<TextView> tv_RegistrosNum = new ArrayList<TextView>();
     ArrayList<TextView> tv_RegistrosFechas = new ArrayList<TextView>();
     ArrayList<TextView> tv_RegistrosMts = new ArrayList<TextView>();
@@ -34,10 +42,14 @@ public class MainActivity extends AppCompatActivity {
     TextView altura_tv;
     TextView variacion_tv;
     TextView fecha_tv;
+    TextView muestraAltura;
     ImageView flecha_iv;
-    GraphView graph;
 
+    String arraysFecha[] = new String[10];
+    Float arraysAlturas[] = new Float[10];
+    Float[] floatPoints = new Float[10];
 
+    private XYPlot plot;
 
 
 
@@ -49,22 +61,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         IdsTextViewsRio();
-        ObtainTvTableRegisters();
-        ObtainDatesRegisters();
         ActualizarUI(bundle);
 
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-        graph.getGridLabelRenderer().setNumHorizontalLabels(20);
-        graph.addSeries(series);
-
+        ObtainDatesRegisters();
 
     }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -99,30 +102,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void IdsTextViewsRio(){
+        plot = (XYPlot) findViewById(R.id.plot);
         flecha_iv =(ImageView)findViewById(R.id.f_variacion);
-        graph = (GraphView) findViewById(R.id.graphview);
         altura_tv = (TextView) findViewById(R.id.tv_altura);
         variacion_tv = (TextView) findViewById(R.id.tv_variacion);
         fecha_tv = (TextView) findViewById(R.id.tv_fechaUltimoRegistro);
+        muestraAltura = (TextView) findViewById(R.id.muestraAltura);
 
     }
 
-    private void ObtainTvTableRegisters(){
-        for (int i=0;i<10;i++){
-            int id = getResources().getIdentifier(String.format("tv_numRegistro%s", i), "id", getPackageName());
-            TextView tv = (TextView)findViewById(id);
-            tv_RegistrosNum.add(tv);
 
-            int id1 = getResources().getIdentifier(String.format("tv_numRegistroFecha%s", i), "id", getPackageName());
-            TextView tv1 = (TextView)findViewById(id1);
-            tv_RegistrosFechas.add(tv1);
-
-            int id2 = getResources().getIdentifier(String.format("tv_numRegistroMts%s", i), "id", getPackageName());
-            TextView tv2= (TextView)findViewById(id2);
-            tv_RegistrosMts.add(tv2);
-        }
-
-    }
 
     private void ObtainDatesRegisters(){
         new Thread(new Runnable() {
@@ -132,20 +121,18 @@ public class MainActivity extends AppCompatActivity {
                     Document doc = Jsoup.connect(urlWebRegistros).get();
                     Element tabla = doc.select("table.fpTable").first();
                     Elements filas = tabla.select("tbody tr");
-                    int max = Math.min(10, filas.size());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            for(int i=0; i < max; i++) {
-                                tv_RegistrosNum.get(i).setText(filas.get(i).child(0).text());
-                                String fecha = filas.get(i).child(1).text().substring(5);//Giro de fecha, DD-MM
-                                String twoFirstChar = fecha.substring(0,2);
-                                String twoSecondChar = fecha.substring(3,5);
-                                String time = fecha.substring(5,11);
-                                tv_RegistrosFechas.get(i).setText(twoSecondChar+"-"+twoFirstChar+time);
-                                tv_RegistrosMts.get(i).setText(filas.get(i).child(2).text());
+                            for(int i=0; i < 10; i++) {
+                                //0 numero de colas 1 numero de fecha 2 altuas
+                                floatPoints[i] = Float.valueOf(filas.get(i).child(2).text().substring(0,4));
                             }
 
+                            List<Float> list = Arrays.asList(floatPoints);
+                            Collections.reverse(list);
+                            floatPoints = (Float[]) list.toArray();
+                            CreateGraphs(floatPoints);
                         }
                     });
                 } catch (IOException e) {
@@ -155,9 +142,42 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
+    private void CreateGraphs(Float[] flpoints){
+        //puntos en el grafico
+        XYSeries s1=new SimpleXYSeries(SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,"",flpoints);
+        //tamaño etiqueta en los puntos
+        PointLabelFormatter plf = new PointLabelFormatter();
+        plf.getTextPaint().setTextSize(PixelUtils.spToPix(12));
+        //Seteo de lineas colores y puntos e colores
+        LineAndPointFormatter format = new LineAndPointFormatter(Color.rgb(16,157,249),Color.rgb(255,255,255),null,null);
+        format.setPointLabelFormatter(plf);
+        format.getLinePaint().setStrokeWidth(3);
+
+        //los agrego al grafico
+        plot.addSeries(s1,format);
+        //seteo de rangos de etiquetas
+        plot.setRangeBoundaries(0, BoundaryMode.FIXED, 7, BoundaryMode.FIXED);
+        plot.setDomainBoundaries(0,10,BoundaryMode.FIXED);
+
+        //modificaciones titulo
+        plot.setTitle("Historial Alturas");
+        plot.getTitle().getLabelPaint().setTextSize( PixelUtils.spToPix(13));
+        plot.getTitle().getLabelPaint().setTypeface(Typeface.DEFAULT_BOLD);
+
+        //lineas del grafico y transparencia en grilla
+        plot.getGraph().getDomainOriginLinePaint().setColor(Color.rgb(255,255,255));
+        plot.getGraph().getDomainOriginLinePaint().setStrokeWidth(1.5f);
+        plot.getGraph().getRangeOriginLinePaint().setColor(Color.rgb(255,255,255));
+        plot.getGraph().getRangeOriginLinePaint().setStrokeWidth(1.5f);
+        plot.getGraph().setRangeGridLinePaint(null);
+        plot.getGraph().setDomainGridLinePaint(null);
+    }
+
+
 
 
 }
+
 
 
 
