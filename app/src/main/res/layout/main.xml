@@ -35,23 +35,17 @@
         android:textStyle="bold"
         tools:text="0.30"></TextView>
 
-    <TextView
-        android:id="@+id/tv_variacion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/whiteBlack"
-        android:textSize="11dp"
-
-        tools:text="-0.23"></TextView>
-
-
-
     <ImageView
         android:id="@+id/uiflecha"
         android:layout_width="32dp"
         android:layout_height="32dp"
-
         android:src="@drawable/uiflecha"
+        app:layout_constraintBottom_toTopOf="@id/uicalen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintVertical_bias="0.96"
         >
     </ImageView>
 
@@ -61,7 +55,26 @@
         android:layout_height="wrap_content"
         android:text="Variación desde la última medición"
         android:textColor="@color/whiteBlack"
+
         ></TextView>
+
+    <TextView
+        android:id="@+id/tv_variacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/whiteBlack"
+        android:textSize="11dp"
+        tools:text="-0.23"
+        app:layout_constraintStart_toEndOf="@id/uiflecha"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_fechaConst"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintVertical_bias="0.965"
+        >
+    </TextView>
+
 
     <ImageView
         android:id="@+id/uicalen"
@@ -69,7 +82,10 @@
         android:layout_height="32dp"
         app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
         app:layout_constraintStart_toStartOf="parent"
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintVertical_bias="0.947"
         android:src="@drawable/uicalen"
         >
     </ImageView>
@@ -82,7 +98,11 @@
         tools:text="15/FEB/24-0000"
         app:layout_constraintStart_toEndOf="@id/uicalen"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"></TextView>
+        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.06"
+        app:layout_constraintVertical_bias="0.95"
+        ></TextView>
 
 
     <TextView
@@ -91,12 +111,16 @@
         android:layout_height="wrap_content"
         android:text="Fecha de la última actualización:"
         android:textColor="@color/whiteBlack"
+        app:layout_constraintStart_toEndOf="@id/uicalen"
+        app:layout_constraintBottom_toTopOf="@id/tv_fechaUltimoRegistro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.11"
         ></TextView>
 
     <FrameLayout
         android:id="@+id/framePosicionamiento"
         android:layout_width="wrap_content"
-        android:layout_height="350dp"
+        android:layout_height="250dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -124,7 +148,7 @@
             android:layout_width="match_parent"
             android:layout_height="270dp"
             android:layout_gravity="center"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="8dp"
             ap:domainLineColor="@color/ap_transparent"
             ap:domainOriginLineColor="@color/ap_transparent"
             ap:graphMarginBottom="0dp"
