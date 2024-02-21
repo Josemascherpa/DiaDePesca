@@ -17,6 +17,13 @@
         android:textColor="@color/whiteBlack"
         android:textSize="20dp"
         android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.05"
+
         ></TextView>
 
     <ImageView
@@ -24,6 +31,12 @@
         android:layout_width="35dp"
         android:layout_height="60dp"
         android:src="@drawable/fbajando"
+        app:layout_constraintTop_toBottomOf="@id/tv_rioParana"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_altura"
+        app:layout_constraintBottom_toTopOf="@id/ui_variacion"
+        app:layout_constraintVertical_bias="0.42"
+        app:layout_constraintHorizontal_bias="0.97"
         ></ImageView>
 
     <TextView
@@ -33,19 +46,25 @@
         android:textColor="@color/whiteBlack"
         android:textSize="55sp"
         android:textStyle="bold"
-        tools:text="0.30"></TextView>
+        tools:text="0.30"
+        app:layout_constraintTop_toBottomOf="@id/tv_rioParana"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ui_variacion"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintHorizontal_bias="0.5"></TextView>
 
     <ImageView
         android:id="@+id/uiflecha"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:src="@drawable/uiflecha"
-        app:layout_constraintBottom_toTopOf="@id/uicalen"
+        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintVertical_bias="0.96"
+        app:layout_constraintVertical_bias="0.533"
         >
     </ImageView>
 
@@ -55,6 +74,12 @@
         android:layout_height="wrap_content"
         android:text="Variación desde la última medición"
         android:textColor="@color/whiteBlack"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/uiflecha"
+        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
+        app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintVertical_bias="0.51"
 
         ></TextView>
 
@@ -67,11 +92,11 @@
         tools:text="-0.23"
         app:layout_constraintStart_toEndOf="@id/uiflecha"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_fechaConst"
-        app:layout_constraintTop_toTopOf="parent"
-
+        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
+        app:layout_constraintTop_toBottomOf="@id/ui_variacion"
         app:layout_constraintHorizontal_bias="0.047"
-        app:layout_constraintVertical_bias="0.965"
+        app:layout_constraintVertical_bias="0"
+
         >
     </TextView>
 
@@ -83,9 +108,9 @@
         app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/uiflecha"
         app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintVertical_bias="0.947"
+        app:layout_constraintVertical_bias="0.115"
         android:src="@drawable/uicalen"
         >
     </ImageView>
@@ -98,10 +123,9 @@
         tools:text="15/FEB/24-0000"
         app:layout_constraintStart_toEndOf="@id/uicalen"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_fechaConst"
         app:layout_constraintHorizontal_bias="0.06"
-        app:layout_constraintVertical_bias="0.95"
+        app:layout_constraintVertical_bias="0.0"
         ></TextView>
 
 
@@ -111,22 +135,24 @@
         android:layout_height="wrap_content"
         android:text="Fecha de la última actualización:"
         android:textColor="@color/whiteBlack"
+        app:layout_constraintTop_toBottomOf="@id/tv_variacion"
         app:layout_constraintStart_toEndOf="@id/uicalen"
-        app:layout_constraintBottom_toTopOf="@id/tv_fechaUltimoRegistro"
+        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintVertical_bias="0.088"
         ></TextView>
 
     <FrameLayout
         android:id="@+id/framePosicionamiento"
         android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_height="300dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.93"
+        app:layout_constraintTop_toBottomOf="@id/tv_fechaUltimoRegistro"
+        app:layout_constraintVertical_bias="0.6"
         >
 
         <TextView
@@ -150,17 +176,17 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             ap:domainLineColor="@color/ap_transparent"
-            ap:domainOriginLineColor="@color/ap_transparent"
             ap:graphMarginBottom="0dp"
             ap:graphMarginLeft="5dp"
-            ap:graphMarginRight="5dp"
+            ap:graphMarginRight="10dp"
             ap:graphMarginTop="10dp"
             ap:legendVisible="false"
-            ap:lineLabelTextSizeBottom="0sp"
+            ap:lineLabelTextSizeBottom="8sp"
             ap:lineLabelTextSizeLeft="10sp"
             ap:rangeLineColor="@color/ap_transparent"
-            ap:rangeOriginLineColor="@color/ap_transparent"
-            app:marginLeft="-15dp" />
+            app:marginLeft="-15dp"
+            />
+
     </FrameLayout>
 
 

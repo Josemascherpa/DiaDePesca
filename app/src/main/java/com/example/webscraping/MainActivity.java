@@ -17,6 +17,7 @@ import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.PointLabelFormatter;
 import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 
@@ -26,6 +27,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,8 +53,10 @@ public class MainActivity extends AppCompatActivity {
     String arraysFecha[] = new String[10];
     Float arraysAlturas[] = new Float[10];
     Float[] floatPoints = new Float[10];
+    String[] dates = new String[10];
 
     private XYPlot plot;
+
 
 
 
@@ -85,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
         // actualizar UI
 
         altura_tv.setText(bundle.getString("altura"));
-        variacion_tv.setText(bundle.getString("variacion"));
+        variacion_tv.setText(bundle.getString("variacion")+ " Mts");
+
 
 
         String fecha = bundle.getString("fecha").replace(" ","");
@@ -94,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         fecha = fecha.substring(0,fecha.length()-4)+hora;
         fecha_tv.setText(fecha);
 
-        if(Float.parseFloat(variacion_tv.getText().toString())<0){
+        if(Float.parseFloat(variacion_tv.getText().toString().substring(0,3))<0){
             variacion_tv.setTextColor(Color.parseColor("#D24545"));
             flecha_iv.setImageResource(R.drawable.fbajando);
         }else{
@@ -123,6 +130,13 @@ public class MainActivity extends AppCompatActivity {
                 Elements filas = tabla.select("tbody tr");
                 for(int i=0; i < 10; i++) {
                     //0 numero de colas 1 numero de fecha 2 altuas
+                    String date = filas.get(i).child(1).text();
+                    if(date.contains("00:00")){
+                        dates[i]  = date.substring(5,10)+"am";
+                    }else{
+                        dates[i]  = date.substring(5,10)+"pm";
+                    }
+                    //2024-02-16 12:00
                     floatPoints[i] = Float.valueOf(filas.get(i).child(2).text().substring(0,4));
                 }
 
@@ -137,7 +151,8 @@ public class MainActivity extends AppCompatActivity {
         }).start();
         try {
              latch.await();
-             CreateGraphs(floatPoints);
+             CreateGraphs(floatPoints,dates);
+
         } catch (InterruptedException e ) {
             Thread.currentThread().interrupt();
             Log.i("Error", e.getMessage() + " "+"ERRORRR");
@@ -145,11 +160,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void CreateGraphs(Float[] flpoints, String[] fechaBottom){
 
-
-
-
-    private void CreateGraphs(Float[] flpoints){
         //puntos en el grafico
         XYSeries s1=new SimpleXYSeries(SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,"",flpoints);
         //tamaño etiqueta en los puntos
@@ -162,9 +174,26 @@ public class MainActivity extends AppCompatActivity {
 
         //los agrego al grafico
         plot.addSeries(s1,format);
+
         //seteo de rangos de etiquetas
         plot.setRangeBoundaries(0, BoundaryMode.FIXED, 7, BoundaryMode.FIXED);
         plot.setDomainBoundaries(0,10,BoundaryMode.FIXED);
+        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setRotation(0);
+        plot.getGraph().getLineLabelInsets().setBottom(PixelUtils.dpToPix(4));
+
+        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
+
+            @Override
+            public StringBuffer format(Object object, StringBuffer buffer, FieldPosition field) {
+                int index = ((Number) object).intValue();
+                return buffer.append(fechaBottom[index]);
+            }
+            @Override
+            public Object parseObject(String string, ParsePosition position) {
+                return null;
+            }
+
+        });
 
         //modificaciones titulo
         plot.setTitle("Historial Alturas");
@@ -178,7 +207,12 @@ public class MainActivity extends AppCompatActivity {
         plot.getGraph().getRangeOriginLinePaint().setStrokeWidth(1.5f);
         plot.getGraph().setRangeGridLinePaint(null);
         plot.getGraph().setDomainGridLinePaint(null);
+
+
+
     }
+
+
 
 
 
