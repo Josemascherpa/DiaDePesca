@@ -6,6 +6,9 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
     private XYPlot plot;
 
+    ImageView compartirAltura;
+
 
 
 
@@ -65,11 +70,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        BarWindowBlack();
+        IdsTextViewsRio();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        IdsTextViewsRio();
         ActualizarUI(bundle);
-
+        ButtonSharedFriends();
         ObtainDatesRegisters();
 
     }
@@ -78,36 +84,34 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //Intent intent = getIntent();
-        //Bundle bundle = intent.getExtras();
-        //altura_tv = (TextView) findViewById(R.id.tv_altura);
-        //variacion_tv = (TextView) findViewById(R.id.tv_variacion);
-        //fecha_tv = (TextView) findViewById(R.id.tv_fechaUltimoRegistro);
-        //ActualizarUI(bundle);
+        IdsTextViewsRio();
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        ActualizarUI(bundle);
+        ButtonSharedFriends();
+        ObtainDatesRegisters();
 
     }
 
     private void ActualizarUI(Bundle bundle){
         // actualizar UI
-
         altura_tv.setText(bundle.getString("altura"));
         variacion_tv.setText(bundle.getString("variacion")+ " Mts");
-
-
-
         String fecha = bundle.getString("fecha").replace(" ","");
         String hora = fecha.substring(fecha.length()-4);
         hora = hora.substring(0,2)+":"+hora.substring(2);
         fecha = fecha.substring(0,fecha.length()-4)+hora;
+        fecha = fecha.replaceAll("/24-", " ");
+        fecha = fecha.replace("/","-");
+        if(fecha.contains("12:00")){
+            fecha=fecha+" pm";
+        }else{
+            fecha=fecha+" am";
+        }
         fecha_tv.setText(fecha);
 
-        if(Float.parseFloat(variacion_tv.getText().toString().substring(0,3))<0){
-            variacion_tv.setTextColor(Color.parseColor("#D24545"));
-            flecha_iv.setImageResource(R.drawable.fbajando);
-        }else{
-            variacion_tv.setTextColor(Color.parseColor("#557C55"));
-            flecha_iv.setImageResource(R.drawable.fsubiendo);
-        }
+        parseFloat();
+
     }
     private void IdsTextViewsRio(){
         plot = (XYPlot) findViewById(R.id.plot);
@@ -115,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
         altura_tv = (TextView) findViewById(R.id.tv_altura);
         variacion_tv = (TextView) findViewById(R.id.tv_variacion);
         fecha_tv = (TextView) findViewById(R.id.tv_fechaUltimoRegistro);
-        muestraAltura = (TextView) findViewById(R.id.muestraAltura);
-
+        compartirAltura = (ImageView) findViewById(R.id.compartir_altura);
     }
 
 
@@ -146,13 +149,12 @@ public class MainActivity extends AppCompatActivity {
                 latch.countDown();
 
             }catch (IOException e){
-
+                Log.e("Error", e.getMessage() + " "+"ERRORRR");
             }
         }).start();
         try {
              latch.await();
              CreateGraphs(floatPoints,dates);
-
         } catch (InterruptedException e ) {
             Thread.currentThread().interrupt();
             Log.i("Error", e.getMessage() + " "+"ERRORRR");
@@ -164,9 +166,11 @@ public class MainActivity extends AppCompatActivity {
 
         //puntos en el grafico
         XYSeries s1=new SimpleXYSeries(SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,"",flpoints);
+
         //tamaño etiqueta en los puntos
         PointLabelFormatter plf = new PointLabelFormatter();
         plf.getTextPaint().setTextSize(PixelUtils.spToPix(12));
+
         //Seteo de lineas colores y puntos e colores
         LineAndPointFormatter format = new LineAndPointFormatter(Color.rgb(16,157,249),Color.rgb(255,255,255),null,null);
         format.setPointLabelFormatter(plf);
@@ -176,13 +180,12 @@ public class MainActivity extends AppCompatActivity {
         plot.addSeries(s1,format);
 
         //seteo de rangos de etiquetas
-        plot.setRangeBoundaries(0, BoundaryMode.FIXED, 7, BoundaryMode.FIXED);
-        plot.setDomainBoundaries(0,10,BoundaryMode.FIXED);
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setRotation(0);
+        plot.setRangeBoundaries(0, BoundaryMode.FIXED, 10, BoundaryMode.FIXED);
+        plot.setDomainBoundaries(0,9.5,BoundaryMode.FIXED);
+        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setRotation(10);
         plot.getGraph().getLineLabelInsets().setBottom(PixelUtils.dpToPix(4));
 
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
-
             @Override
             public StringBuffer format(Object object, StringBuffer buffer, FieldPosition field) {
                 int index = ((Number) object).intValue();
@@ -197,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
         //modificaciones titulo
         plot.setTitle("Historial Alturas");
+        plot.getTitle().setMarginTop(55f);
         plot.getTitle().getLabelPaint().setTextSize( PixelUtils.spToPix(13));
         plot.getTitle().getLabelPaint().setTypeface(Typeface.DEFAULT_BOLD);
 
@@ -210,6 +214,41 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
+
+    }
+
+    private void parseFloat(){
+        if(Float.parseFloat(variacion_tv.getText().toString().substring(0,5))<0){
+            variacion_tv.setTextColor(Color.parseColor("#D24545"));
+            flecha_iv.setImageResource(R.drawable.fbajando);
+        }else{
+            variacion_tv.setTextColor(Color.parseColor("#557C55"));
+            flecha_iv.setImageResource(R.drawable.fsubiendo);
+        }
+    }
+
+    private void ButtonSharedFriends(){
+        compartirAltura.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                String infoEnviar = "Altura Actual: "+altura_tv.getText()+"Mts"+" \nVariacion: "+variacion_tv.getText()+" \nUltima Actualizacion: "+fecha_tv.getText();
+                sendIntent.putExtra(Intent.EXTRA_TEXT,infoEnviar);
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent,null);
+                startActivity(shareIntent);
+            }
+        });
+    }
+
+    private void BarWindowBlack(){
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(MainActivity.this.getResources().getColor(R.color.black));
     }
 
 

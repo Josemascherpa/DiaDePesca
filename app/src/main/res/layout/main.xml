@@ -15,27 +15,27 @@
         android:text="Rio Parana(Santa Fe)"
         android:textAlignment="center"
         android:textColor="@color/whiteBlack"
-        android:textSize="20dp"
+        android:textSize="30dp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.05"
+        app:layout_constraintVertical_bias="0.07"
 
         ></TextView>
 
     <ImageView
         android:id="@+id/f_variacion"
         android:layout_width="35dp"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:src="@drawable/fbajando"
         app:layout_constraintTop_toBottomOf="@id/tv_rioParana"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/tv_altura"
-        app:layout_constraintBottom_toTopOf="@id/ui_variacion"
-        app:layout_constraintVertical_bias="0.42"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.07"
         app:layout_constraintHorizontal_bias="0.97"
         ></ImageView>
 
@@ -44,150 +44,176 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/whiteBlack"
-        android:textSize="55sp"
+        android:textSize="80sp"
         android:textStyle="bold"
         tools:text="0.30"
         app:layout_constraintTop_toBottomOf="@id/tv_rioParana"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/ui_variacion"
-        app:layout_constraintVertical_bias="0.3"
-        app:layout_constraintHorizontal_bias="0.5"></TextView>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.02"
+        app:layout_constraintHorizontal_bias="0.5"
+        ></TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:text="(mts)"
+        android:textColor="@color/whiteBlack"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/linear_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@id/tv_altura"
+        app:layout_constraintTop_toBottomOf="@id/tv_rioParana"
+        app:layout_constraintVertical_bias="1"></TextView>
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_altura"
+        app:layout_constraintVertical_bias="0">
+
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:translationX="150dp">
+
+            <ImageView
+                android:id="@+id/uiflecha"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/uiflecha"></ImageView>
+
+            <ImageView
+                android:id="@+id/uicalen"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/uicalen"></ImageView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:orientation="vertical"
+            android:translationX="150dp"
+            android:translationY="-25dp">
+
+            <TextView
+                android:id="@+id/ui_variacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Variación desde la última medición:"
+                android:textColor="@color/whiteBlack"
+
+                ></TextView>
+
+            <TextView
+                android:id="@+id/tv_variacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/whiteBlack"
+                android:textSize="11dp"
+                tools:text="-0.23"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:translationX="-150dp"
+            android:translationY="26dp"
+
+            >
+
+            <TextView
+                android:id="@+id/tv_fechaConst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="Fecha de la última actualización:"
+                android:textColor="@color/whiteBlack"></TextView>
+
+            <TextView
+                android:id="@+id/tv_fechaUltimoRegistro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/whiteBlack"
+                android:textSize="11dp"
+                tools:text="15/FEB/24-0000"></TextView>
+
+        </LinearLayout>
+    </LinearLayout>
+
 
     <ImageView
-        android:id="@+id/uiflecha"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/uiflecha"
-        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
+        android:id="@+id/compartir_altura"
+        android:clickable="true"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/buttoncompartir"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintVertical_bias="0.533"
-        >
-    </ImageView>
-
-    <TextView
-        android:id="@+id/ui_variacion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Variación desde la última medición"
-        android:textColor="@color/whiteBlack"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/uiflecha"
-        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
-        app:layout_constraintHorizontal_bias="0.11"
-        app:layout_constraintVertical_bias="0.51"
-
-        ></TextView>
-
-    <TextView
-        android:id="@+id/tv_variacion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/whiteBlack"
-        android:textSize="11dp"
-        tools:text="-0.23"
-        app:layout_constraintStart_toEndOf="@id/uiflecha"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
-        app:layout_constraintTop_toBottomOf="@id/ui_variacion"
-        app:layout_constraintHorizontal_bias="0.047"
-        app:layout_constraintVertical_bias="0"
-
-        >
-    </TextView>
-
-
-    <ImageView
-        android:id="@+id/uicalen"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/uiflecha"
-        app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintVertical_bias="0.115"
-        android:src="@drawable/uicalen"
-        >
-    </ImageView>
-    <TextView
-        android:id="@+id/tv_fechaUltimoRegistro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/whiteBlack"
-        android:textSize="11dp"
-        tools:text="15/FEB/24-0000"
-        app:layout_constraintStart_toEndOf="@id/uicalen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_fechaConst"
-        app:layout_constraintHorizontal_bias="0.06"
-        app:layout_constraintVertical_bias="0.0"
-        ></TextView>
-
-
-    <TextView
-        android:id="@+id/tv_fechaConst"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fecha de la última actualización:"
-        android:textColor="@color/whiteBlack"
-        app:layout_constraintTop_toBottomOf="@id/tv_variacion"
-        app:layout_constraintStart_toEndOf="@id/uicalen"
-        app:layout_constraintBottom_toTopOf="@id/framePosicionamiento"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
-        app:layout_constraintVertical_bias="0.088"
-        ></TextView>
+        app:layout_constraintTop_toBottomOf="@id/linear_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.03"
+        android:adjustViewBounds="true"></ImageView>
 
     <FrameLayout
         android:id="@+id/framePosicionamiento"
         android:layout_width="wrap_content"
-        android:layout_height="300dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="270dp"
+        app:layout_constraintBottom_toTopOf="@id/url_pagina"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_fechaUltimoRegistro"
-        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintTop_toBottomOf="@id/compartir_altura"
+        app:layout_constraintVertical_bias="0.3"
         >
-
-        <TextView
-            android:id="@+id/muestraAltura"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/whiteBlack"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_fechaUltimoRegistro"
-            tools:text="0.34"></TextView>
-
         <com.androidplot.xy.XYPlot
             android:id="@+id/plot"
             style="@style/APDefacto.Dark"
-            android:layout_width="match_parent"
-            android:layout_height="270dp"
+            android:layout_width="wrap_content"
+            android:layout_height="280dp"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             ap:domainLineColor="@color/ap_transparent"
-            ap:graphMarginBottom="0dp"
+            ap:graphMarginBottom="20dp"
             ap:graphMarginLeft="5dp"
-            ap:graphMarginRight="10dp"
-            ap:graphMarginTop="10dp"
+            ap:graphMarginTop="25dp"
             ap:legendVisible="false"
             ap:lineLabelTextSizeBottom="8sp"
             ap:lineLabelTextSizeLeft="10sp"
             ap:rangeLineColor="@color/ap_transparent"
-            app:marginLeft="-15dp"
+            app:marginLeft="-13dp"
             />
 
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/url_pagina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="URL: https://contenidosweb.prefecturanaval.gob.ar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/whiteBlack"
+        app:layout_constraintVertical_bias="0.95"
+        android:linksClickable="true"
+        android:autoLink="web"
+        ></TextView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
