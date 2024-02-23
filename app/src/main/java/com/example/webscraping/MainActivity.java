@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                String infoEnviar = "Altura Actual: "+altura_tv.getText()+"Mts"+" \nVariacion: "+variacion_tv.getText()+" \nUltima Actualizacion: "+fecha_tv.getText();
+                String infoEnviar = "Rio Parana(Santa Fe)\n"+"Altura Actual:0. "+altura_tv.getText()+"Mts"+" \nVariacion: "+variacion_tv.getText()+" \nUltima Actualizacion: "+fecha_tv.getText();
                 sendIntent.putExtra(Intent.EXTRA_TEXT,infoEnviar);
                 sendIntent.setType("text/plain");
                 Intent shareIntent = Intent.createChooser(sendIntent,null);

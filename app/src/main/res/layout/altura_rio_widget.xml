@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Webscraping.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/Theme.Webscraping.AppWidgetContainer"
+    android:background="@color/whiteBlack"
+    android:id="@+id/linearWidget"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rio Parana(Santa Fe)"
+        android:textSize="15dp"
+        android:autoSizeTextType="uniform"
+        android:maxLines="1"
+        android:gravity="center"></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="0.30"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:autoSizeTextType="uniform"
+        android:layout_gravity="center"></TextView>
+
+</LinearLayout>
