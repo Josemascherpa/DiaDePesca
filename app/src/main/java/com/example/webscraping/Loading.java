@@ -36,21 +36,6 @@ public class Loading extends AppCompatActivity {
 
     }
 
-    private void LoadDataWind(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Document doc = Jsoup.connect("https://www.windguru.cz/105315").get();
-                    Element td = doc.getElementsByClass("tcell day1").first();
-                } catch (IOException e) {
-                    Log.i("Error", e.getMessage() + " "+"ERRORRR");
-                }
-            }
-
-        }).start();
-    }
-
     public void LoadDataRio(){
         new Thread(new Runnable() {
             @Override

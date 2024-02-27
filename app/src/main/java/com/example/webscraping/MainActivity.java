@@ -1,5 +1,6 @@
 package com.example.webscraping;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -39,7 +40,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     String urlWebRegistros = "https://contenidosweb.prefecturanaval.gob.ar/alturas/?page=historico&tiempo=7&id=240";
 
     ArrayList<String> arrayDate = new ArrayList<String>();
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView compartirAltura;
 
+    static Context contextMain;
+
 
 
 
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        contextMain=MainActivity.this;
         BarWindowBlack();
         IdsTextViewsRio();
         Intent intent = getIntent();
@@ -77,10 +81,7 @@ public class MainActivity extends AppCompatActivity {
         ActualizarUI(bundle);
         ButtonSharedFriends();
         ObtainDatesRegisters();
-
     }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -90,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         ActualizarUI(bundle);
         ButtonSharedFriends();
         ObtainDatesRegisters();
-
     }
 
     private void ActualizarUI(Bundle bundle){
@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
             fecha=fecha+" am";
         }
         fecha_tv.setText(fecha);
-
         parseFloat();
 
     }
@@ -155,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
         try {
              latch.await();
              CreateGraphs(floatPoints,dates);
+
+
         } catch (InterruptedException e ) {
             Thread.currentThread().interrupt();
             Log.i("Error", e.getMessage() + " "+"ERRORRR");
