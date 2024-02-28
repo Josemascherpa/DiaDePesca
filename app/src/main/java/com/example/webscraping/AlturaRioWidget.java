@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,6 +35,7 @@ public class AlturaRioWidget extends AppWidgetProvider {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             ComponentName thisAppWidget = new ComponentName(context.getPackageName(), AlturaRioWidget.class.getName());
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
+
             onUpdate(context, appWidgetManager, appWidgetIds);
         }
     }
@@ -48,10 +50,11 @@ public class AlturaRioWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             LoadDataRio(context,appWidgetManager,appWidgetId);
             Log.i("hola","update");
+            Toast.makeText(context,"hoasdfasdf",Toast.LENGTH_SHORT);
             RemoteViews remoteV = new RemoteViews(context.getPackageName(), R.layout.altura_rio_widget);
             Intent intentSync = new Intent(context, AlturaRioWidget.class);
             intentSync.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE); //You need to specify the action for the intent. Right now that intent is doing nothing for there is no action to be broadcasted.
-            PendingIntent pendingSync = PendingIntent.getBroadcast(context,0, intentSync, PendingIntent.FLAG_UPDATE_CURRENT); //You need to specify a proper flag for the intent. Or else the intent will become deleted.
+            PendingIntent pendingSync = PendingIntent.getBroadcast(context,0, intentSync, 0); //You need to specify a proper flag for the intent. Or else the intent will become deleted.
             remoteV.setOnClickPendingIntent(R.id.refresh,pendingSync);
             appWidgetManager.updateAppWidget(appWidgetId, remoteV);
 
