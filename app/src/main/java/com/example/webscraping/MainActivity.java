@@ -65,15 +65,21 @@ public class MainActivity extends AppCompatActivity{
 
     ImageView compartirAltura;
 
-    static Context contextMain;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        contextMain=MainActivity.this;
         BarWindowBlack();
+        IdsTextViewsRio();
+        RecoveryIntentLoading();
+        ButtonSharedFriends();
+        ObtainDatesRegisters();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
         IdsTextViewsRio();
         RecoveryIntentLoading();
         ButtonSharedFriends();
@@ -98,14 +104,7 @@ public class MainActivity extends AppCompatActivity{
         Context newContext = newBase.createConfigurationContext(configuration);
         super.attachBaseContext(newContext);
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        IdsTextViewsRio();
-        RecoveryIntentLoading();
-        ButtonSharedFriends();
-        ObtainDatesRegisters();
-    }
+
 
     private void ActualizarUI(Bundle bundle){
         // actualizar UI
