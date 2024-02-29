@@ -29,35 +29,38 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp">
+
         <ImageView
             android:id="@+id/f_variacion"
             android:layout_width="30dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/fbajando"
-            ></ImageView>
+            android:layout_height="40dp"
+            android:paddingLeft="70dp"
+            android:layout_marginTop="22dp"
+            android:layout_weight="1"
+            android:src="@drawable/fbajando"></ImageView>
         <TextView
-            android:id="@+id/tv_altura"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/whiteBlack"
-            android:textSize="60dp"
-            android:textStyle="bold"
-            tools:text="0.30"
-            android:autoSizeTextType="uniform"
-            ></TextView>
+                android:id="@+id/tv_altura"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/whiteBlack"
+                android:textSize="60dp"
+                android:textStyle="bold"
+                tools:text="0.30"
+                android:autoSizeTextType="uniform"
+                ></TextView>
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(mts)"
+                android:textColor="@color/whiteBlack"
+                android:textStyle="bold"
+                android:layout_marginTop="-30dp"
+                ></TextView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:text="(mts)"
-            android:textColor="@color/whiteBlack"
-            android:textStyle="bold"
-            android:layout_marginTop="30dp"
-            ></TextView>
+
 
     </LinearLayout>
 
@@ -91,13 +94,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="98dp"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:orientation="vertical"
-                android:layout_marginTop="6dp">
+                android:layout_marginTop="6dp"
+                >
                 <TextView
                     android:id="@+id/ui_variacion"
                     android:layout_width="wrap_content"
@@ -109,12 +113,12 @@
 
                 <TextView
                     android:id="@+id/tv_variacion"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
                     android:textColor="@color/whiteBlack"
                     android:textSize="11dp"
                     tools:text="-0.23"
-                    android:autoSizeTextType="uniform"></TextView>
+                    ></TextView>
 
             </LinearLayout>
 
@@ -134,12 +138,12 @@
 
                 <TextView
                     android:id="@+id/tv_fechaUltimoRegistro"
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
                     android:textColor="@color/whiteBlack"
                     android:textSize="11dp"
                     tools:text="15/FEB/24-0000"
-                    android:autoSizeTextType="uniform"></TextView>
+                    ></TextView>
             </LinearLayout>
 
 
@@ -178,6 +182,7 @@
             android:gravity="center"
             android:text="URL: https://contenidosweb.prefecturanaval.gob.ar"
             android:linksClickable="true"
+            android:autoSizeTextType="uniform"
             android:autoLink="web"></TextView>
     </LinearLayout>
 
