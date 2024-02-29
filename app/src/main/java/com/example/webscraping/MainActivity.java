@@ -67,9 +67,6 @@ public class MainActivity extends AppCompatActivity{
 
     static Context contextMain;
 
-
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +75,7 @@ public class MainActivity extends AppCompatActivity{
         contextMain=MainActivity.this;
         BarWindowBlack();
         IdsTextViewsRio();
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        ActualizarUI(bundle);
+        RecoveryIntentLoading();
         ButtonSharedFriends();
         ObtainDatesRegisters();
     }
@@ -107,9 +102,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         IdsTextViewsRio();
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        ActualizarUI(bundle);
+        RecoveryIntentLoading();
         ButtonSharedFriends();
         ObtainDatesRegisters();
     }
@@ -271,6 +264,12 @@ public class MainActivity extends AppCompatActivity{
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(MainActivity.this.getResources().getColor(R.color.black));
+    }
+
+    private void RecoveryIntentLoading(){
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        ActualizarUI(bundle);
     }
 
 
