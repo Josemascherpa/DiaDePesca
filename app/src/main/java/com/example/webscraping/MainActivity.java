@@ -2,10 +2,12 @@ package com.example.webscraping;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -82,6 +84,25 @@ public class MainActivity extends AppCompatActivity{
         ButtonSharedFriends();
         ObtainDatesRegisters();
     }
+
+    //ZOOM FIXED
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        final Configuration configuration = newBase.getResources().getConfiguration();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            final DisplayMetrics displayMetrics = newBase.getResources().getDisplayMetrics();
+            if (displayMetrics.densityDpi != DisplayMetrics.DENSITY_DEVICE_STABLE)
+            {
+                // Current density is different from Default Density. Override it
+                configuration.densityDpi = DisplayMetrics.DENSITY_DEVICE_STABLE;
+            }
+        }
+        configuration.fontScale = 1.0f;
+        Context newContext = newBase.createConfigurationContext(configuration);
+        super.attachBaseContext(newContext);
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -145,6 +166,10 @@ public class MainActivity extends AppCompatActivity{
                 List<Float> list = Arrays.asList(floatPoints);
                 Collections.reverse(list);
                 floatPoints = (Float[]) list.toArray();
+
+                List<String> listDates = Arrays.asList(dates);
+                Collections.reverse(listDates);
+                dates = (String[])listDates.toArray();
                 latch.countDown();
 
             }catch (IOException e){
@@ -153,6 +178,7 @@ public class MainActivity extends AppCompatActivity{
         }).start();
         try {
              latch.await();
+
              CreateGraphs(floatPoints,dates);
 
 
@@ -212,11 +238,6 @@ public class MainActivity extends AppCompatActivity{
         plot.getGraph().getRangeOriginLinePaint().setStrokeWidth(1.5f);
         plot.getGraph().setRangeGridLinePaint(null);
         plot.getGraph().setDomainGridLinePaint(null);
-
-
-
-
-
 
     }
 
