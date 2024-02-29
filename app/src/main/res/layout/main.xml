@@ -34,22 +34,24 @@
             android:id="@+id/f_variacion"
             android:layout_width="30dp"
             android:layout_height="40dp"
-            android:paddingLeft="70dp"
+            android:paddingLeft="100dp"
             android:layout_marginTop="22dp"
             android:layout_weight="1"
             android:src="@drawable/fbajando"></ImageView>
         <TextView
                 android:id="@+id/tv_altura"
-                android:layout_weight="1"
+                android:layout_weight="0"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+            android:gravity="center"
                 android:textColor="@color/whiteBlack"
                 android:textSize="60dp"
                 android:textStyle="bold"
                 tools:text="0.30"
                 android:autoSizeTextType="uniform"
                 ></TextView>
+
             <TextView
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
@@ -57,7 +59,7 @@
                 android:text="(mts)"
                 android:textColor="@color/whiteBlack"
                 android:textStyle="bold"
-                android:layout_marginTop="-30dp"
+                android:layout_marginTop="30dp"
                 ></TextView>
 
 
@@ -178,11 +180,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:gravity="center"
-            android:text="URL: https://contenidosweb.prefecturanaval.gob.ar"
+            android:textSize="13dp"
+            android:text="URL:https://contenidosweb.prefecturanaval.gob.ar"
             android:linksClickable="true"
             android:autoSizeTextType="uniform"
+            android:maxLines="1"
             android:autoLink="web"></TextView>
     </LinearLayout>
 
