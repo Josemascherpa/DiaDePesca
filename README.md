@@ -14,7 +14,8 @@ La aplicación muestra la altura del río, la variación, el estado en que se en
   </ul>               
 
   Icono:
-  <img src="https://github.com/Josemascherpa/AlturaRio/blob/main/app/src/main/ic_pesca-playstore.png" width="50" height="50"><br>
+  <img src="https://github.com/Josemascherpa/AlturaRio/blob/main/app/src/main/ic_pesca-playstore.png" width="30" height="30"><br>
+  Video: [Youtube](https://youtu.be/GAOi3pxXEis?si=7bBOlLPUfB9jvXly)<br>
   Enlace apk:
   [Link Drive apk](https://drive.google.com/file/d/1fnT-BjveZ1M2mPcMJHpR_AqZAtMpea9w/view?usp=drive_link)
   
