@@ -1,7 +1,7 @@
 <div align="center">
   <h1>🐟Altura Rio🎣</h1> 
 Como soy un amante de la pesca y suelo ir bastante seguido, decidí utilizar mis conocimientos para programar una aplicación a modo de práctica y aprendizaje, utilizando la técnica de web scraping. Principalmente, la creé con el objetivo de ahorrarme tener que ingresar cada vez a la página de la Prefectura y verificar la altura del río. Para solucionar este 'problema', desarrollé la app para hacerlo más simple.
-La aplicación muestra la altura del río, la variación, el estado en que se encuentra y las fechas de actualización. Además, incluye un gráfico que muestra la altura de los últimos 10 días.
+La aplicación muestra la altura del río, la variación, el estado en que se encuentra y las fechas de actualización. Además, incluye un gráfico que muestra la altura de los últimos 10 días y un boton para compartir la informacion a distintas redes sociales!.
 </div>
 
 
