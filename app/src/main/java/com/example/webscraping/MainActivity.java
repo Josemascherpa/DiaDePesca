@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity{
         IdsTextViewsRio();
         RecoveryIntentLoading();
         ButtonSharedFriends();
-        ObtainDatesRegisters();
+        //ObtainDatesRegisters();
     }
 
     //ZOOM FIXED
@@ -126,12 +126,14 @@ public class MainActivity extends AppCompatActivity{
 
     }
     private void IdsTextViewsRio(){
+
         plot = (XYPlot) findViewById(R.id.plot);
         flecha_iv =(ImageView)findViewById(R.id.f_variacion);
         altura_tv = (TextView) findViewById(R.id.tv_altura);
         variacion_tv = (TextView) findViewById(R.id.tv_variacion);
         fecha_tv = (TextView) findViewById(R.id.tv_fechaUltimoRegistro);
         compartirAltura = (ImageView) findViewById(R.id.compartir_altura);
+
     }
 
 
@@ -140,20 +142,30 @@ public class MainActivity extends AppCompatActivity{
         CountDownLatch latch = new CountDownLatch(1);
         new Thread(()->{
             try{
+
                 Document doc = Jsoup.connect(urlWebRegistros).get();
                 Element tabla = doc.select("table.fpTable").first();
                 Elements filas = tabla.select("tbody tr");
+
                 for(int i=0; i < 10; i++) {
+
                     //0 numero de colas 1 numero de fecha 2 altuas
                     String date = filas.get(i).child(1).text();
+
                     if(date.contains("00:00")){
                         dates[i]  = date.substring(5,10)+"am";
                     }else{
                         dates[i]  = date.substring(5,10)+"pm";
                     }
                     //2024-02-16 12:00
-                    floatPoints[i] = Float.valueOf(filas.get(i).child(2).text().substring(0,4));
+                    if(!filas.get(i).child(2).text().substring(0,4).contains("Mt")){
+                        floatPoints[i] = Float.valueOf(filas.get(i).child(2).text().substring(0,4));
+                    }else{
+                        floatPoints[i] = Float.valueOf(filas.get(i).child(2).text().substring(0,1));
+                    }
+
                 }
+
 
                 List<Float> list = Arrays.asList(floatPoints);
                 Collections.reverse(list);
@@ -178,6 +190,7 @@ public class MainActivity extends AppCompatActivity{
             Thread.currentThread().interrupt();
             Log.i("Error", e.getMessage() + " "+"ERRORRR");
         }
+
     }
 
 
@@ -231,6 +244,7 @@ public class MainActivity extends AppCompatActivity{
         plot.getGraph().setRangeGridLinePaint(null);
         plot.getGraph().setDomainGridLinePaint(null);
 
+
     }
 
     private void parseFloat(){
@@ -256,6 +270,7 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(shareIntent);
             }
         });
+
     }
 
     private void BarWindowBlack(){
@@ -268,6 +283,7 @@ public class MainActivity extends AppCompatActivity{
     private void RecoveryIntentLoading(){
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+
         ActualizarUI(bundle);
     }
 
