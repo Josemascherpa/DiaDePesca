@@ -1,22 +1,20 @@
 package com.example.webscraping;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import com.example.webscraping.data.Rio;
+import com.example.webscraping.network.DataProvider;
 
-import java.io.IOException;
+import java.util.List;
 
 public class Loading extends AppCompatActivity {
-    String urlWeb = "https://contenidosweb.prefecturanaval.gob.ar/alturas/";
+
+    private DataProvider recoveryData;
 
     TextView versionTV;
     String versionApp = "Version 1.0.0";
@@ -24,53 +22,38 @@ public class Loading extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loadingui);
-
+        recoveryData = new DataProvider("https://contenidosweb.prefecturanaval.gob.ar/alturas/");
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(0xFF000000);
 
-        LoadDataRio();
+        RecoveryDataRios();
         versionTV = (TextView)findViewById(R.id.version);
         versionTV.setText(versionApp);
 
     }
 
-    public void LoadDataRio(){
-        new Thread(() -> {
-            try {
-                Document doc = Jsoup.connect(urlWeb).get();
-                Element row = doc.select("tr:contains(SANTA FE):not(:contains(San Javier))").first();
-                String altura = row.select("[data-label=Ultimo Registro:]").text(); // 4,00
-                String variacion = row.select("[data-label=Variacion]").text(); // -0,05
-                String periodo = row.select("[data-label=Periodo:]").text();
-                String fecha = row.select("[data-label=Fecha Hora:]").text();
-                String estado = row.select("[data-label=Estado:]").text();
-                String variacionAnterior = row.select("[data-label=Registro Anterior:]").text();
-                String fechaAnterior = row.select("[data-label=Fecha Anterior:]").text();
+    public void RecoveryDataRios(){
 
-                runOnUiThread(() -> {
-
-                    Class MainActivity = com.example.webscraping.MainActivity.class;
-                    Intent intent = new Intent(Loading.this,MainActivity);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("altura", altura);
-                    bundle.putString("variacion", variacion);
-                    bundle.putString("periodo", periodo);
-                    bundle.putString("fecha", fecha);
-                    bundle.putString("estado", estado);
-                    bundle.putString("variacionAnterior", variacionAnterior);
-                    bundle.putString("fechaAnterior", fechaAnterior);
-                    intent.putExtras(bundle);
-
-                    startActivity(intent);
-                    finish();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final List<Rio> data = recoveryData.LoadDataRio();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Actualizar la interfaz de usuario con los datos recuperados
+                        if (data != null) {
+                            // Aquí puedes hacer lo que necesites con los datos, por ejemplo, mostrarlos en la interfaz de usuario
+                        } else {
+                            // Manejar el caso de que no se pudieron recuperar los datos
+                        }
+                    }
                 });
-
-            } catch (IOException e) {
-                Log.i("Error", e.getMessage() + " "+"ERRORRR");
             }
         }).start();
+
     }
 
 }
