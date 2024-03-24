@@ -10,6 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataProvider {
@@ -21,14 +22,13 @@ public class DataProvider {
 
     public List<Rio> LoadDataRio() {
 
-        List<Rio> listRios;
+        List<Rio> listRios = new ArrayList<Rio>();
         try {
-
             Document doc = Jsoup.connect("https://contenidosweb.prefecturanaval.gob.ar/alturas/").get();
             Elements filas = doc.select("tbody tr");
-
             for (Element fila : filas) {
                 // Agarro las celdas de las filas
+
                 Elements celdas = fila.select("th,td");
                 String puerto = "", rio = "", ultimoRegistro = "", variacion = "", fechaHora = "", estado = "";
                 for (int i = 0; i < celdas.size(); i++) {
@@ -58,10 +58,12 @@ public class DataProvider {
                             break;
                     }
                 }
+                Rio rioData = new Rio(rio,puerto,ultimoRegistro,variacion,fechaHora,estado);
+                listRios.add(rioData);
                 // Hacer lo que necesites con los valores recuperados de cada fila
-                Log.i("hola","Puerto: " + puerto + ", Río: " + rio + ", Último registro: " + ultimoRegistro + ", Variación: " + variacion + ", Fecha/Hora: " + fechaHora + ", Estado: " + estado);
+                //Log.i("hola","Puerto: " + puerto + ", Río: " + rio + ", Último registro: " + ultimoRegistro + ", Variación: " + variacion + ", Fecha/Hora: " + fechaHora + ", Estado: " + estado);
             }
-            return null;
+            return listRios;
         } catch (IOException e) {
             Log.i("Error", e.getMessage() + " " + "ERRORRR");
             return null;

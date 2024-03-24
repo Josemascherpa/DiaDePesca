@@ -1,6 +1,7 @@
 package com.example.webscraping;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -40,15 +41,16 @@ public class Loading extends AppCompatActivity {
             @Override
             public void run() {
                 final List<Rio> data = recoveryData.LoadDataRio();
+                Log.i("hola",String.valueOf(data.size()));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         // Actualizar la interfaz de usuario con los datos recuperados
-                        if (data != null) {
+                        /*if (data != null) {
                             // Aquí puedes hacer lo que necesites con los datos, por ejemplo, mostrarlos en la interfaz de usuario
                         } else {
                             // Manejar el caso de que no se pudieron recuperar los datos
-                        }
+                        }*/
                     }
                 });
             }
