@@ -20,7 +20,7 @@
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".Loading"
+            android:name=".load.Loading"
             android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>

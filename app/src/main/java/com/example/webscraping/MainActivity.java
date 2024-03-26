@@ -8,10 +8,12 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,35 +28,24 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
+import com.example.webscraping.data.Rio;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 public class MainActivity extends AppCompatActivity{
     String urlWebRegistros = "https://contenidosweb.prefecturanaval.gob.ar/alturas/?page=historico&tiempo=7&id=240";
-
-    ArrayList<String> arrayDate = new ArrayList<String>();
-    ArrayList<TextView> tv_RegistrosNum = new ArrayList<TextView>();
-    ArrayList<TextView> tv_RegistrosFechas = new ArrayList<TextView>();
-    ArrayList<TextView> tv_RegistrosMts = new ArrayList<TextView>();
-
     TextView altura_tv;
     TextView variacion_tv;
     TextView fecha_tv;
     TextView muestraAltura;
     ImageView flecha_iv;
+    AutoCompleteTextView buscaRios_ATV;
+
+    TextView nombreRio;
 
     String arraysFecha[] = new String[10];
     Float arraysAlturas[] = new Float[10];
@@ -66,6 +57,10 @@ public class MainActivity extends AppCompatActivity{
     ImageView compartirAltura;
 
 
+//////////////////////////////////
+    List<Rio> _Rios = new ArrayList<Rio>();
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +70,18 @@ public class MainActivity extends AppCompatActivity{
         IdsTextViewsRio();
         RecoveryIntentLoading();
         ButtonSharedFriends();
-        ObtainDatesRegisters();
+
+        AutocompleteFilling();
+        EditUIWithAutocomplete();
+
     }
     @Override
     protected void onResume() {
         super.onResume();
-        IdsTextViewsRio();
-        RecoveryIntentLoading();
-        ButtonSharedFriends();
-        //ObtainDatesRegisters();
+        //IdsTextViewsRio();
+        //RecoveryIntentLoading();
+        //ButtonSharedFriends();
+//        ObtainDatesRegisters();
     }
 
     //ZOOM FIXED
@@ -108,92 +106,19 @@ public class MainActivity extends AppCompatActivity{
 
     private void ActualizarUI(Bundle bundle){
         // actualizar UI
-        altura_tv.setText(bundle.getString("altura"));
-        variacion_tv.setText(bundle.getString("variacion")+ " Mts");
-        String fecha = bundle.getString("fecha").replace(" ","");
-        String hora = fecha.substring(fecha.length()-4);
-        hora = hora.substring(0,2)+":"+hora.substring(2);
-        fecha = fecha.substring(0,fecha.length()-4)+hora;
-        fecha = fecha.replaceAll("/24-", " ");
-        fecha = fecha.replace("/","-");
-        if(fecha.contains("12:00")){
-            fecha=fecha+" pm";
-        }else{
-            fecha=fecha+" am";
-        }
-        fecha_tv.setText(fecha);
-        parseFloat();
 
     }
     private void IdsTextViewsRio(){
-
         plot = (XYPlot) findViewById(R.id.plot);
         flecha_iv =(ImageView)findViewById(R.id.f_variacion);
         altura_tv = (TextView) findViewById(R.id.tv_altura);
         variacion_tv = (TextView) findViewById(R.id.tv_variacion);
         fecha_tv = (TextView) findViewById(R.id.tv_fechaUltimoRegistro);
         compartirAltura = (ImageView) findViewById(R.id.compartir_altura);
+        buscaRios_ATV = (AutoCompleteTextView) findViewById(R.id.ac_tv);
+        nombreRio = (TextView) findViewById(R.id.tv_NombreRio);
 
     }
-
-
-
-    private void ObtainDatesRegisters(){
-        CountDownLatch latch = new CountDownLatch(1);
-        new Thread(()->{
-            try{
-
-                Document doc = Jsoup.connect(urlWebRegistros).get();
-                Element tabla = doc.select("table.fpTable").first();
-                Elements filas = tabla.select("tbody tr");
-
-                for(int i=0; i < 10; i++) {
-
-                    //0 numero de colas 1 numero de fecha 2 altuas
-                    String date = filas.get(i).child(1).text();
-
-                    if(date.contains("00:00")){
-                        dates[i]  = date.substring(5,10)+"am";
-                    }else{
-                        dates[i]  = date.substring(5,10)+"pm";
-                    }
-                    //2024-02-16 12:00
-                    if(!filas.get(i).child(2).text().substring(0,4).contains("Mt")){
-                        floatPoints[i] = Float.valueOf(filas.get(i).child(2).text().substring(0,4));
-                    }else{
-                        floatPoints[i] = Float.valueOf(filas.get(i).child(2).text().substring(0,1));
-                    }
-
-                }
-
-
-                List<Float> list = Arrays.asList(floatPoints);
-                Collections.reverse(list);
-                floatPoints = (Float[]) list.toArray();
-
-                List<String> listDates = Arrays.asList(dates);
-                Collections.reverse(listDates);
-                dates = (String[])listDates.toArray();
-                latch.countDown();
-
-            }catch (IOException e){
-                Log.e("Error", e.getMessage() + " "+"ERRORRR");
-            }
-        }).start();
-        try {
-             latch.await();
-
-             CreateGraphs(floatPoints,dates);
-
-
-        } catch (InterruptedException e ) {
-            Thread.currentThread().interrupt();
-            Log.i("Error", e.getMessage() + " "+"ERRORRR");
-        }
-
-    }
-
-
     private void CreateGraphs(Float[] flpoints, String[] fechaBottom){
 
         //puntos en el grafico
@@ -281,10 +206,58 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void RecoveryIntentLoading(){
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            _Rios = (List<Rio>) bundle.getSerializable("listaRios");
+        }
+    }
 
-        ActualizarUI(bundle);
+    private void AutocompleteFilling(){
+        List<String> arrayNombreRios = new ArrayList<>();
+        for (int i=0;i<_Rios.size();i++) {
+            String nombreAutocompletado = _Rios.get(i).GetNombre()+"("+ _Rios.get(i).GetPuerto()+")";
+            arrayNombreRios.add(nombreAutocompletado);
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,arrayNombreRios);
+        buscaRios_ATV.setAdapter(adapter);
+    }
+
+    private void EditUIWithAutocomplete(){
+        buscaRios_ATV.setOnItemClickListener((parent, view, position, id) -> {
+            String rioSelec = (String)parent.getItemAtPosition(position);
+            String puertoRio = rioSelec.substring(rioSelec.indexOf("(")+1,rioSelec.indexOf(")"));
+            String ubicacion = null;
+            if(puertoRio.contains("(")){
+                int indiceParent = puertoRio.indexOf("(");
+                ubicacion = puertoRio.substring(indiceParent+1,puertoRio.length());
+                ubicacion = "("+ubicacion+")";
+                puertoRio = puertoRio.substring(0,indiceParent-1);
+            }
+//Guardar en una string lo que este entre parentesis para cuando comparo sumarselo
+            for(int i=0;i<_Rios.size();i++){
+                if(ubicacion!=null){
+                    if(_Rios.get(i).GetPuerto().equals(puertoRio+" "+ubicacion)){
+                        Rio rioSelecionado = _Rios.get(i);
+                        altura_tv.setText(rioSelecionado.GetAltura());
+                        variacion_tv.setText(rioSelecionado.GetVariacion()+" Mts");
+                        fecha_tv.setText(rioSelecionado.GetFecha());
+                        nombreRio.setText(rioSelecionado.GetNombre()+"("+rioSelecionado.GetPuerto()+")");
+                    }
+                }else{
+                    if(_Rios.get(i).GetPuerto().equals(puertoRio)){
+                        Rio rioSelecionado = _Rios.get(i);
+                        altura_tv.setText(rioSelecionado.GetAltura());
+                        variacion_tv.setText(rioSelecionado.GetVariacion()+" Mts");
+                        fecha_tv.setText(rioSelecionado.GetFecha());
+                        nombreRio.setText(rioSelecionado.GetNombre()+"("+rioSelecionado.GetPuerto()+")");
+
+                    }
+                }
+            }
+            buscaRios_ATV.clearFocus();
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(buscaRios_ATV.getWindowToken(), 0);
+        });
     }
 
 

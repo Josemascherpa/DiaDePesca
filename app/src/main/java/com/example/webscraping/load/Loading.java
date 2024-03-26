@@ -1,16 +1,18 @@
-package com.example.webscraping;
+package com.example.webscraping.load;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.webscraping.R;
 import com.example.webscraping.data.Rio;
 import com.example.webscraping.network.DataProvider;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class Loading extends AppCompatActivity {
@@ -36,21 +38,19 @@ public class Loading extends AppCompatActivity {
     }
 
     public void RecoveryDataRios(){
-
         new Thread(new Runnable() {
             @Override
             public void run() {
                 final List<Rio> data = recoveryData.LoadDataRio();
-                Log.i("hola",String.valueOf(data.size()));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // Actualizar la interfaz de usuario con los datos recuperados
-                        /*if (data != null) {
-                            // Aquí puedes hacer lo que necesites con los datos, por ejemplo, mostrarlos en la interfaz de usuario
-                        } else {
-                            // Manejar el caso de que no se pudieron recuperar los datos
-                        }*/
+                        Class MainActivity = com.example.webscraping.MainActivity.class;
+                        Intent intent = new Intent(Loading.this,MainActivity);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("listaRios",(Serializable)data);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                     }
                 });
             }

@@ -28,7 +28,6 @@ public class DataProvider {
             Elements filas = doc.select("tbody tr");
             for (Element fila : filas) {
                 // Agarro las celdas de las filas
-
                 Elements celdas = fila.select("th,td");
                 String puerto = "", rio = "", ultimoRegistro = "", variacion = "", fechaHora = "", estado = "";
                 for (int i = 0; i < celdas.size(); i++) {
@@ -48,11 +47,13 @@ public class DataProvider {
                         case 3:  // Columna "Variación"
                             variacion = contenido;
                             break;
-                        case 4:  // Columna "Fecha/Hora"
+                        case 5:  // Columna "Fecha/Hora"
                             fechaHora = contenido;
+
                             break;
-                        case 5:  // Columna "Estado"
+                        case 6:  // Columna "Estado"
                             estado = contenido;
+
                             break;
                         default:
                             break;
@@ -60,8 +61,6 @@ public class DataProvider {
                 }
                 Rio rioData = new Rio(rio,puerto,ultimoRegistro,variacion,fechaHora,estado);
                 listRios.add(rioData);
-                // Hacer lo que necesites con los valores recuperados de cada fila
-                //Log.i("hola","Puerto: " + puerto + ", Río: " + rio + ", Último registro: " + ultimoRegistro + ", Variación: " + variacion + ", Fecha/Hora: " + fechaHora + ", Estado: " + estado);
             }
             return listRios;
         } catch (IOException e) {

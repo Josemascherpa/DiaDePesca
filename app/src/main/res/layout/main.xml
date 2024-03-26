@@ -10,8 +10,20 @@
     android:orientation="vertical"
     >
 
+    <AutoCompleteTextView
+        android:id="@+id/ac_tv"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:hint="Busca tu rio"
+        android:textColorHint="@color/whiteBlack"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:inputType="text"
+        ></AutoCompleteTextView>
+
     <TextView
-        android:id="@+id/tv_rioParana"
+        android:id="@+id/tv_NombreRio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autoSizeTextType="uniform"
@@ -20,7 +32,7 @@
         android:textColor="@color/whiteBlack"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:layout_gravity="center"
         ></TextView>
 
