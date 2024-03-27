@@ -29,7 +29,7 @@ public class DataProvider {
             for (Element fila : filas) {
                 // Agarro las celdas de las filas
                 Elements celdas = fila.select("th,td");
-                String puerto = "", rio = "", ultimoRegistro = "", variacion = "", fechaHora = "", estado = "";
+                String puerto = "", rio = "", ultimoRegistro = "", variacion = "", fechaHora = "", estado = "",linkDatesGraphs="";
                 for (int i = 0; i < celdas.size(); i++) {
                     String contenido = celdas.get(i).text();
                     //voy corriendo la columna para ver cada una
@@ -54,12 +54,20 @@ public class DataProvider {
                             estado = contenido;
                             break;
                         case 12:
-                            Log.i("hola",contenido);
+                            Element enlace = celdas.get(i).selectFirst("a[href]");
+                            String href = enlace.attr("href");
+                            if (href.endsWith("id=")) {
+                                linkDatesGraphs = "empty";
+                                Log.i("hola", "Enlace sin ID específico: " + linkDatesGraphs);
+                            } else {
+                                linkDatesGraphs = href;
+                                Log.i("hola", "Enlace con ID específico: " + linkDatesGraphs);
+                            }
                         default:
                             break;
                     }
                 }
-                Rio rioData = new Rio(rio,puerto,ultimoRegistro,variacion,fechaHora,estado);
+                Rio rioData = new Rio(rio,puerto,ultimoRegistro,variacion,fechaHora,estado,linkDatesGraphs);
                 listRios.add(rioData);
             }
             return listRios;

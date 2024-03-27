@@ -9,14 +9,16 @@ public class Rio implements Serializable {
     String variacion;
     String fechaUltimaActualizacion;
     String estado;
+    String linkDatesGraphs;
 
-    public Rio(String nombreRio,String puerto, String altura, String variacion, String fechaUltimaActualizacion, String estado) {
+    public Rio(String nombreRio,String puerto, String altura, String variacion, String fechaUltimaActualizacion, String estado,String linkDatesGraphs) {
         this.nombreRio = "RIO "+nombreRio;
         this.puerto = puerto;
         this.altura = altura;
         this.variacion = variacion;
         this.fechaUltimaActualizacion = fechaUltimaActualizacion;
         this.estado = estado;
+        this.linkDatesGraphs = linkDatesGraphs;
     }
 
     public String GetNombre(){
@@ -36,6 +38,9 @@ public class Rio implements Serializable {
     }
     public String GetEstado(){
         return estado;
+    }
+    public String GetLinkDatesGraphs(){
+        return linkDatesGraphs;
     }
 
 }
