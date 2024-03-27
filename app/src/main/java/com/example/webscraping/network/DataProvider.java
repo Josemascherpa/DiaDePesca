@@ -31,8 +31,7 @@ public class DataProvider {
                 Elements celdas = fila.select("th,td");
                 String puerto = "", rio = "", ultimoRegistro = "", variacion = "", fechaHora = "", estado = "";
                 for (int i = 0; i < celdas.size(); i++) {
-                    Element celda = celdas.get(i);
-                    String contenido = celda.text();
+                    String contenido = celdas.get(i).text();
                     //voy corriendo la columna para ver cada una
                     switch (i) {
                         case 0:  // Columna "Puerto"
@@ -53,8 +52,9 @@ public class DataProvider {
                             break;
                         case 6:  // Columna "Estado"
                             estado = contenido;
-
                             break;
+                        case 12:
+                            Log.i("hola",contenido);
                         default:
                             break;
                     }
