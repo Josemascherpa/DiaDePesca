@@ -58,10 +58,8 @@ public class DataProvider {
                             String href = enlace.attr("href");
                             if (href.endsWith("id=")) {
                                 linkDatesGraphs = "empty";
-                                Log.i("hola", "Enlace sin ID específico: " + linkDatesGraphs);
                             } else {
                                 linkDatesGraphs = href;
-                                Log.i("hola", "Enlace con ID específico: " + linkDatesGraphs);
                             }
                         default:
                             break;

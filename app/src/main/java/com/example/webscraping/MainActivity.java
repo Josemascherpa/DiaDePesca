@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -207,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> arrayNombreRios = new ArrayList<>();
         for (int i = 0; i < _Rios.size(); i++) {
             String nombreAutocompletado = _Rios.get(i).GetNombre() + " " + _Rios.get(i).GetPuerto();
+            Log.i("hola",_Rios.get(i).GetLinkDatesGraphs());
             arrayNombreRios.add(nombreAutocompletado);
         }
         CustomAutoCompleteAdapter adapter = new CustomAutoCompleteAdapter(this, arrayNombreRios);
