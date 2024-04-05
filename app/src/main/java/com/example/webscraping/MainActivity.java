@@ -35,6 +35,8 @@ import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     TextView altura_tv;
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void CreateGraphs(Float[] flpoints, String[] fechaBottom) {
-
+        plot.clear();
         //puntos en el grafico
         XYSeries s1 = new SimpleXYSeries(SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "", flpoints);
 
@@ -169,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
         plot.getGraph().setRangeGridLinePaint(null);
         plot.getGraph().setDomainGridLinePaint(null);
 
+        plot.redraw();
+
 
     }
 
@@ -212,8 +216,6 @@ public class MainActivity extends AppCompatActivity {
         CustomAutoCompleteAdapter adapter = new CustomAutoCompleteAdapter(this, arrayNombreRios);
         buscaRios_ATV.setAdapter(adapter);
         buscaRios_ATV.setThreshold(1); // Configura el número mínimo de caracteres antes de que se muestren sugerencias
-
-
     }
 
     private void EditUIWithAutocomplete() {
@@ -222,11 +224,27 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < _Rios.size(); i++) {
                 if (((_Rios.get(i).GetNombre()+ _Rios.get(i).GetPuerto()).replace(" ", "")).equals((rioSeleccionado.replace(" ", "")))) {
                     Rio rio = _Rios.get(i);
+                    rio.ScrapperDate(rio.GetLinkDatesGraphs());
                     altura_tv.setText(rio.GetAltura());
                     variacion_tv.setText(rio.GetVariacion() + " Mts");
                     fecha_tv.setText(SortedDateTV(rio.GetFecha()));
                     nombreRio.setText(rio.GetNombre() + "(" + rio.GetPuerto() + ")");
                     DirectionAndColorArrow();
+
+                    Timer timer = new Timer();
+
+                    // Programar la tarea para que se ejecute después de 5 segundos
+                    timer.schedule(new TimerTask() {
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    CreateGraphs(rio.arrayValues, rio.arrayDates);
+                                }
+                            });
+                        }
+                    }, 1000);
                 }
             }
             buscaRios_ATV.clearFocus();

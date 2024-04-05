@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataProvider {
-    String url;
+    String url = "https://contenidosweb.prefecturanaval.gob.ar/alturas/";
 
     public DataProvider(String url) {
         this.url = url;
@@ -24,11 +24,12 @@ public class DataProvider {
 
         List<Rio> listRios = new ArrayList<Rio>();
         try {
-            Document doc = Jsoup.connect("https://contenidosweb.prefecturanaval.gob.ar/alturas/").get();
+            Document doc = Jsoup.connect(url).get();
             Elements filas = doc.select("tbody tr");
             for (Element fila : filas) {
                 // Agarro las celdas de las filas
                 Elements celdas = fila.select("th,td");
+
                 String puerto = "", rio = "", ultimoRegistro = "", variacion = "", fechaHora = "", estado = "",linkDatesGraphs="";
                 for (int i = 0; i < celdas.size(); i++) {
                     String contenido = celdas.get(i).text();
@@ -58,10 +59,9 @@ public class DataProvider {
                             String href = enlace.attr("href");
                             if (href.endsWith("id=")) {
                                 linkDatesGraphs = "empty";
-                                Log.i("hola", "Enlace sin ID específico: " + linkDatesGraphs);
+
                             } else {
                                 linkDatesGraphs = href;
-                                Log.i("hola", "Enlace con ID específico: " + linkDatesGraphs);
                             }
                         default:
                             break;
@@ -77,4 +77,9 @@ public class DataProvider {
         }
 
     }
+
+
+
+
+
 }
