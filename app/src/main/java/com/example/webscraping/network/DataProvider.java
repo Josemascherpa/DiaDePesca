@@ -59,7 +59,6 @@ public class DataProvider {
                             String href = enlace.attr("href");
                             if (href.endsWith("id=")) {
                                 linkDatesGraphs = "empty";
-
                             } else {
                                 linkDatesGraphs = href;
                             }
