@@ -35,6 +35,8 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void CreateGraphs(Float[] flpoints, String[] fechaBottom) {
         plot.clear();
+
         //puntos en el grafico
         XYSeries s1 = new SimpleXYSeries(SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "", flpoints);
 
@@ -139,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         plot.addSeries(s1, format);
 
         //seteo de rangos de etiquetas
-        plot.setRangeBoundaries(0, BoundaryMode.FIXED, 10, BoundaryMode.FIXED);
+        plot.setRangeBoundaries(0, BoundaryMode.FIXED, getLargestNumber(flpoints), BoundaryMode.FIXED);
         plot.setDomainBoundaries(0, 9.5, BoundaryMode.FIXED);
         plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setRotation(10);
         plot.getGraph().getLineLabelInsets().setBottom(PixelUtils.dpToPix(4));
@@ -241,6 +244,13 @@ public class MainActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
+                                    Collections.reverse(listFloatPoints);
+                                    rio.arrayValues = (Float[]) listFloatPoints.toArray();
+
+                                    List<String> listDates = Arrays.asList(rio.arrayDates);
+                                    Collections.reverse(listDates);
+                                    rio.arrayDates = (String[])listDates.toArray();
 
                                     CreateGraphs(rio.arrayValues, rio.arrayDates);
                                 }
@@ -284,6 +294,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return fechaReturn;
+    }
+
+    private float getLargestNumber(Float[] arrayfloat){
+        Float largestNumber=10f;
+        for(int i=0;i<arrayfloat.length;i++){
+            if(arrayfloat[i]>largestNumber){
+                largestNumber+=10f;
+            }
+        }
+        Log.i("hola",String.valueOf(largestNumber));
+        return largestNumber;
     }
 
 
