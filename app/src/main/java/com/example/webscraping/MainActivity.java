@@ -8,14 +8,15 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +30,9 @@ import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.example.webscraping.CustomAutocompleteEditText.CustomAutoCompleteAdapter;
+import com.example.webscraping.FavouriteRio.MySharedPreferences;
 import com.example.webscraping.data.Rio;
+import com.example.webscraping.load.Loading;
 
 import java.text.FieldPosition;
 import java.text.Format;
@@ -46,15 +49,10 @@ public class MainActivity extends AppCompatActivity {
     TextView variacion_tv;
     TextView fecha_tv;
     ImageView flecha_iv;
+    ImageButton favButton;
     AutoCompleteTextView buscaRios_ATV;
-
     TextView nombreRio;
-
-    String arraysFecha[] = new String[10];
-    Float arraysAlturas[] = new Float[10];
-    Float[] floatPoints = new Float[10];
-    String[] dates = new String[10];
-
+    Integer rioSave = null;
     private XYPlot plot;
 
     ImageView compartirAltura;
@@ -73,19 +71,16 @@ public class MainActivity extends AppCompatActivity {
         IdsTextViewsRio();
         RecoveryIntentLoading();
         ButtonSharedFriends();
-
         AutocompleteFilling();
         EditUIWithAutocomplete();
-
+        FavRio();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        //IdsTextViewsRio();
-        //RecoveryIntentLoading();
-        //ButtonSharedFriends();
-//        ObtainDatesRegisters();
+    protected void onRestart() {
+        super.onRestart();
+        Intent intent = new Intent(this, Loading.class);
+        startActivity(intent);
     }
 
     //ZOOM FIXED
@@ -106,10 +101,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void ActualizarUI(Bundle bundle) {
-        // actualizar UI
-
-    }
 
     private void IdsTextViewsRio() {
         plot = (XYPlot) findViewById(R.id.plot);
@@ -120,9 +111,9 @@ public class MainActivity extends AppCompatActivity {
         compartirAltura = (ImageView) findViewById(R.id.compartir_altura);
         buscaRios_ATV = (AutoCompleteTextView) findViewById(R.id.ac_tv);
         nombreRio = (TextView) findViewById(R.id.tv_NombreRio);
-
+        favButton = (ImageButton) findViewById(R.id.id_fav);
+        favButton.setVisibility(View.GONE);
     }
-
     private void CreateGraphs(Float[] flpoints, String[] fechaBottom) {
         plot.clear();
 
@@ -187,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                String infoEnviar = "Rio Parana(Santa Fe)\n" + "Altura Actual: " + altura_tv.getText() + "Mts" + " \nVariacion: " + variacion_tv.getText() + " \nUltima Actualizacion: " + fecha_tv.getText();
+                String infoEnviar = nombreRio.getText()+  "\nAltura Actual: " + altura_tv.getText() + "Mts" + " \nVariacion: " + variacion_tv.getText() + " \nUltima Actualizacion: " + fecha_tv.getText();
                 sendIntent.putExtra(Intent.EXTRA_TEXT, infoEnviar);
                 sendIntent.setType("text/plain");
                 Intent shareIntent = Intent.createChooser(sendIntent, null);
@@ -215,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
         List<String> arrayNombreRios = new ArrayList<>();
         for (int i = 0; i < _Rios.size(); i++) {
             String nombreAutocompletado = _Rios.get(i).GetNombre() + " " + _Rios.get(i).GetPuerto();
-            Log.i("hola",_Rios.get(i).GetLinkDatesGraphs());
             arrayNombreRios.add(nombreAutocompletado);
         }
         CustomAutoCompleteAdapter adapter = new CustomAutoCompleteAdapter(this, arrayNombreRios);
@@ -224,10 +214,53 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void EditUIWithAutocomplete() {
+        //If I haven't saved anything yet, the integer won't exist, which means GetRioFavs() will return 0, but since a river exists with 0, I set it to return 9999.
+        if(MySharedPreferences.getRioFavs(this)!=9999){
+            for(int i=0;i<_Rios.size();i++){
+                if(i==MySharedPreferences.getRioFavs(this)){
+                    Rio rio = _Rios.get(i);
+                    rio.ScrapperDate(rio.GetLinkDatesGraphs());
+                    altura_tv.setText(rio.GetAltura());
+                    variacion_tv.setText(rio.GetVariacion() + " Mts");
+                    fecha_tv.setText(SortedDateTV(rio.GetFecha()));
+                    nombreRio.setText(rio.GetNombre() + "(" + rio.GetPuerto() + ")");
+                    DirectionAndColorArrow();
+
+                    Timer timer = new Timer();
+                    // Programar la tarea para que se ejecute después de 5 segundos
+                    timer.schedule(new TimerTask() {
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
+                                    Collections.reverse(listFloatPoints);
+                                    rio.arrayValues = (Float[]) listFloatPoints.toArray();
+
+                                    List<String> listDates = Arrays.asList(rio.arrayDates);
+                                    Collections.reverse(listDates);
+                                    rio.arrayDates = (String[])listDates.toArray();
+
+                                    CreateGraphs(rio.arrayValues, rio.arrayDates);
+                                }
+                            });
+                        }
+                    }, 1000);
+
+                }
+            }
+        }
+
+        //Set the UI for when a river is selected from the Spinner.
         buscaRios_ATV.setOnItemClickListener((parent, view, position, id) -> {
             String rioSeleccionado = (String) parent.getItemAtPosition(position);
+            favButton.setVisibility(View.VISIBLE);
+
             for (int i = 0; i < _Rios.size(); i++) {
+
                 if (((_Rios.get(i).GetNombre()+ _Rios.get(i).GetPuerto()).replace(" ", "")).equals((rioSeleccionado.replace(" ", "")))) {
+                    rioSave = i;
+
                     Rio rio = _Rios.get(i);
                     rio.ScrapperDate(rio.GetLinkDatesGraphs());
                     altura_tv.setText(rio.GetAltura());
@@ -259,9 +292,12 @@ public class MainActivity extends AppCompatActivity {
                     }, 1000);
                 }
             }
+
+            //Clear focus and clear keyboard
             buscaRios_ATV.clearFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(buscaRios_ATV.getWindowToken(), 0);
+
         });
     }
 
@@ -300,11 +336,18 @@ public class MainActivity extends AppCompatActivity {
         Float largestNumber=10f;
         for(int i=0;i<arrayfloat.length;i++){
             if(arrayfloat[i]>largestNumber){
-                largestNumber+=10f;
+                largestNumber=arrayfloat[i]+5f;
             }
         }
-        Log.i("hola",String.valueOf(largestNumber));
         return largestNumber;
+    }
+
+    private void FavRio(){
+        favButton.setOnClickListener(v -> {
+            MySharedPreferences.saveInteger(this,rioSave);
+            Toast.makeText(this,"Agregado a favoritos!!",Toast.LENGTH_LONG).show();
+            favButton.setVisibility(View.GONE);
+        });
     }
 
 
