@@ -218,34 +218,44 @@ public class MainActivity extends AppCompatActivity {
         if(MySharedPreferences.getRioFavs(this)!=9999){
             for(int i=0;i<_Rios.size();i++){
                 if(i==MySharedPreferences.getRioFavs(this)){
+                    VisibilityDates();
                     Rio rio = _Rios.get(i);
                     rio.ScrapperDate(rio.GetLinkDatesGraphs());
                     altura_tv.setText(rio.GetAltura());
                     variacion_tv.setText(rio.GetVariacion() + " Mts");
                     fecha_tv.setText(SortedDateTV(rio.GetFecha()));
                     nombreRio.setText(rio.GetNombre() + "(" + rio.GetPuerto() + ")");
-                    DirectionAndColorArrow();
 
-                    Timer timer = new Timer();
-                    // Programar la tarea para que se ejecute después de 5 segundos
-                    timer.schedule(new TimerTask() {
-                        public void run() {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
-                                    Collections.reverse(listFloatPoints);
-                                    rio.arrayValues = (Float[]) listFloatPoints.toArray();
+                    if(!rio.GetEstado().contains("S/E")){
+                        DirectionAndColorArrow();
 
-                                    List<String> listDates = Arrays.asList(rio.arrayDates);
-                                    Collections.reverse(listDates);
-                                    rio.arrayDates = (String[])listDates.toArray();
+                        Timer timer = new Timer();
+                        // Programar la tarea para que se ejecute después de 5 segundos
+                        timer.schedule(new TimerTask() {
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                                    CreateGraphs(rio.arrayValues, rio.arrayDates);
-                                }
-                            });
-                        }
-                    }, 1000);
+                                        List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
+                                        Collections.reverse(listFloatPoints);
+                                        rio.arrayValues = (Float[]) listFloatPoints.toArray();
+
+                                        List<String> listDates = Arrays.asList(rio.arrayDates);
+                                        Collections.reverse(listDates);
+                                        rio.arrayDates = (String[])listDates.toArray();
+
+                                        CreateGraphs(rio.arrayValues, rio.arrayDates);
+
+
+                                    }
+                                });
+                            }
+                        }, 1000);
+                    }else{
+                        EmptyDates();
+                    }
+
 
                 }
             }
@@ -255,41 +265,46 @@ public class MainActivity extends AppCompatActivity {
         buscaRios_ATV.setOnItemClickListener((parent, view, position, id) -> {
             String rioSeleccionado = (String) parent.getItemAtPosition(position);
             favButton.setVisibility(View.VISIBLE);
-
             for (int i = 0; i < _Rios.size(); i++) {
-
                 if (((_Rios.get(i).GetNombre()+ _Rios.get(i).GetPuerto()).replace(" ", "")).equals((rioSeleccionado.replace(" ", "")))) {
+                    VisibilityDates();
                     rioSave = i;
-
                     Rio rio = _Rios.get(i);
                     rio.ScrapperDate(rio.GetLinkDatesGraphs());
                     altura_tv.setText(rio.GetAltura());
                     variacion_tv.setText(rio.GetVariacion() + " Mts");
                     fecha_tv.setText(SortedDateTV(rio.GetFecha()));
                     nombreRio.setText(rio.GetNombre() + "(" + rio.GetPuerto() + ")");
-                    DirectionAndColorArrow();
 
-                    Timer timer = new Timer();
+                    if(!rio.GetEstado().contains("S/E")){
+                        DirectionAndColorArrow();
 
-                    // Programar la tarea para que se ejecute después de 5 segundos
-                    timer.schedule(new TimerTask() {
-                        public void run() {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
-                                    Collections.reverse(listFloatPoints);
-                                    rio.arrayValues = (Float[]) listFloatPoints.toArray();
+                        Timer timer = new Timer();
 
-                                    List<String> listDates = Arrays.asList(rio.arrayDates);
-                                    Collections.reverse(listDates);
-                                    rio.arrayDates = (String[])listDates.toArray();
+                        // Programar la tarea para que se ejecute después de 5 segundos
+                        timer.schedule(new TimerTask() {
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                                    CreateGraphs(rio.arrayValues, rio.arrayDates);
-                                }
-                            });
-                        }
-                    }, 1000);
+                                        List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
+                                        Collections.reverse(listFloatPoints);
+                                        rio.arrayValues = (Float[]) listFloatPoints.toArray();
+
+                                        List<String> listDates = Arrays.asList(rio.arrayDates);
+                                        Collections.reverse(listDates);
+                                        rio.arrayDates = (String[])listDates.toArray();
+
+                                        CreateGraphs(rio.arrayValues, rio.arrayDates);
+                                    }
+                                });
+                            }
+                        }, 1000);
+                    }else{
+                        EmptyDates();
+                    }
+
                 }
             }
 
@@ -348,6 +363,18 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Agregado a favoritos!!",Toast.LENGTH_LONG).show();
             favButton.setVisibility(View.GONE);
         });
+    }
+
+    private void EmptyDates(){
+        altura_tv.setVisibility(View.GONE);
+        plot.setVisibility(View.GONE);
+        compartirAltura.setVisibility(View.GONE);
+        Toast.makeText(this,"Datos no registrados",Toast.LENGTH_LONG).show();
+    }
+    private void VisibilityDates(){
+        altura_tv.setVisibility(View.VISIBLE);
+        plot.setVisibility(View.VISIBLE);
+        compartirAltura.setVisibility(View.VISIBLE);
     }
 
 
