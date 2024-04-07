@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -74,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
         AutocompleteFilling();
         EditUIWithAutocomplete();
         FavRio();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
     }
 
     @Override
@@ -273,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
                     rio.ScrapperDate(rio.GetLinkDatesGraphs());
                     altura_tv.setText(rio.GetAltura());
                     variacion_tv.setText(rio.GetVariacion() + " Mts");
+                    Log.i("hola",rio.GetFecha());
                     fecha_tv.setText(SortedDateTV(rio.GetFecha()));
                     nombreRio.setText(rio.GetNombre() + "(" + rio.GetPuerto() + ")");
 
