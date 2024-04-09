@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
     }
     private void CreateGraphs(Float[] flpoints, String[] fechaBottom) {
         plot.clear();
-
         //puntos en el grafico
         XYSeries s1 = new SimpleXYSeries(SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "", flpoints);
 
@@ -241,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if(!rio.GetEstado().contains("S/E")){
                         DirectionAndColorArrow();
+
                         Timer timer = new Timer();
                         // Programar la tarea para que se ejecute después de 5 segundos
                         timer.schedule(new TimerTask() {
@@ -248,7 +248,9 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+
                                         if(!rio.GetPuerto().contains("PUERTO RUIZ")){
+                                            Log.i("hola","asdf");
                                             List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
                                             Collections.reverse(listFloatPoints);
                                             rio.arrayValues = (Float[]) listFloatPoints.toArray();
@@ -259,11 +261,12 @@ public class MainActivity extends AppCompatActivity {
 
                                             CreateGraphs(rio.arrayValues, rio.arrayDates);
                                             favButton.setProgress(favButton.getDuration());
+
                                         }
                                     }
                                 });
                             }
-                        }, 500);
+                        }, 1000);
                     }else{
                         EmptyDates();
                     }
@@ -325,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                        }, 500);
+                        }, 1000);
                     }else{
                         EmptyDates();
                     }
