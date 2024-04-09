@@ -1,5 +1,6 @@
 package com.example.webscraping;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -14,14 +15,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     TextView variacion_tv;
     TextView fecha_tv;
     ImageView flecha_iv;
-    ImageButton favButton;
+    LottieAnimationView favButton;
     AutoCompleteTextView buscaRios_ATV;
     TextView nombreRio;
     Integer rioSave = null;
@@ -118,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         compartirAltura = (ImageView) findViewById(R.id.compartir_altura);
         buscaRios_ATV = (AutoCompleteTextView) findViewById(R.id.ac_tv);
         nombreRio = (TextView) findViewById(R.id.tv_NombreRio);
-        favButton = (ImageButton) findViewById(R.id.id_fav);
+        favButton = (LottieAnimationView) findViewById(R.id.id_fav);
         favButton.setVisibility(View.GONE);
     }
     private void CreateGraphs(Float[] flpoints, String[] fechaBottom) {
@@ -223,11 +225,15 @@ public class MainActivity extends AppCompatActivity {
     private void EditUIWithAutocomplete() {
         //If I haven't saved anything yet, the integer won't exist, which means GetRioFavs() will return 0, but since a river exists with 0, I set it to return 9999.
         if(MySharedPreferences.getRioFavs(this)!=9999){
+            favButton.setVisibility(View.VISIBLE);
             for(int i=0;i<_Rios.size();i++){
                 if(i==MySharedPreferences.getRioFavs(this)){
                     VisibilityDates();
                     Rio rio = _Rios.get(i);
-                    rio.ScrapperDate(rio.GetLinkDatesGraphs());
+                    if(!rio.GetPuerto().contains("PUERTO RUIZ")){
+                        rio.ScrapperDate(rio.GetLinkDatesGraphs());
+                    }
+
                     altura_tv.setText(rio.GetAltura());
                     variacion_tv.setText(rio.GetVariacion() + " Mts");
                     fecha_tv.setText(SortedDateTV(rio.GetFecha()));
@@ -235,7 +241,6 @@ public class MainActivity extends AppCompatActivity {
 
                     if(!rio.GetEstado().contains("S/E")){
                         DirectionAndColorArrow();
-
                         Timer timer = new Timer();
                         // Programar la tarea para que se ejecute después de 5 segundos
                         timer.schedule(new TimerTask() {
@@ -243,22 +248,22 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        if(!rio.GetPuerto().contains("PUERTO RUIZ")){
+                                            List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
+                                            Collections.reverse(listFloatPoints);
+                                            rio.arrayValues = (Float[]) listFloatPoints.toArray();
 
-                                        List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
-                                        Collections.reverse(listFloatPoints);
-                                        rio.arrayValues = (Float[]) listFloatPoints.toArray();
+                                            List<String> listDates = Arrays.asList(rio.arrayDates);
+                                            Collections.reverse(listDates);
+                                            rio.arrayDates = (String[])listDates.toArray();
 
-                                        List<String> listDates = Arrays.asList(rio.arrayDates);
-                                        Collections.reverse(listDates);
-                                        rio.arrayDates = (String[])listDates.toArray();
-
-                                        CreateGraphs(rio.arrayValues, rio.arrayDates);
-
-
+                                            CreateGraphs(rio.arrayValues, rio.arrayDates);
+                                            favButton.setProgress(favButton.getDuration());
+                                        }
                                     }
                                 });
                             }
-                        }, 1000);
+                        }, 500);
                     }else{
                         EmptyDates();
                     }
@@ -271,13 +276,23 @@ public class MainActivity extends AppCompatActivity {
         //Set the UI for when a river is selected from the Spinner.
         buscaRios_ATV.setOnItemClickListener((parent, view, position, id) -> {
             String rioSeleccionado = (String) parent.getItemAtPosition(position);
-            favButton.setVisibility(View.VISIBLE);
+
             for (int i = 0; i < _Rios.size(); i++) {
                 if (((_Rios.get(i).GetNombre()+ _Rios.get(i).GetPuerto()).replace(" ", "")).equals((rioSeleccionado.replace(" ", "")))) {
                     VisibilityDates();
+                    if(i!=MySharedPreferences.getRioFavs(this)){
+
+                        favButton.setProgress(0);
+
+                    }else{
+                        favButton.setProgress(favButton.getDuration());
+                    }
+
                     rioSave = i;
                     Rio rio = _Rios.get(i);
-                    rio.ScrapperDate(rio.GetLinkDatesGraphs());
+                    if(!rio.GetPuerto().contains("PUERTO RUIZ")){
+                        rio.ScrapperDate(rio.GetLinkDatesGraphs());
+                    }
                     altura_tv.setText(rio.GetAltura());
                     variacion_tv.setText(rio.GetVariacion() + " Mts");
                     Log.i("hola",rio.GetFecha());
@@ -296,19 +311,21 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
 
-                                        List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
-                                        Collections.reverse(listFloatPoints);
-                                        rio.arrayValues = (Float[]) listFloatPoints.toArray();
+                                        if(!rio.GetPuerto().contains("PUERTO RUIZ")){
+                                            List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
+                                            Collections.reverse(listFloatPoints);
+                                            rio.arrayValues = (Float[]) listFloatPoints.toArray();
 
-                                        List<String> listDates = Arrays.asList(rio.arrayDates);
-                                        Collections.reverse(listDates);
-                                        rio.arrayDates = (String[])listDates.toArray();
+                                            List<String> listDates = Arrays.asList(rio.arrayDates);
+                                            Collections.reverse(listDates);
+                                            rio.arrayDates = (String[])listDates.toArray();
 
-                                        CreateGraphs(rio.arrayValues, rio.arrayDates);
+                                            CreateGraphs(rio.arrayValues, rio.arrayDates);
+                                        }
                                     }
                                 });
                             }
-                        }, 1000);
+                        }, 500);
                     }else{
                         EmptyDates();
                     }
@@ -367,9 +384,33 @@ public class MainActivity extends AppCompatActivity {
 
     private void FavRio(){
         favButton.setOnClickListener(v -> {
+            favButton.playAnimation();
             MySharedPreferences.saveInteger(this,rioSave);
             Toast.makeText(this,"Agregado a favoritos!!",Toast.LENGTH_LONG).show();
-            favButton.setVisibility(View.GONE);
+//            favButton.setVisibility(View.GONE);
+
+        });
+        favButton.addAnimatorListener(new Animator.AnimatorListener(){
+            @Override
+            public void onAnimationStart(@NonNull Animator animation) {
+
+
+            }
+
+            @Override
+            public void onAnimationEnd(@NonNull Animator animation) {
+//                favButton.pauseAnimation();
+            }
+
+            @Override
+            public void onAnimationCancel(@NonNull Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(@NonNull Animator animation) {
+
+            }
         });
     }
 
@@ -384,6 +425,7 @@ public class MainActivity extends AppCompatActivity {
         plot.setVisibility(View.VISIBLE);
         compartirAltura.setVisibility(View.VISIBLE);
     }
+
 
 
 }

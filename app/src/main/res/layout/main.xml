@@ -22,16 +22,17 @@
         android:layout_marginTop="10dp"
         android:inputType="text"
         ></AutoCompleteTextView>
-    <ImageButton
+
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/id_fav"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginTop="-40dp"
         android:layout_marginRight="15dp"
         android:layout_gravity="right"
-        android:background="@drawable/fav"
+        app:lottie_rawRes="@raw/favanimations"
         >
-    </ImageButton>
+    </com.airbnb.lottie.LottieAnimationView>
 
 
     <TextView
@@ -200,22 +201,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="13dp"
-            android:text="URL:https://contenidosweb.prefecturanaval.gob.ar"
-            android:linksClickable="true"
-            android:autoSizeTextType="uniform"
-            android:maxLines="1"
-            android:autoLink="web"></TextView>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/framePosicionamiento"

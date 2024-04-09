@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.webscraping.data.Rio;
 import com.example.webscraping.network.DataProvider;
-import com.example.webscraping.R;
 
 import java.io.Serializable;
 import java.util.List;
@@ -35,8 +34,8 @@ public class Loading extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(0xFF000000);
         RecoveryDataRios();
-        versionTV = (TextView)findViewById(R.id.version);
-        versionTV.setText(versionApp);
+//        versionTV = (TextView)findViewById(R.id.version);
+//        versionTV.setText(versionApp);
 
     }
 

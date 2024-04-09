@@ -46,4 +46,7 @@ dependencies {
     implementation ("com.androidplot:androidplot-core:1.5.10")
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("com.airbnb.android:lottie:6.4.0")
+
+
 }
