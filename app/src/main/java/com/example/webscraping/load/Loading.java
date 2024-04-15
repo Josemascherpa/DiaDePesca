@@ -6,15 +6,19 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.webscraping.R;
 import com.example.webscraping.data.Rio;
 import com.example.webscraping.network.CheckInternet;
 import com.example.webscraping.network.DataProvider;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.Serializable;
 import java.util.List;
@@ -31,13 +35,21 @@ public class Loading extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(com.example.webscraping.R.layout.loadingui);
 
-        recoveryData = new DataProvider("https://contenidosweb.prefecturanaval.gob.ar/alturas/");
+
+        FrameLayout bottomSheet = findViewById(R.id.standard_bottom_sheet);
+        BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+//        bottomSheetBehavior.setSaveFlags(BottomSheetBehavior.SAVE_ALL);
+//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+
+
+//        recoveryData = new DataProvider("https://contenidosweb.prefecturanaval.gob.ar/alturas/");
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(0xFF000000);
 //        if( checkInternet.isOnline()){
-            RecoveryDataRios();
+//            RecoveryDataRios();
 //        }else{
 //            Toast.makeText(this,"no hay internet",Toast.LENGTH_LONG).show();
 //        }
@@ -89,3 +101,4 @@ public class Loading extends AppCompatActivity {
 
 
 }
+
