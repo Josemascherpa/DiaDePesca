@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     Integer rioSave = null;
     private XYPlot plot;
 
-    ImageView compartirAltura;
+    LottieAnimationView compartirAltura;
 
 
     //////////////////////////////////
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         altura_tv = (TextView) findViewById(R.id.tv_altura);
         variacion_tv = (TextView) findViewById(R.id.tv_variacion);
         fecha_tv = (TextView) findViewById(R.id.tv_fechaUltimoRegistro);
-        compartirAltura = (ImageView) findViewById(R.id.compartir_altura);
+        compartirAltura = (LottieAnimationView) findViewById(R.id.compartir_altura);
         buscaRios_ATV = (AutoCompleteTextView) findViewById(R.id.ac_tv);
         nombreRio = (TextView) findViewById(R.id.tv_NombreRio);
         favButton = (LottieAnimationView) findViewById(R.id.id_fav);
@@ -250,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
                                     public void run() {
 
                                         if(!rio.GetPuerto().contains("PUERTO RUIZ")){
-                                            Log.i("hola","asdf");
                                             List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
                                             Collections.reverse(listFloatPoints);
                                             rio.arrayValues = (Float[]) listFloatPoints.toArray();
@@ -266,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                        }, 1000);
+                        }, 1500);
                     }else{
                         EmptyDates();
                     }
@@ -279,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         //Set the UI for when a river is selected from the Spinner.
         buscaRios_ATV.setOnItemClickListener((parent, view, position, id) -> {
             String rioSeleccionado = (String) parent.getItemAtPosition(position);
-
+            favButton.setVisibility(View.VISIBLE);
             for (int i = 0; i < _Rios.size(); i++) {
                 if (((_Rios.get(i).GetNombre()+ _Rios.get(i).GetPuerto()).replace(" ", "")).equals((rioSeleccionado.replace(" ", "")))) {
                     VisibilityDates();
@@ -328,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                        }, 1000);
+                        }, 1500);
                     }else{
                         EmptyDates();
                     }

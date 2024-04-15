@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.webscraping.data.Rio;
+import com.example.webscraping.network.CheckInternet;
 import com.example.webscraping.network.DataProvider;
 
 import java.io.Serializable;
@@ -24,18 +25,22 @@ public class Loading extends AppCompatActivity {
 
     TextView versionTV;
     String versionApp = "Version 1.0.0";
+    CheckInternet checkInternet = new CheckInternet();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.example.webscraping.R.layout.loadingui);
+
         recoveryData = new DataProvider("https://contenidosweb.prefecturanaval.gob.ar/alturas/");
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(0xFF000000);
-        RecoveryDataRios();
-//        versionTV = (TextView)findViewById(R.id.version);
-//        versionTV.setText(versionApp);
+//        if( checkInternet.isOnline()){
+            RecoveryDataRios();
+//        }else{
+//            Toast.makeText(this,"no hay internet",Toast.LENGTH_LONG).show();
+//        }
 
     }
 
@@ -54,10 +59,12 @@ public class Loading extends AppCompatActivity {
                         bundle.putSerializable("listaRios",(Serializable)data);
                         intent.putExtras(bundle);
                         startActivity(intent);
+
                     }
                 });
             }
         }).start();
+
 
     }
 
@@ -76,5 +83,9 @@ public class Loading extends AppCompatActivity {
         Context newContext = newBase.createConfigurationContext(configuration);
         super.attachBaseContext(newContext);
     }
+
+
+
+
 
 }

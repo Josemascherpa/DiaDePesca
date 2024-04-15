@@ -187,17 +187,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="15dp">
-        <ImageView
+        android:layout_marginTop="10dp">
+
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/compartir_altura"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
             android:clickable="true"
-            android:layout_width="230dp"
-            android:layout_height="wrap_content"
             android:text="Fecha de la última actualización:"
             android:textColor="@color/whiteBlack"
-            android:src="@drawable/buttoncompartir"
-            android:layout_gravity="center"
-            ></ImageView>
+            app:lottie_rawRes="@raw/sharedwsp"
+            app:lottie_speed="0.2"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"></com.airbnb.lottie.LottieAnimationView>
 
     </LinearLayout>
 
