@@ -49,28 +49,31 @@ public class Loading extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         managerUI = new ManagerUILoading(binding);
-
         managerUI.ClickButtonRegister(binding.comenzaraventura);
         managerUI.ClickButtonLogin(binding.ingresar);
 
 
-
+        BarBackgroundsBlack();
 //        bottomSheetBehavior.setSaveFlags(BottomSheetBehavior.SAVE_ALL);
 //        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
 
 
 //        recoveryData = new DataProvider("https://contenidosweb.prefecturanaval.gob.ar/alturas/");
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(0xFF000000);
+
 //        if( checkInternet.isOnline()){
 //            RecoveryDataRios();
 //        }else{
 //            Toast.makeText(this,"no hay internet",Toast.LENGTH_LONG).show();
 //        }
 
+    }
+
+    private void BarBackgroundsBlack(){
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(0xFF000000);
     }
 
     @Override
