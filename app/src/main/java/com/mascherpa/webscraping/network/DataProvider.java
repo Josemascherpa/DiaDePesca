@@ -1,8 +1,8 @@
-package com.example.webscraping.network;
+package com.mascherpa.webscraping.network;
 
 import android.util.Log;
 
-import com.example.webscraping.data.Rio;
+import com.mascherpa.webscraping.data.Rio;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

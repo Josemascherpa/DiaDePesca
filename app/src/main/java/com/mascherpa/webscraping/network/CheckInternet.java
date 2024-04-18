@@ -1,4 +1,4 @@
-package com.example.webscraping.network;
+package com.mascherpa.webscraping.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

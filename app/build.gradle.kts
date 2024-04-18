@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.webscraping"
+    namespace = "com.mascherpa.webscraping"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.webscraping"
+        applicationId = "com.mascherpa.webscraping"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

@@ -1,4 +1,4 @@
-package com.example.webscraping.data;
+package com.mascherpa.webscraping.data;
 
 import android.util.Log;
 

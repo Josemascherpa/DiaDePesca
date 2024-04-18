@@ -1,4 +1,4 @@
-package com.example.webscraping.FavouriteRio;
+package com.mascherpa.webscraping.FavouriteRio;
 
 import android.content.Context;
 import android.content.SharedPreferences;

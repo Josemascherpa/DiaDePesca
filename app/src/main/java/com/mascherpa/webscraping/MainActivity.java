@@ -1,4 +1,4 @@
-package com.example.webscraping;
+package com.mascherpa.webscraping;
 
 import android.animation.Animator;
 import android.content.Context;
@@ -32,10 +32,10 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
-import com.example.webscraping.CustomAutocompleteEditText.CustomAutoCompleteAdapter;
-import com.example.webscraping.FavouriteRio.MySharedPreferences;
-import com.example.webscraping.data.Rio;
-import com.example.webscraping.load.Loading;
+import com.mascherpa.webscraping.CustomAutocompleteEditText.CustomAutoCompleteAdapter;
+import com.mascherpa.webscraping.FavouriteRio.MySharedPreferences;
+import com.mascherpa.webscraping.data.Rio;
+import com.mascherpa.webscraping.load.Loading;
 
 import java.text.FieldPosition;
 import java.text.Format;

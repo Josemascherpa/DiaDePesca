@@ -1,4 +1,4 @@
-package com.example.webscraping.UI;
+package com.mascherpa.webscraping.UI;
 
 import android.view.View;
 import android.widget.Button;
@@ -6,7 +6,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
-import com.example.webscraping.databinding.LoadinguiBinding;
+import com.mascherpa.webscraping.databinding.LoadinguiBinding;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class ManagerUILoading {
