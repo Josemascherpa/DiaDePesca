@@ -1,4 +1,4 @@
-package com.mascherpa.webscraping.load;
+package com.mascherpa.diadepesca.load;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,11 +16,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mascherpa.webscraping.UI.ManagerUILoading;
-import com.mascherpa.webscraping.data.Rio;
-import com.mascherpa.webscraping.databinding.LoadinguiBinding;
-import com.mascherpa.webscraping.network.CheckInternet;
-import com.mascherpa.webscraping.network.DataProvider;
+import com.mascherpa.diadepesca.UI.ManagerUILoading;
+import com.mascherpa.diadepesca.data.Rio;
+import com.mascherpa.diadepesca.databinding.LoadinguiBinding;
+import com.mascherpa.diadepesca.network.CheckInternet;
+import com.mascherpa.diadepesca.network.DataProvider;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.Serializable;
@@ -120,7 +120,7 @@ public class Loading extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Class MainActivity = com.mascherpa.webscraping.MainActivity.class;
+                        Class MainActivity = com.mascherpa.diadepesca.MainActivity.class;
                         Intent intent = new Intent(Loading.this,MainActivity);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("listaRios",(Serializable)data);

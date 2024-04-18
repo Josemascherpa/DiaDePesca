@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.mascherpa.webscraping"
+    namespace = "com.mascherpa.diadepesca"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.mascherpa.webscraping"
+        applicationId = "com.mascherpa.diadepesca"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

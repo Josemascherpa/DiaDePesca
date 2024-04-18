@@ -1,8 +1,8 @@
-package com.mascherpa.webscraping.network;
+package com.mascherpa.diadepesca.network;
 
 import android.util.Log;
 
-import com.mascherpa.webscraping.data.Rio;
+import com.mascherpa.diadepesca.data.Rio;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

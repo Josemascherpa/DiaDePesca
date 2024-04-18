@@ -1,4 +1,4 @@
-package com.mascherpa.webscraping.CustomAutocompleteEditText;
+package com.mascherpa.diadepesca.CustomAutocompleteEditText;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;

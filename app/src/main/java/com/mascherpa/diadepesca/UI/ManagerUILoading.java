@@ -1,4 +1,4 @@
-package com.mascherpa.webscraping.UI;
+package com.mascherpa.diadepesca.UI;
 
 import android.view.View;
 import android.widget.Button;
@@ -6,7 +6,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
-import com.mascherpa.webscraping.databinding.LoadinguiBinding;
+import com.mascherpa.diadepesca.databinding.LoadinguiBinding;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class ManagerUILoading {

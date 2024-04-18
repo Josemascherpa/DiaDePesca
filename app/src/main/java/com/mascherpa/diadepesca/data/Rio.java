@@ -1,4 +1,4 @@
-package com.mascherpa.webscraping.data;
+package com.mascherpa.diadepesca.data;
 
 import android.util.Log;
 

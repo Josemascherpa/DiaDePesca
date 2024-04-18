@@ -1,4 +1,4 @@
-package com.mascherpa.webscraping.FavouriteRio;
+package com.mascherpa.diadepesca.FavouriteRio;
 
 import android.content.Context;
 import android.content.SharedPreferences;
