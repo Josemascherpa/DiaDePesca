@@ -5,6 +5,6 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Webscraping"
+rootProject.name = "DiadePesca"
 include(":app")
  

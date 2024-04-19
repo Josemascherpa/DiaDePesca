@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "788665467938",
+    "project_id": "diadepesca",
+    "storage_bucket": "diadepesca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788665467938:android:10ebbaf9ed9cee35edf67b",
+        "android_client_info": {
+          "package_name": "com.mascherpa.diadepesca"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "788665467938-v7j1vmi7gu5jq5v6guno8el98t76jneq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mascherpa.diadepesca",
+            "certificate_hash": "608e9248268c6ae39d1b952f54ab78dd296be8e3"
+          }
+        },
+        {
+          "client_id": "788665467938-suts3q151g5q55kckr3epp34gp1eulp7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkTMYX3-nrKAbTltDg0OL9NCjb68iJItw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "788665467938-suts3q151g5q55kckr3epp34gp1eulp7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

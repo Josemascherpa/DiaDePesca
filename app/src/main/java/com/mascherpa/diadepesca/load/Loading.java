@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -16,12 +17,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.mascherpa.diadepesca.UI.ManagerUILoading;
 import com.mascherpa.diadepesca.data.Rio;
 import com.mascherpa.diadepesca.databinding.LoadinguiBinding;
 import com.mascherpa.diadepesca.network.CheckInternet;
 import com.mascherpa.diadepesca.network.DataProvider;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.Serializable;
 import java.util.List;
@@ -42,20 +43,32 @@ public class Loading extends AppCompatActivity {
     private ManagerUILoading managerUI;
 
 
+    //Firebase
+
+
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = LoadinguiBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        managerUI = new ManagerUILoading(binding);
+        managerUI = new ManagerUILoading(binding,this);
         managerUI.ClickButtonRegister(binding.comenzaraventura);
         managerUI.ClickButtonLogin(binding.ingresar);
 
-
         BarBackgroundsBlack();
-//        bottomSheetBehavior.setSaveFlags(BottomSheetBehavior.SAVE_ALL);
-//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+
+
+        binding.loginGmail.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+
+
+            }
+        });
 
 
 
@@ -68,6 +81,8 @@ public class Loading extends AppCompatActivity {
 //        }
 
     }
+
+
 
     private void BarBackgroundsBlack(){
         Window window = getWindow();

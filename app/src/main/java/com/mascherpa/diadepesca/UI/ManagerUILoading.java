@@ -1,13 +1,15 @@
 package com.mascherpa.diadepesca.UI;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
-import com.mascherpa.diadepesca.databinding.LoadinguiBinding;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.mascherpa.diadepesca.databinding.LoadinguiBinding;
 
 public class ManagerUILoading {
     private LoadinguiBinding binding;
@@ -17,8 +19,10 @@ public class ManagerUILoading {
     FrameLayout bottomSheetLogin;
     BottomSheetBehavior<View> bottomSheetBehaviorLogin;
 
-    public ManagerUILoading(LoadinguiBinding bindingLoading){
+    private FirebaseAnalytics mFirebaseAnalytics;
+    public ManagerUILoading(LoadinguiBinding bindingLoading, Context context){
         this.binding = bindingLoading;
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         SetsBottomSheets();
 
     }
