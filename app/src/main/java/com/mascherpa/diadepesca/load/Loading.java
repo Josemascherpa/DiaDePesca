@@ -6,10 +6,8 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -22,11 +20,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.firebase.auth.ActionCodeSettings;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.mascherpa.diadepesca.R;
 import com.mascherpa.diadepesca.UI.ManagerUILoading;
 import com.mascherpa.diadepesca.data.Rio;
 import com.mascherpa.diadepesca.databinding.LoadinguiBinding;
@@ -55,7 +62,10 @@ public class Loading extends AppCompatActivity {
     //Firebase
 
     private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
+
     String email;
+    private static final int RC_SIGN_IN = 9001;
 
 
 
@@ -74,19 +84,23 @@ public class Loading extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
+
         // Set OnClickListener for login button
         binding.loginGmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                email = binding.emailLogin.getEditText().getText().toString();
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.client_id))
+                        .requestEmail()
+                        .build();
 
-                if (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    // Registrar al usuario utilizando el método definido anteriormente
-                    registerUserWithEmailAndPassword(email);
-                } else {
-                    // Mostrar un mensaje de error si el email es inválido
-                    showMessage("Enter a valid email address");
-                }
+                // Crear el cliente de inicio de sesión de Google
+                GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(Loading.this, gso);
+
+                // Iniciar el proceso de inicio de sesión de Google
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+
 
 
             }
@@ -104,44 +118,46 @@ public class Loading extends AppCompatActivity {
 
     }
 
-    private void registerUserWithEmailAndPassword(String email) {
-        mAuth.sendSignInLinkToEmail(email, createSignInEmailLinkSettings())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                // El inicio de sesión de Google falló
+                Log.w("hola", "Google sign in failed", e);
+            }
+        }
+    }
+
+    // Autenticar en Firebase con las credenciales de Google
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+                    public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Guardar el email en SharedPreferences o en otro lugar seguro
-                            // El usuario debe abrir su correo electrónico y hacer clic en el enlace de registro para completar el proceso de registro
-                            // Aquí puedes mostrar un mensaje al usuario para que revise su correo electrónico
-                            showMessage("Check your email for the registration link");
+                            // El inicio de sesión con Firebase fue exitoso
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            // Aquí puedes realizar acciones adicionales con el usuario autenticado
                         } else {
-                            // Registro fallido
-                            Exception e = task.getException();
-                            if (e != null) {
-                                // Obtener el mensaje de error
-                                String errorMessage = e.getMessage();
-                                // Mostrar el mensaje de error
-                                showMessage("Failed to send registration email: " + errorMessage);
-                                Log.i("hola",errorMessage);
-                            } else {
-                                // Si no hay excepción, mostrar un mensaje genérico
-                                showMessage("Failed to send registration email");
-                            }
+                            // El inicio de sesión con Firebase falló
+                            Log.w("hola", "signInWithCredential:failure", task.getException());
                         }
                     }
                 });
     }
 
-    private ActionCodeSettings createSignInEmailLinkSettings() {
-        return ActionCodeSettings.newBuilder()
-                .setUrl("https://diadepesca.page.link/authenticationApp")
-                .setHandleCodeInApp(true)
-                .setAndroidPackageName(
-                        "com.mascherpa.diadepesca", /* ID del paquete de tu aplicación */
-                        true, /* Instalar la aplicación si no está instalada */
-                        "12" /* Mínimo de versión de la aplicación requerida */)
-                .build();
-    }
+
+
+
+
+
 
 
 
