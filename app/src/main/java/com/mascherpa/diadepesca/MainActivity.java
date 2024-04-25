@@ -71,12 +71,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         BarWindowBlack();
-        IdsTextViewsRio();
+        /*IdsTextViewsRio();
         RecoveryIntentLoading();
         ButtonSharedFriends();
         AutocompleteFilling();
         EditUIWithAutocomplete();
-        FavRio();
+        FavRio();*/
     }
 
     @Override

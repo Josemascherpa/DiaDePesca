@@ -38,16 +38,17 @@ android {
 }
 
 dependencies {
-    implementation ("androidx.biometric:biometric:1.1.0")
 
 
-    implementation("com.google.android.gms:play-services-auth:21.0.0")
 
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+
+    implementation("com.google.firebase:firebase-dynamic-links:20.1.1")
 
 
 
-    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")

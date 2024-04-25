@@ -1,15 +1,15 @@
 package com.mascherpa.diadepesca.load;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -21,14 +21,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricPrompt;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.mascherpa.diadepesca.UI.ManagerUILoading;
 import com.mascherpa.diadepesca.data.Rio;
 import com.mascherpa.diadepesca.databinding.LoadinguiBinding;
@@ -37,8 +35,6 @@ import com.mascherpa.diadepesca.network.DataProvider;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.Executor;
 
 public class Loading extends AppCompatActivity {
 
@@ -59,11 +55,9 @@ public class Loading extends AppCompatActivity {
     //Firebase
 
     private FirebaseAuth mAuth;
+    String email;
 
-    private static final int REQUEST_CODE_PERMISSION = 100;
-    private BiometricPrompt biometricPrompt;
-    private BiometricPrompt.PromptInfo promptInfo = null;
-    private String email;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,25 +65,34 @@ public class Loading extends AppCompatActivity {
         binding = LoadinguiBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        managerUI = new ManagerUILoading(binding,this);
+        managerUI = new ManagerUILoading(binding, this);
         managerUI.ClickButtonRegister(binding.comenzaraventura);
         managerUI.ClickButtonLogin(binding.ingresar);
 
         BarBackgroundsBlack();
 
         mAuth = FirebaseAuth.getInstance();
-        Executor executor = ContextCompat.getMainExecutor(this);
-        biometricPrompt = createBiometricPrompt(this, executor);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.USE_BIOMETRIC) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.USE_BIOMETRIC}, REQUEST_CODE_PERMISSION);
-        } else {
-            promptInfo = createPromptInfo();
-        }
 
-        binding.loginGmail.setOnClickListener(v -> {
-            email = binding.emailLogin.getEditText().getText().toString();
-            onRegisterButtonClick(v);
+
+        // Set OnClickListener for login button
+        binding.loginGmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                email = binding.emailLogin.getEditText().getText().toString();
+
+                if (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    // Registrar al usuario utilizando el método definido anteriormente
+                    registerUserWithEmailAndPassword(email);
+                } else {
+                    // Mostrar un mensaje de error si el email es inválido
+                    showMessage("Enter a valid email address");
+                }
+
+
+            }
         });
+
+
 
 //        recoveryData = new DataProvider("https://contenidosweb.prefecturanaval.gob.ar/alturas/");
 
@@ -100,99 +103,50 @@ public class Loading extends AppCompatActivity {
 //        }
 
     }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (biometricPrompt != null && promptInfo != null) {
-                    biometricPrompt.authenticate(promptInfo);
-                }
-            } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
-    private BiometricPrompt.PromptInfo createPromptInfo() {
-        return new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Biometric login")
-                .setSubtitle("Authenticate using your biometric credential")
-                .setNegativeButtonText("Cancel")
-                .build();
-    }
-    private void onRegisterButtonClick(View view) {
-        if (biometricPrompt != null && promptInfo != null) {
-            biometricPrompt.authenticate(promptInfo);
-        }
-    }
-
-    private void checkAndRegisterUser() {
-        // Verificar si el usuario está registrado en Firebase
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            // El usuario ya está registrado, iniciar sesión
-            Toast.makeText(this, "User already logged in", Toast.LENGTH_SHORT).show();
-            // Aquí puedes redirigir al usuario a la siguiente actividad
-        } else {
-            // El usuario no está registrado, registrar en Firebase
-            registerWithFirebase();
-        }
-    }
-    private void authenticateBiometric() {
-        biometricPrompt.authenticate(promptInfo);
-    }
-
-
-    private BiometricPrompt createBiometricPrompt(FragmentActivity activity, Executor executor) {
-        return new BiometricPrompt(activity, executor, new BiometricPrompt.AuthenticationCallback() {
-            @Override
-            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                super.onAuthenticationSucceeded(result);
-                FirebaseUser currentUser = mAuth.getCurrentUser();
-                if (currentUser != null) {
-                    Toast.makeText(Loading.this, "Authentication successful", Toast.LENGTH_SHORT).show();
-                    // Si el usuario ya está autenticado, simplemente redirige a la pantalla principal aquí
-                } else {
-                    // Si el usuario no está autenticado, registra con Firebase
-                    registerWithFirebase();
-                }
-            }
-
-            @Override
-            public void onAuthenticationFailed() {
-                super.onAuthenticationFailed();
-                Toast.makeText(Loading.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void registerWithFirebase() {
-        // Generar un UID único para el usuario
-        String uid = generateUniqueUID();
-        // Registrar al usuario en Firebase con el UID generado
-
-        mAuth.signInWithCustomToken(uid)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show();
-                        // Aquí puedes redirigir al usuario a la siguiente actividad
-                    } else {
-                        Log.i("hola",task.getException().getMessage());
-                        Toast.makeText(this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+    private void registerUserWithEmailAndPassword(String email) {
+        mAuth.sendSignInLinkToEmail(email, createSignInEmailLinkSettings())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // Guardar el email en SharedPreferences o en otro lugar seguro
+                            // El usuario debe abrir su correo electrónico y hacer clic en el enlace de registro para completar el proceso de registro
+                            // Aquí puedes mostrar un mensaje al usuario para que revise su correo electrónico
+                            showMessage("Check your email for the registration link");
+                        } else {
+                            // Registro fallido
+                            Exception e = task.getException();
+                            if (e != null) {
+                                // Obtener el mensaje de error
+                                String errorMessage = e.getMessage();
+                                // Mostrar el mensaje de error
+                                showMessage("Failed to send registration email: " + errorMessage);
+                                Log.i("hola",errorMessage);
+                            } else {
+                                // Si no hay excepción, mostrar un mensaje genérico
+                                showMessage("Failed to send registration email");
+                            }
+                        }
                     }
-                })
-                .addOnFailureListener(this, e -> {
-                    Log.i("hola",e.getMessage());
-                    Toast.makeText(this, "Registration failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
-    private String generateUniqueUID() {
-        // Aquí puedes implementar lógica para generar un UID único
-        // Por ejemplo, puedes usar un UUID aleatorio
-        return UUID.randomUUID().toString();
+    private ActionCodeSettings createSignInEmailLinkSettings() {
+        return ActionCodeSettings.newBuilder()
+                .setUrl("https://diadepesca.page.link/authenticationApp")
+                .setHandleCodeInApp(true)
+                .setAndroidPackageName(
+                        "com.mascherpa.diadepesca", /* ID del paquete de tu aplicación */
+                        true, /* Instalar la aplicación si no está instalada */
+                        "12" /* Mínimo de versión de la aplicación requerida */)
+                .build();
     }
+
+
+
+
+
 
 
 
