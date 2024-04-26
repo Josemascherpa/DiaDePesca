@@ -35,6 +35,7 @@ import com.androidplot.xy.XYSeries;
 import com.mascherpa.diadepesca.CustomAutocompleteEditText.CustomAutoCompleteAdapter;
 import com.mascherpa.diadepesca.FavouriteRio.MySharedPreferences;
 import com.mascherpa.diadepesca.data.Rio;
+import com.mascherpa.diadepesca.databinding.MainBinding;
 import com.mascherpa.diadepesca.load.Loading;
 
 import java.text.FieldPosition;
@@ -64,15 +65,28 @@ public class MainActivity extends AppCompatActivity {
     //////////////////////////////////
     List<Rio> _Rios = new ArrayList<>();
 
+    String emailUser;
+
+    private MainBinding mainActivityBinding;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        mainActivityBinding = MainBinding.inflate(getLayoutInflater());
+        setContentView(mainActivityBinding.getRoot());
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            emailUser = bundle.getString("emailUser");
+            mainActivityBinding.tvNombreRio.setText(emailUser);
+        }
+
         BarWindowBlack();
-        /*IdsTextViewsRio();
-        RecoveryIntentLoading();
+
+
+
+        /*RecoveryIntentLoading();
         ButtonSharedFriends();
         AutocompleteFilling();
         EditUIWithAutocomplete();

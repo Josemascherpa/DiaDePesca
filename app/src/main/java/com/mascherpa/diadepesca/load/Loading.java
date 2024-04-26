@@ -144,6 +144,13 @@ public class Loading extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // El inicio de sesión con Firebase fue exitoso
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            Class MainActivity = com.mascherpa.diadepesca.MainActivity.class;
+                            Intent intent = new Intent(Loading.this,MainActivity);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("emailUser",user.getEmail().toString());
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+
                             // Aquí puedes realizar acciones adicionales con el usuario autenticado
                         } else {
                             // El inicio de sesión con Firebase falló
