@@ -7,7 +7,6 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -33,6 +33,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
+import com.mascherpa.diadepesca.MainActivity;
 import com.mascherpa.diadepesca.R;
 import com.mascherpa.diadepesca.UI.ManagerUILoading;
 import com.mascherpa.diadepesca.data.Rio;
@@ -41,6 +43,7 @@ import com.mascherpa.diadepesca.network.CheckInternet;
 import com.mascherpa.diadepesca.network.DataProvider;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 public class Loading extends AppCompatActivity {
@@ -61,11 +64,12 @@ public class Loading extends AppCompatActivity {
 
     //Firebase
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
+    private FirebaseDatabase database;
     private GoogleSignInClient mGoogleSignInClient;
 
     String email;
-    private static final int RC_SIGN_IN = 9001;
+    private static final int RC_SIGN_IN = 20;
 
 
 
@@ -81,31 +85,21 @@ public class Loading extends AppCompatActivity {
 
         BarBackgroundsBlack();
 
-        mAuth = FirebaseAuth.getInstance();
-
-
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.client_id))
+                        .requestEmail().build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(),gso);
 
         // Set OnClickListener for login button
         binding.loginGmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.client_id))
-                        .requestEmail()
-                        .build();
-
-                // Crear el cliente de inicio de sesión de Google
-                GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(Loading.this, gso);
-
-                // Iniciar el proceso de inicio de sesión de Google
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
-
-
+                googleSignIn();
 
             }
         });
-
 
 
 //        recoveryData = new DataProvider("https://contenidosweb.prefecturanaval.gob.ar/alturas/");
@@ -118,57 +112,49 @@ public class Loading extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void googleSignIn() {
 
-        if (requestCode == RC_SIGN_IN) {
+        Intent intent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(intent,RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RC_SIGN_IN){
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                // El inicio de sesión de Google falló
-                Log.w("hola", "Google sign in failed", e);
+                firebaseAuth(account.getIdToken());
+            }catch (Exception e){
+                showMessage(e.getMessage());
             }
         }
     }
 
-    // Autenticar en Firebase con las credenciales de Google
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        FirebaseAuth.getInstance().signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+    private void firebaseAuth(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
+
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // El inicio de sesión con Firebase fue exitoso
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            Class MainActivity = com.mascherpa.diadepesca.MainActivity.class;
-                            Intent intent = new Intent(Loading.this,MainActivity);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("emailUser",user.getEmail().toString());
-                            intent.putExtras(bundle);
+                        if(task.isSuccessful()){
+                            FirebaseUser user = auth.getCurrentUser();
+                            HashMap<String,Object> map = new HashMap<>();
+                            map.put("id",user.getUid());
+                            map.put("name",user.getDisplayName());
+                            map.put("profile",user.getPhotoUrl().toString());
+                            database.getReference().child("users").child(user.getUid()).setValue(map);
+                            Intent intent = new Intent(Loading.this,MainActivity.class);
                             startActivity(intent);
 
-                            // Aquí puedes realizar acciones adicionales con el usuario autenticado
-                        } else {
-                            // El inicio de sesión con Firebase falló
-                            Log.w("hola", "signInWithCredential:failure", task.getException());
+                        }else{
+                            showMessage("error");
                         }
                     }
                 });
     }
-
-
-
-
-
-
-
-
-
-
 
 
 
