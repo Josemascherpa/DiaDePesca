@@ -9,4 +9,9 @@
         <item name="android:background">?android:attr/colorBackground</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
+
+    <style name="roundedCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item> <!-- Puedes ajustar el tamaño de las esquinas redondeadas aquí -->
+    </style>
 </resources>

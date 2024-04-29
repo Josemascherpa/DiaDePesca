@@ -81,7 +81,6 @@ public class Loading extends AppCompatActivity {
 
         managerUI = new ManagerUILoading(binding, this);
         managerUI.ClickButtonRegister(binding.comenzaraventura);
-        managerUI.ClickButtonLogin(binding.ingresar);
 
         BarBackgroundsBlack();
 
@@ -93,11 +92,10 @@ public class Loading extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(),gso);
 
         // Set OnClickListener for login button
-        binding.loginGmail.setOnClickListener(new View.OnClickListener() {
+        binding.signupGmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 googleSignIn();
-
             }
         });
 
@@ -134,7 +132,6 @@ public class Loading extends AppCompatActivity {
 
     private void firebaseAuth(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
-
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -195,24 +192,7 @@ public class Loading extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                 }
             }
-
-            if (managerUI.ReturnStateBottomSheetsLogin()== BottomSheetBehavior.STATE_EXPANDED) {
-                Rect outRect = new Rect();
-                binding.loginBottomSheets.getGlobalVisibleRect(outRect);
-
-                if(!outRect.contains((int)event.getRawX(), (int)event.getRawY())){
-                    managerUI.GetBottomSheetsLogin().setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-                }
-
-
-
-            }
-
         }
-
         return super.dispatchTouchEvent(event);
     }
 

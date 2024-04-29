@@ -17,7 +17,7 @@ public class ManagerUILoading {
     BottomSheetBehavior<View> bottomSheetBehavior;
 
     FrameLayout bottomSheetLogin;
-    BottomSheetBehavior<View> bottomSheetBehaviorLogin;
+
 
     private FirebaseAnalytics mFirebaseAnalytics;
     public ManagerUILoading(LoadinguiBinding bindingLoading, Context context){
@@ -35,23 +35,9 @@ public class ManagerUILoading {
         });
     }
 
-    public void ClickButtonLogin(Button btnLogin){
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Login();
-            }
-        });
-    }
 
-    private void Login(){
-        bottomSheetLogin.setVisibility(View.VISIBLE);
-        bottomSheet.setVisibility(View.INVISIBLE);
-        bottomSheetBehaviorLogin.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-    }
 
     private void SingUp(){
-        bottomSheetLogin.setVisibility(View.INVISIBLE);
         bottomSheet.setVisibility(View.VISIBLE);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
@@ -64,10 +50,10 @@ public class ManagerUILoading {
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if(newState==BottomSheetBehavior.STATE_EXPANDED){
                     binding.comenzaraventura.setEnabled(false);
-                    binding.ingresar.setEnabled(false);
+
                 }else if(newState==BottomSheetBehavior.STATE_COLLAPSED || newState == BottomSheetBehavior.STATE_HIDDEN){
                     binding.comenzaraventura.setEnabled(true);
-                    binding.ingresar.setEnabled(true);
+
                 }
             }
 
@@ -77,41 +63,19 @@ public class ManagerUILoading {
             }
         });
 
-        bottomSheetLogin = binding.loginBottomSheets;
-        bottomSheetBehaviorLogin = BottomSheetBehavior.from(bottomSheetLogin);
 
-        bottomSheetBehaviorLogin.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if(newState==BottomSheetBehavior.STATE_EXPANDED){
-                    binding.comenzaraventura.setEnabled(false);
-                    binding.ingresar.setEnabled(false);
-                }else if(newState==BottomSheetBehavior.STATE_COLLAPSED || newState == BottomSheetBehavior.STATE_HIDDEN){
-                    binding.comenzaraventura.setEnabled(true);
-                    binding.ingresar.setEnabled(true);
-                }
-            }
 
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
-            }
-        });
     }
 
     public int ReturnStateBottomSheetsSignUp(){
         return bottomSheetBehavior.getState();
     }
-    public int ReturnStateBottomSheetsLogin(){
-            return bottomSheetBehaviorLogin.getState();
-    }
+
     public BottomSheetBehavior GetBottomSheetsSign(){
         return bottomSheetBehavior;
     }
 
-    public BottomSheetBehavior GetBottomSheetsLogin(){
-        return bottomSheetBehaviorLogin;
-    }
+
 
 
 

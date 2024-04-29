@@ -32,6 +32,7 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mascherpa.diadepesca.CustomAutocompleteEditText.CustomAutoCompleteAdapter;
 import com.mascherpa.diadepesca.FavouriteRio.MySharedPreferences;
 import com.mascherpa.diadepesca.data.Rio;
@@ -49,6 +50,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
+    FirebaseDatabase database;
     TextView altura_tv;
     TextView variacion_tv;
     TextView fecha_tv;
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mainActivityBinding = MainBinding.inflate(getLayoutInflater());
         setContentView(mainActivityBinding.getRoot());
+        database = FirebaseDatabase.getInstance();
 
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
