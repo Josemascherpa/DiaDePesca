@@ -32,11 +32,15 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.mascherpa.diadepesca.CustomAutocompleteEditText.CustomAutoCompleteAdapter;
 import com.mascherpa.diadepesca.FavouriteRio.MySharedPreferences;
 import com.mascherpa.diadepesca.data.Rio;
 import com.mascherpa.diadepesca.databinding.MainBinding;
+import com.mascherpa.diadepesca.firebase.FirebaseManager;
 import com.mascherpa.diadepesca.load.Loading;
 
 import java.text.FieldPosition;
@@ -50,7 +54,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    FirebaseDatabase database;
+
     TextView altura_tv;
     TextView variacion_tv;
     TextView fecha_tv;
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     String emailUser;
 
     private MainBinding mainActivityBinding;
+    private FirebaseManager firebaseManager;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -77,13 +82,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mainActivityBinding = MainBinding.inflate(getLayoutInflater());
         setContentView(mainActivityBinding.getRoot());
-        database = FirebaseDatabase.getInstance();
+        firebaseManager = new FirebaseManager();
+
 
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             emailUser = bundle.getString("emailUser");
             mainActivityBinding.tvNombreRio.setText(emailUser);
         }
+
+        mainActivityBinding.changeName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseManager.changeNameDatabase(mainActivityBinding.editTextName.getText().toString());
+            }
+        });
+
+        mainActivityBinding.signuout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+
+                //Limpiola autenticacion de persistencia de datos de auth
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.client_id))
+                        .requestEmail()
+                        .build();
+                GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+                mGoogleSignInClient.signOut();
+
+                finish();
+                Intent intent = new Intent(getApplicationContext(), Loading.class);
+                startActivity(intent);
+            }
+        });
+
+
 
         BarWindowBlack();
 
@@ -129,15 +163,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void IdsTextViewsRio() {
-        plot = (XYPlot) findViewById(R.id.plot);
-        flecha_iv = (ImageView) findViewById(R.id.f_variacion);
-        altura_tv = (TextView) findViewById(R.id.tv_altura);
-        variacion_tv = (TextView) findViewById(R.id.tv_variacion);
-        fecha_tv = (TextView) findViewById(R.id.tv_fechaUltimoRegistro);
-        compartirAltura = (LottieAnimationView) findViewById(R.id.compartir_altura);
-        buscaRios_ATV = (AutoCompleteTextView) findViewById(R.id.ac_tv);
+//        plot = (XYPlot) findViewById(R.id.plot);
+//        flecha_iv = (ImageView) findViewById(R.id.f_variacion);
+//        altura_tv = (TextView) findViewById(R.id.tv_altura);
+//        variacion_tv = (TextView) findViewById(R.id.tv_variacion);
+//        fecha_tv = (TextView) findViewById(R.id.tv_fechaUltimoRegistro);
+//        compartirAltura = (LottieAnimationView) findViewById(R.id.compartir_altura);
+//        buscaRios_ATV = (AutoCompleteTextView) findViewById(R.id.ac_tv);
         nombreRio = (TextView) findViewById(R.id.tv_NombreRio);
-        favButton = (LottieAnimationView) findViewById(R.id.id_fav);
+//        favButton = (LottieAnimationView) findViewById(R.id.id_fav);
         favButton.setVisibility(View.GONE);
     }
     private void CreateGraphs(Float[] flpoints, String[] fechaBottom) {

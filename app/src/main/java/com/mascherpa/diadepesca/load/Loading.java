@@ -25,15 +25,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.mascherpa.diadepesca.MainActivity;
 import com.mascherpa.diadepesca.R;
 import com.mascherpa.diadepesca.UI.ManagerUILoading;
@@ -84,20 +87,34 @@ public class Loading extends AppCompatActivity {
 
         BarBackgroundsBlack();
 
-        auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.client_id))
-                        .requestEmail().build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(),gso);
 
-        // Set OnClickListener for login button
-        binding.signupGmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                googleSignIn();
-            }
-        });
+
+        auth = FirebaseAuth.getInstance();
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            finish();
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        } else {
+            database = FirebaseDatabase.getInstance();
+            GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.client_id))
+                    .requestEmail().build();
+            mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(),gso);
+
+            // Set OnClickListener for login button
+            binding.signupGmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    googleSignIn();
+                }
+            });
+        }
+
+
+
 
 
 //        recoveryData = new DataProvider("https://contenidosweb.prefecturanaval.gob.ar/alturas/");
@@ -131,26 +148,76 @@ public class Loading extends AppCompatActivity {
     }
 
     private void firebaseAuth(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         auth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            FirebaseUser user = auth.getCurrentUser();
-                            HashMap<String,Object> map = new HashMap<>();
-                            map.put("id",user.getUid());
-                            map.put("name",user.getDisplayName());
-                            map.put("profile",user.getPhotoUrl().toString());
-                            database.getReference().child("users").child(user.getUid()).setValue(map);
-                            Intent intent = new Intent(Loading.this,MainActivity.class);
-                            startActivity(intent);
-
-                        }else{
-                            showMessage("error");
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = auth.getCurrentUser();
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("id", user.getUid());
+                        map.put("name", user.getDisplayName());
+                        map.put("profile", user.getPhotoUrl().toString());
+                        // Llamamos a validateUser y le pasamos el userUid y un Listener para manejar el resultado
+                        validateUser(user.getUid(), exist -> {
+                            if (exist) {
+                                // El usuario existe, continuar con el flujo normal
+                                Intent intent = new Intent(Loading.this, MainActivity.class);
+                                startActivity(intent);
+                            } else {
+                                // El usuario no existe, crear una nueva cuenta
+                                createNewAccount(map);
+                            }
+                        });
+                    } else {
+                        showMessage("error");
                     }
                 });
+    }
+
+    // Modificamos validateUser para que acepte un Listener para manejar el resultado
+    private void validateUser(String firebaseUID, OnUserValidationListener listener) {
+        if (database != null) {
+            DatabaseReference usersRef = database.getReference("users");
+            Query query = usersRef.orderByChild("id").equalTo(firebaseUID);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    boolean exist = dataSnapshot.exists(); // Verificar si el usuario existe
+                    listener.onUserValidation(exist); // Notificar el resultado al Listener
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Manejar errores si la consulta es cancelada
+                }
+            });
+        }
+    }
+    // Interfaz para manejar el resultado de la validación del usuario
+    interface OnUserValidationListener {
+        void onUserValidation(boolean exist);
+    }
+
+    // Función para crear una nueva cuenta en la base de datos
+    private void createNewAccount(HashMap<String, Object> userData) {
+        DatabaseReference usersRef = database.getReference("users");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            usersRef.child(user.getUid()).setValue(userData)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Si la creación de la cuenta fue exitosa, redirigir al usuario a la actividad principal
+                            Intent intent = new Intent(Loading.this, MainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            // Manejar errores si la creación de la cuenta falla
+                            showMessage("Error al crear la cuenta en la base de datos");
+                        }
+                    });
+        } else {
+            // Manejar el caso en el que el usuario no esté autenticado
+            showMessage("El usuario no está autenticado");
+        }
     }
 
 
