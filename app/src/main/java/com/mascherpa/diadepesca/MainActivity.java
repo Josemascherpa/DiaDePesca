@@ -38,7 +38,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.mascherpa.diadepesca.CustomAutocompleteEditText.CustomAutoCompleteAdapter;
 import com.mascherpa.diadepesca.FavouriteRio.MySharedPreferences;
+import com.mascherpa.diadepesca.UI.ManagerUIMain;
 import com.mascherpa.diadepesca.data.Rio;
+import com.mascherpa.diadepesca.databinding.LoadinguiBinding;
 import com.mascherpa.diadepesca.databinding.MainBinding;
 import com.mascherpa.diadepesca.firebase.FirebaseManager;
 import com.mascherpa.diadepesca.load.Loading;
@@ -76,36 +78,34 @@ public class MainActivity extends AppCompatActivity {
     private MainBinding mainActivityBinding;
     private FirebaseManager firebaseManager;
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainActivityBinding = MainBinding.inflate(getLayoutInflater());
         setContentView(mainActivityBinding.getRoot());
-        firebaseManager = new FirebaseManager(getApplicationContext(),getString(R.string.client_id));
+        firebaseManager = new FirebaseManager(getApplicationContext(),getString(R.string.client_id),mainActivityBinding);
 
-
-        Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
-            emailUser = bundle.getString("emailUser");
-            mainActivityBinding.tvNombreRio.setText(emailUser);
-        }
-
-        mainActivityBinding.deleteAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseManager.deleteAccount(FirebaseAuth.getInstance().getUid());
-
-            }
-        });
-
+        setButtonDeleteAccount();
+        setButtonSignOut();
+        ChangeName();
+        BarWindowBlack();
+        /*RecoveryIntentLoading();
+        ButtonSharedFriends();
+        AutocompleteFilling();
+        EditUIWithAutocomplete();
+        FavRio();*/
+    }
+    private void ChangeName(){
         mainActivityBinding.changeName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 firebaseManager.changeNameDatabase(mainActivityBinding.editTextName.getText().toString());
             }
         });
-
+    }
+    private void setButtonSignOut(){
         mainActivityBinding.signuout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,18 +116,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
 
-
-
-        BarWindowBlack();
-
-
-
-        /*RecoveryIntentLoading();
-        ButtonSharedFriends();
-        AutocompleteFilling();
-        EditUIWithAutocomplete();
-        FavRio();*/
+    private void setButtonDeleteAccount(){
+        mainActivityBinding.deleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseManager.deleteAccount(FirebaseAuth.getInstance().getUid());
+            }
+        });
     }
 
     @Override
@@ -170,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
 //        fecha_tv = (TextView) findViewById(R.id.tv_fechaUltimoRegistro);
 //        compartirAltura = (LottieAnimationView) findViewById(R.id.compartir_altura);
 //        buscaRios_ATV = (AutoCompleteTextView) findViewById(R.id.ac_tv);
-        nombreRio = (TextView) findViewById(R.id.tv_NombreRio);
+
 //        favButton = (LottieAnimationView) findViewById(R.id.id_fav);
         favButton.setVisibility(View.GONE);
     }

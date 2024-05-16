@@ -7,7 +7,10 @@ import static androidx.core.content.ContextCompat.startActivity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -17,9 +20,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mascherpa.diadepesca.MainActivity;
 import com.mascherpa.diadepesca.R;
+import com.mascherpa.diadepesca.UI.ManagerUIMain;
+import com.mascherpa.diadepesca.databinding.MainBinding;
 import com.mascherpa.diadepesca.load.Loading;
 
 public class FirebaseManager {
@@ -28,12 +37,35 @@ public class FirebaseManager {
     FirebaseUser user;
     Context context;
     String client_id;
-    public FirebaseManager(Context getContexts, String getClient_id){
+
+    public String nameUser;
+    MainBinding managerUI;
+    public FirebaseManager(Context getContexts, String getClient_id, MainBinding binding){
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         context = getContexts;
         client_id = getClient_id;
+        managerUI = binding;
+        GetNameUser();
+
+    }
+
+    public void GetNameUser(){
+        DatabaseReference userRef = database.getReference("users").child(auth.getUid()).child("name");
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Obtener el valor de la clave "name"
+                nameUser = dataSnapshot.getValue(String.class);
+                managerUI.tvNombreUser.setText("Hello "+nameUser+"!!");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Manejar errores de lectura de datos, si es necesario
+                Log.e("Error", "Error al leer el valor de la clave 'name': " + databaseError.getMessage());
+            }
+        });
     }
     public void changeNameDatabase(String name){
         DatabaseReference userRef = database.getReference("users").child(auth.getUid()).child("name");

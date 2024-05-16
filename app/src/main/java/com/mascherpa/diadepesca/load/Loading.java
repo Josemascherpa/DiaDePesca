@@ -225,6 +225,7 @@ public class Loading extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     boolean exist = dataSnapshot.exists(); // verifico si el usuario existe
                     listener.onUserValidation(exist); // notifico el resultado al Listener
+
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {

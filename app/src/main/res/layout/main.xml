@@ -5,9 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:ap="http://schemas.android.com/apk/res-auto"
-    android:background="@color/black"
+    android:background="@color/grey"
     android:orientation="vertical"
     >
+
+
 
 
 
@@ -36,24 +38,23 @@
 
 
     <TextView
-        android:id="@+id/tv_NombreRio"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_NombreUser"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autoSizeTextType="uniform"
-        android:text="Rio Parana(Santa Fe)"
-        android:textAlignment="center"
-        android:textColor="@color/whiteBlack"
+        android:text="Hello"
+        android:textColor="@color/black"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:layout_marginTop="0dp"
-        android:layout_gravity="center"
+        android:layout_marginTop="20sp"
+        android:layout_marginLeft="30sp"
+        android:layout_gravity="left"
         ></TextView>
 
     <EditText
         android:id="@+id/edit_text_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         ></EditText>
     <Button
         android:id="@+id/change_name"
