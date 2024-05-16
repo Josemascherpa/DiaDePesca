@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <ImageView
         android:id="@+id/image_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/fondo" />
+
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
@@ -18,11 +20,10 @@
         android:layout_marginTop="80dp"
         android:text="¡Bienvenido!"
         android:letterSpacing="0.02"
-        android:textSize="60dp"
+        android:textSize="60sp"
         android:textColor="@color/whiteBlack"
         android:textStyle="bold"
-        android:fontFamily="@font/robotoregular"
-        ></com.google.android.material.textview.MaterialTextView>
+        android:fontFamily="@font/robotoregular" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
@@ -31,18 +32,17 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="Obtén información sobre los ríos y el clima para tu jornada de pesca."
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textAlignment="center"
         android:textColor="@color/whiteBlack"
         android:textStyle="bold"
-        android:fontFamily="@font/robotoregular"
-        ></com.google.android.material.textview.MaterialTextView>
+        android:fontFamily="@font/robotoregular" />
 
     <Button
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:id="@+id/comenzaraventura"
         android:layout_gravity="bottom|center"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_marginBottom="80dp"
         android:layout_width="250dp"
         android:layout_height="55dp"
@@ -52,6 +52,7 @@
         android:backgroundTint="@color/blue"
         android:textAppearance="@font/robotoregular"
         />
+
 
 
 
@@ -66,21 +67,22 @@
         app:behavior_hideable="false"
         >
 
+
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
             android:id="@+id/drag_handle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
+
         <TextView
             android:id="@+id/register_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign up with"
-            android:textSize="25dp"
+            android:textSize="25sp"
             android:textStyle="bold"
             android:layout_marginTop="30dp"
-            android:layout_gravity="center|top"
-            ></TextView>
+            android:layout_gravity="center|top" />
 
         <!-- gmail -->
         <com.google.android.material.imageview.ShapeableImageView
@@ -96,6 +98,37 @@
             app:shapeAppearanceOverlay="@style/roundedCorners"
             />
     </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/overlayLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:alpha="0.7"
+            android:clickable="true"
+            android:focusable="true"/>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/ap_white"/>
+
+
+    </FrameLayout>
+
+
+
+
+
+
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

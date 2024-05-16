@@ -94,6 +94,7 @@ public class Loading extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
+            showLoadingIntent();
             validateUser(currentUser.getUid(), exist -> {
                 if (exist) {//Existe usuario
                     Intent intent = new Intent(Loading.this, MainActivity.class);
@@ -117,6 +118,11 @@ public class Loading extends AppCompatActivity {
 //            Toast.makeText(this,"no hay internet",Toast.LENGTH_LONG).show();
 //        }
 
+    }
+
+    private void showLoadingIntent(){
+        binding.overlayLoading.setVisibility(View.VISIBLE);
+        managerUI.CloseBottomSheetBehavior();
     }
 
 
@@ -149,6 +155,7 @@ public class Loading extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RC_SIGN_IN){
+            showLoadingIntent();
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -252,17 +259,6 @@ public class Loading extends AppCompatActivity {
             showMessage("El usuario no está autenticado");
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     private void showMessage(String message) {

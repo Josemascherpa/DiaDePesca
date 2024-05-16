@@ -62,9 +62,10 @@ public class ManagerUILoading {
 
             }
         });
+    }
 
-
-
+    public void CloseBottomSheetBehavior(){
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     public int ReturnStateBottomSheetsSignUp(){
