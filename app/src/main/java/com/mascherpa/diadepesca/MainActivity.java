@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mainActivityBinding = MainBinding.inflate(getLayoutInflater());
         setContentView(mainActivityBinding.getRoot());
-        firebaseManager = new FirebaseManager();
+        firebaseManager = new FirebaseManager(getApplicationContext(),getString(R.string.client_id));
 
 
         Bundle bundle = getIntent().getExtras();
@@ -90,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
             emailUser = bundle.getString("emailUser");
             mainActivityBinding.tvNombreRio.setText(emailUser);
         }
+
+        mainActivityBinding.deleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseManager.deleteAccount(FirebaseAuth.getInstance().getUid());
+
+            }
+        });
 
         mainActivityBinding.changeName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,15 +110,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-
-                //Limpiola autenticacion de persistencia de datos de auth
-                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.client_id))
-                        .requestEmail()
-                        .build();
-                GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
-                mGoogleSignInClient.signOut();
-
+                firebaseManager.ClearCacheGoogle();
                 finish();
                 Intent intent = new Intent(getApplicationContext(), Loading.class);
                 startActivity(intent);

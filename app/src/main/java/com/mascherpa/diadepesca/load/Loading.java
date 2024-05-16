@@ -24,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -60,6 +61,7 @@ public class Loading extends AppCompatActivity {
     Button comenzarAventurabtn;
 
     Button ingresarBtn;
+
     private LoadinguiBinding binding;
 
     private ManagerUILoading managerUI;
@@ -88,31 +90,21 @@ public class Loading extends AppCompatActivity {
         BarBackgroundsBlack();
 
 
-
+        database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
-
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
-            finish();
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-        } else {
-            database = FirebaseDatabase.getInstance();
-            GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.client_id))
-                    .requestEmail().build();
-            mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(),gso);
-
-            // Set OnClickListener for login button
-            binding.signupGmail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    googleSignIn();
+            validateUser(currentUser.getUid(), exist -> {
+                if (exist) {//Existe usuario
+                    Intent intent = new Intent(Loading.this, MainActivity.class);
+                    startActivity(intent);
+                }else{//no existe usuario
+                    UserNotLoadedInDB();
                 }
             });
+        } else {
+            LoginOrRegister();
         }
-
 
 
 
@@ -127,8 +119,28 @@ public class Loading extends AppCompatActivity {
 
     }
 
-    private void googleSignIn() {
 
+    private void UserNotLoadedInDB(){
+        auth.signOut();
+        LoginOrRegister();
+    }
+
+    private void LoginOrRegister(){
+        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.client_id))
+                .requestEmail().build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(),gso);
+        // Set OnClickListener for login button
+        binding.signupGmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                googleSignIn();
+            }
+        });
+    }
+
+    private void googleSignIn() {
         Intent intent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(intent,RC_SIGN_IN);
     }
@@ -141,8 +153,29 @@ public class Loading extends AppCompatActivity {
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuth(account.getIdToken());
-            }catch (Exception e){
-                showMessage(e.getMessage());
+
+            }catch (ApiException e){
+                int statusCode = e.getStatusCode();
+                switch (statusCode) {
+                    case GoogleSignInStatusCodes.SIGN_IN_CANCELLED:
+                        showMessage("Sign in cancelled");
+                        break;
+                    case GoogleSignInStatusCodes.SIGN_IN_FAILED:
+                        showMessage("Sign in failed");
+                        break;
+                    case GoogleSignInStatusCodes.NETWORK_ERROR:
+                        showMessage("Network error");
+                        break;
+                    case GoogleSignInStatusCodes.INVALID_ACCOUNT:
+                        showMessage("Invalid account");
+                        break;
+                    case GoogleSignInStatusCodes.ERROR:
+                        showMessage("Error code 10: Configuration issue");
+                        break;
+                    default:
+                        showMessage("Error code: " + statusCode + " - " + e.getMessage());
+                        break;
+                }
             }
         }
     }
@@ -176,19 +209,19 @@ public class Loading extends AppCompatActivity {
 
     // Modificamos validateUser para que acepte un Listener para manejar el resultado
     private void validateUser(String firebaseUID, OnUserValidationListener listener) {
+
         if (database != null) {
             DatabaseReference usersRef = database.getReference("users");
             Query query = usersRef.orderByChild("id").equalTo(firebaseUID);
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    boolean exist = dataSnapshot.exists(); // Verificar si el usuario existe
-                    listener.onUserValidation(exist); // Notificar el resultado al Listener
+                    boolean exist = dataSnapshot.exists(); // verifico si el usuario existe
+                    listener.onUserValidation(exist); // notifico el resultado al Listener
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    // Manejar errores si la consulta es cancelada
+                    showMessage("Error en la consulta: " + error.getMessage());
                 }
             });
         }
@@ -198,7 +231,7 @@ public class Loading extends AppCompatActivity {
         void onUserValidation(boolean exist);
     }
 
-    // Función para crear una nueva cuenta en la base de datos
+    //metodo para crear una nueva cuenta en la base de datos
     private void createNewAccount(HashMap<String, Object> userData) {
         DatabaseReference usersRef = database.getReference("users");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -302,12 +335,6 @@ public class Loading extends AppCompatActivity {
         Context newContext = newBase.createConfigurationContext(configuration);
         super.attachBaseContext(newContext);
     }
-
-
-
-
-
-
 
 
 }
