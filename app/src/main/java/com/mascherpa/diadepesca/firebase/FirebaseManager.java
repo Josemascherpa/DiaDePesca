@@ -1,10 +1,5 @@
 package com.mascherpa.diadepesca.firebase;
 
-import static android.provider.Settings.System.getString;
-
-import static androidx.core.content.ContextCompat.startActivity;
-
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -12,22 +7,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mascherpa.diadepesca.MainActivity;
 import com.mascherpa.diadepesca.R;
-import com.mascherpa.diadepesca.UI.ManagerUIMain;
 import com.mascherpa.diadepesca.databinding.MainBinding;
 import com.mascherpa.diadepesca.load.Loading;
 
@@ -48,6 +40,31 @@ public class FirebaseManager {
         client_id = getClient_id;
         managerUI = binding;
         GetNameUser();
+        getImageUser();
+
+    }
+
+    private void getImageUser() {
+        DatabaseReference imageRef = database.getReference("users").child(auth.getUid()).child("profile");
+        imageRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Obtener el valor de la clave "name"
+                String linkimage = dataSnapshot.getValue(String.class);
+                Glide.with(context)
+                        .load(linkimage)
+                        .placeholder(R.drawable.refreshwidget)
+                        .error(R.drawable.app_widget_background)
+                        .transform(new CircleCrop())
+                        .into(managerUI.imageUser);
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Manejar errores de lectura de datos, si es necesario
+                Log.e("Error", "Error al leer el valor de la clave 'name': " + databaseError.getMessage());
+            }
+        });
 
     }
 

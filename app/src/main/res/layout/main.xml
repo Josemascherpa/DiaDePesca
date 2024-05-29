@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:ap="http://schemas.android.com/apk/res-auto"
-    android:background="@color/grey"
+    android:background="@color/whiteBlack"
     android:orientation="vertical"
+    android:padding="10dp"
     >
-
-
-
 
 
 <!--    <AutoCompleteTextView-->
@@ -36,30 +31,50 @@
 <!--        >-->
 <!--    </com.airbnb.lottie.LottieAnimationView>-->
 
+    <!-- Nombre Usuario y foto perfil-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/tv_NombreUser"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform"
+            android:text="Hola"
+            android:textColor="@color/black"
+            android:textSize="28dp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:gravity="center|center_vertical"/>
+        <ImageView
+                android:id="@+id/imageUser"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop">
+        </ImageView>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_NombreUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoSizeTextType="uniform"
-        android:text="Hello"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:layout_marginTop="20sp"
-        android:layout_marginLeft="30sp"
-        android:layout_gravity="left"
-        ></TextView>
+
+
+
+
+
 
     <EditText
         android:id="@+id/edit_text_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         ></EditText>
     <Button
         android:id="@+id/change_name"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:visibility="gone"
         ></Button>
 
     <Button
@@ -67,13 +82,49 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="sign out"
+        android:visibility="gone"
         ></Button>
     <Button
         android:id="@+id/deleteAccount"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="delete account"
+        android:visibility="gone"
         ></Button>
+
+    <!-- RIO -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_corners"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Nombre Rio"
+            android:gravity="center">
+        </TextView>
+
+    </LinearLayout>
+    <!-- WEATHER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_corners"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="hola">
+
+        </TextView>
+
+    </LinearLayout>
 
 <!--    <LinearLayout-->
 <!--        android:id="@+id/framePosicionamiento"-->

@@ -4,8 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorTitles">#637A9F</color>
     <color name="grey">#EBE6E4E4</color>
-    <color name="greyBlack">#918F8F</color>
-    <color name="whiteBlack">#E3DFDF</color>
+    <color name="greyBlack">#F3F1EEEE</color>
+    <color name="whiteBlack">#DAD0BD</color>
     <color name="light_blue_50">#FFE1F5FE</color>
     <color name="light_blue_200">#FF81D4FA</color>
     <color name="light_blue_600">#FF039BE5</color>
