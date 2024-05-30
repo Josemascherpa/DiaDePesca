@@ -75,7 +75,7 @@ public class FirebaseManager {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Obtener el valor de la clave "name"
                 nameUser = dataSnapshot.getValue(String.class);
-                managerUI.tvNombreUser.setText("Hello "+nameUser+"!!");
+                managerUI.tvNombreUser.setText("Hola "+nameUser+"!!");
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -56,8 +57,6 @@ public class Loading extends AppCompatActivity {
 
     TextView versionTV;
     String versionApp = "Version 1.0.0";
-    CheckInternet checkInternet = new CheckInternet();
-
     Button comenzarAventurabtn;
 
     Button ingresarBtn;
@@ -83,22 +82,19 @@ public class Loading extends AppCompatActivity {
 
         binding = LoadinguiBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        database = FirebaseDatabase.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         managerUI = new ManagerUILoading(binding, this);
         managerUI.ClickButtonRegister(binding.comenzaraventura);
-
         BarBackgroundsBlack();
 
-
-        database = FirebaseDatabase.getInstance();
-        auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
             showLoadingIntent();
             validateUser(currentUser.getUid(), exist -> {
                 if (exist) {//Existe usuario
-                    Intent intent = new Intent(Loading.this, MainActivity.class);
-                    startActivity(intent);
+                    RecoveryDataRiosAndStartMain();
                 }else{//no existe usuario
                     UserNotLoadedInDB();
                 }
@@ -106,18 +102,6 @@ public class Loading extends AppCompatActivity {
         } else {
             LoginOrRegister();
         }
-
-
-
-
-//        recoveryData = new DataProvider("https://contenidosweb.prefecturanaval.gob.ar/alturas/");
-
-//        if( checkInternet.isOnline()){
-//            RecoveryDataRios();
-//        }else{
-//            Toast.makeText(this,"no hay internet",Toast.LENGTH_LONG).show();
-//        }
-
     }
 
     private void showLoadingIntent(){
@@ -201,8 +185,7 @@ public class Loading extends AppCompatActivity {
                         validateUser(user.getUid(), exist -> {
                             if (exist) {
                                 // El usuario existe, continuar con el flujo normal
-                                Intent intent = new Intent(Loading.this, MainActivity.class);
-                                startActivity(intent);
+                                RecoveryDataRiosAndStartMain();
                             } else {
                                 // El usuario no existe, crear una nueva cuenta
                                 createNewAccount(map);
@@ -248,8 +231,7 @@ public class Loading extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             // Si la creación de la cuenta fue exitosa, redirigir al usuario a la actividad principal
-                            Intent intent = new Intent(Loading.this, MainActivity.class);
-                            startActivity(intent);
+                            RecoveryDataRiosAndStartMain();
                         } else {
                             // Manejar errores si la creación de la cuenta falla
                             showMessage("Error al crear la cuenta en la base de datos");
@@ -294,7 +276,8 @@ public class Loading extends AppCompatActivity {
     }
 
 
-    public void RecoveryDataRios(){
+    public void RecoveryDataRiosAndStartMain(){
+        recoveryData = new DataProvider("https://contenidosweb.prefecturanaval.gob.ar/alturas/");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -308,7 +291,6 @@ public class Loading extends AppCompatActivity {
                         bundle.putSerializable("listaRios",(Serializable)data);
                         intent.putExtras(bundle);
                         startActivity(intent);
-
                     }
                 });
             }

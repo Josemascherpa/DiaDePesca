@@ -1,122 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whiteBlack"
     android:orientation="vertical"
-    android:padding="10dp"
-    >
+    android:padding="10dp">
 
-
-<!--    <AutoCompleteTextView-->
-<!--        android:id="@+id/ac_tv"-->
-<!--        android:layout_width="250dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:hint="Busca tu rio"-->
-<!--        android:textColorHint="@color/whiteBlack"-->
-<!--        android:gravity="center"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:inputType="text"-->
-<!--        ></AutoCompleteTextView>-->
-
-<!--    <com.airbnb.lottie.LottieAnimationView-->
-<!--        android:id="@+id/id_fav"-->
-<!--        android:layout_width="60dp"-->
-<!--        android:layout_height="60dp"-->
-<!--        android:layout_marginTop="-40dp"-->
-<!--        android:layout_marginRight="15dp"-->
-<!--        android:layout_gravity="right"-->
-<!--        app:lottie_rawRes="@raw/favanimations"-->
-<!--        >-->
-<!--    </com.airbnb.lottie.LottieAnimationView>-->
 
     <!-- Nombre Usuario y foto perfil-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/tv_NombreUser"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:autoSizeTextType="uniform"
-            android:text="Hola"
+            android:gravity="center|center_vertical"
+            android:text="Hola Usuario"
             android:textColor="@color/black"
             android:textSize="28dp"
-            android:textStyle="bold"
-            android:layout_gravity="center_vertical"
-            android:gravity="center|center_vertical"/>
+            android:textStyle="bold" />
+
         <ImageView
-                android:id="@+id/imageUser"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center_vertical"
-                android:scaleType="centerCrop">
-        </ImageView>
+            android:id="@+id/imageUser"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerCrop"></ImageView>
     </LinearLayout>
-
-
-
-
-
 
 
     <EditText
         android:id="@+id/edit_text_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        ></EditText>
+        android:visibility="gone"></EditText>
+
     <Button
         android:id="@+id/change_name"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:visibility="gone"
-        ></Button>
+        android:visibility="gone"></Button>
 
     <Button
         android:id="@+id/signuout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="sign out"
-        android:visibility="gone"
-        ></Button>
+        android:visibility="gone"></Button>
+
     <Button
         android:id="@+id/deleteAccount"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="delete account"
-        android:visibility="gone"
-        ></Button>
+        android:visibility="gone"></Button>
 
-    <!-- RIO -->
+    <!-- RIO FRAMELAYOUT-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="230dp"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:background="@drawable/rounded_corners"
-        android:layout_gravity="center"
-        >
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <!--Linearlayout buscador rio y favorito-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <AutoCompleteTextView
+                android:id="@+id/busca_rio"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginStart="60sp"
+                android:hint="Busca tu rio"
+                android:inputType="text"
+                android:textColorHint="@color/whiteBlack" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/fav_animation"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="right"
+                android:layout_marginTop="-40dp"
+                app:lottie_rawRes="@raw/favanimations"></com.airbnb.lottie.LottieAnimationView>
+
+        </LinearLayout>
+        <!--LinearLayout Solo Text Informacion Rio-->
+        <LinearLayout
+            android:layout_marginTop="-13sp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Información Rio"
+                android:textSize="18dp"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre Rio"
-            android:gravity="center">
-        </TextView>
+            android:gravity="center"
+            android:orientation="vertical">
+            <!--Nombre Rio-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="30dp"
+                    android:text="Altura actual:"
+                    android:textSize="18sp"
+                    android:gravity="left"
+                    android:layout_gravity="center_vertical"
+                    ></TextView>
+                <TextView
+                    android:id="@+id/altura_rio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Altura"
+                    android:textSize="18sp"
+                    android:gravity="left"
+                    android:layout_gravity="center_vertical"
+                    ></TextView>
+            </LinearLayout>
+            <!--Altura Actual Rio-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="30dp"
+                    android:text="Variacion:"
+                    android:textSize="18sp"
+                    android:gravity="left"
+                    android:layout_gravity="center_vertical"
+                    ></TextView>
+                <TextView
+                    android:id="@+id/variacion_rio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="VariacionRio"
+                    android:textSize="18sp"
+                    android:gravity="left"
+                    android:layout_gravity="center_vertical"
+                    ></TextView>
+            </LinearLayout>
+            <!--Variacion Rio-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="30dp"
+                    android:gravity="left"
+                    android:text="Actualización:"
+                    android:textSize="18sp"></TextView>
+
+                <TextView
+                    android:id="@+id/fecha_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="fecha"
+                    android:textSize="18sp"
+                    android:gravity="left"
+                    android:layout_gravity="center_vertical"
+                    ></TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="compartir"
+                    ></Button>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
+
     <!-- WEATHER -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_corners"
+        android:layout_height="230dp"
         android:layout_gravity="center"
-        >
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_corners">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -126,31 +229,29 @@
 
     </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/framePosicionamiento"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:orientation="vertical"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        >-->
-<!--        <com.androidplot.xy.XYPlot-->
-<!--            android:id="@+id/plot"-->
-<!--            style="@style/APDefacto.Dark"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_gravity="center"-->
-<!--            ap:domainLineColor="@color/ap_transparent"-->
-<!--            ap:graphMarginBottom="20dp"-->
-<!--            ap:graphMarginLeft="5dp"-->
-<!--            ap:graphMarginTop="25dp"-->
-<!--            ap:legendVisible="false"-->
-<!--            ap:lineLabelTextSizeBottom="8sp"-->
-<!--            ap:lineLabelTextSizeLeft="10sp"-->
-<!--            ap:rangeLineColor="@color/ap_transparent"-->
-<!--            app:marginLeft="-13dp" />-->
-<!--    </LinearLayout>-->
-
-
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/framePosicionamiento"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:orientation="vertical"-->
+    <!--        android:layout_marginTop="10dp"-->
+    <!--        >-->
+    <!--        <com.androidplot.xy.XYPlot-->
+    <!--            android:id="@+id/plot"-->
+    <!--            style="@style/APDefacto.Dark"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            ap:domainLineColor="@color/ap_transparent"-->
+    <!--            ap:graphMarginBottom="20dp"-->
+    <!--            ap:graphMarginLeft="5dp"-->
+    <!--            ap:graphMarginTop="25dp"-->
+    <!--            ap:legendVisible="false"-->
+    <!--            ap:lineLabelTextSizeBottom="8sp"-->
+    <!--            ap:lineLabelTextSizeLeft="10sp"-->
+    <!--            ap:rangeLineColor="@color/ap_transparent"-->
+    <!--            app:marginLeft="-13dp" />-->
+    <!--    </LinearLayout>-->
 
 
 </LinearLayout>

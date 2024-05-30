@@ -32,15 +32,12 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.mascherpa.diadepesca.CustomAutocompleteEditText.CustomAutoCompleteAdapter;
+
 import com.mascherpa.diadepesca.FavouriteRio.MySharedPreferences;
 import com.mascherpa.diadepesca.UI.ManagerUIMain;
 import com.mascherpa.diadepesca.data.Rio;
-import com.mascherpa.diadepesca.databinding.LoadinguiBinding;
+
 import com.mascherpa.diadepesca.databinding.MainBinding;
 import com.mascherpa.diadepesca.firebase.FirebaseManager;
 import com.mascherpa.diadepesca.load.Loading;
@@ -48,12 +45,7 @@ import com.mascherpa.diadepesca.load.Loading;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,9 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     //////////////////////////////////
-    List<Rio> _Rios = new ArrayList<>();
 
+    private List<Rio> _Rios;
     String emailUser;
+    private ManagerUIMain managerUI;
 
     private MainBinding mainActivityBinding;
     private FirebaseManager firebaseManager;
@@ -91,11 +84,14 @@ public class MainActivity extends AppCompatActivity {
         setButtonSignOut();
         ChangeName();
         BarWindowBlack();
-        /*RecoveryIntentLoading();
-        ButtonSharedFriends();
-        AutocompleteFilling();
-        EditUIWithAutocomplete();
-        FavRio();*/
+
+        //Revisar de hacerlo en el manager ui y lo de abajo
+        InitAndCallsManagerUI();
+
+//        ButtonSharedFriends();
+//        AutocompleteFilling();
+//        EditUIWithAutocomplete();
+//        FavRio();
     }
     private void ChangeName(){
         mainActivityBinding.changeName.setOnClickListener(new View.OnClickListener() {
@@ -251,145 +247,24 @@ public class MainActivity extends AppCompatActivity {
         window.setStatusBarColor(MainActivity.this.getResources().getColor(R.color.black));
     }
 
+    private void InitAndCallsManagerUI(){
+        managerUI = new ManagerUIMain(mainActivityBinding,getApplicationContext());
+        RecoveryIntentLoading();
+        managerUI.AutocompleteFilling();
+
+
+    }
     private void RecoveryIntentLoading() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            _Rios = (List<Rio>) bundle.getSerializable("listaRios");
+            managerUI._Rios = (List<Rio>) bundle.getSerializable("listaRios");
+            Log.i("hola", String.valueOf(managerUI._Rios.size()));
         }
     }
 
-    private void AutocompleteFilling() {
-        List<String> arrayNombreRios = new ArrayList<>();
-        for (int i = 0; i < _Rios.size(); i++) {
-            String nombreAutocompletado = _Rios.get(i).GetNombre() + " " + _Rios.get(i).GetPuerto();
-            arrayNombreRios.add(nombreAutocompletado);
-        }
-        CustomAutoCompleteAdapter adapter = new CustomAutoCompleteAdapter(this, arrayNombreRios);
-        buscaRios_ATV.setAdapter(adapter);
-        buscaRios_ATV.setThreshold(1); // Configura el número mínimo de caracteres antes de que se muestren sugerencias
-    }
-
-    private void EditUIWithAutocomplete() {
-        //If I haven't saved anything yet, the integer won't exist, which means GetRioFavs() will return 0, but since a river exists with 0, I set it to return 9999.
-        if(MySharedPreferences.getRioFavs(this)!=9999){
-            favButton.setVisibility(View.VISIBLE);
-            for(int i=0;i<_Rios.size();i++){
-                if(i==MySharedPreferences.getRioFavs(this)){
-                    VisibilityDates();
-                    Rio rio = _Rios.get(i);
-                    if(!rio.GetPuerto().contains("PUERTO RUIZ")){
-                        rio.ScrapperDate(rio.GetLinkDatesGraphs());
-                    }
-
-                    altura_tv.setText(rio.GetAltura());
-                    variacion_tv.setText(rio.GetVariacion() + " Mts");
-                    fecha_tv.setText(SortedDateTV(rio.GetFecha()));
-                    nombreRio.setText(rio.GetNombre() + "(" + rio.GetPuerto() + ")");
-
-                    if(!rio.GetEstado().contains("S/E")){
-                        DirectionAndColorArrow();
-
-                        Timer timer = new Timer();
-                        // Programar la tarea para que se ejecute después de 5 segundos
-                        timer.schedule(new TimerTask() {
-                            public void run() {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        if(!rio.GetPuerto().contains("PUERTO RUIZ")){
-                                            List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
-                                            Collections.reverse(listFloatPoints);
-                                            rio.arrayValues = (Float[]) listFloatPoints.toArray();
-
-                                            List<String> listDates = Arrays.asList(rio.arrayDates);
-                                            Collections.reverse(listDates);
-                                            rio.arrayDates = (String[])listDates.toArray();
-
-                                            CreateGraphs(rio.arrayValues, rio.arrayDates);
-                                            favButton.setProgress(favButton.getDuration());
-
-                                        }
-                                    }
-                                });
-                            }
-                        }, 1500);
-                    }else{
-                        EmptyDates();
-                    }
 
 
-                }
-            }
-        }
 
-        //Set the UI for when a river is selected from the Spinner.
-        buscaRios_ATV.setOnItemClickListener((parent, view, position, id) -> {
-            String rioSeleccionado = (String) parent.getItemAtPosition(position);
-            favButton.setVisibility(View.VISIBLE);
-            for (int i = 0; i < _Rios.size(); i++) {
-                if (((_Rios.get(i).GetNombre()+ _Rios.get(i).GetPuerto()).replace(" ", "")).equals((rioSeleccionado.replace(" ", "")))) {
-                    VisibilityDates();
-                    if(i!=MySharedPreferences.getRioFavs(this)){
-
-                        favButton.setProgress(0);
-
-                    }else{
-                        favButton.setProgress(favButton.getDuration());
-                    }
-
-                    rioSave = i;
-                    Rio rio = _Rios.get(i);
-                    if(!rio.GetPuerto().contains("PUERTO RUIZ")){
-                        rio.ScrapperDate(rio.GetLinkDatesGraphs());
-                    }
-                    altura_tv.setText(rio.GetAltura());
-                    variacion_tv.setText(rio.GetVariacion() + " Mts");
-                    Log.i("hola",rio.GetFecha());
-                    fecha_tv.setText(SortedDateTV(rio.GetFecha()));
-                    nombreRio.setText(rio.GetNombre() + "(" + rio.GetPuerto() + ")");
-
-                    if(!rio.GetEstado().contains("S/E")){
-                        DirectionAndColorArrow();
-
-                        Timer timer = new Timer();
-
-                        // Programar la tarea para que se ejecute después de 5 segundos
-                        timer.schedule(new TimerTask() {
-                            public void run() {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        if(!rio.GetPuerto().contains("PUERTO RUIZ")){
-                                            List<Float> listFloatPoints = Arrays.asList(rio.arrayValues);
-                                            Collections.reverse(listFloatPoints);
-                                            rio.arrayValues = (Float[]) listFloatPoints.toArray();
-
-                                            List<String> listDates = Arrays.asList(rio.arrayDates);
-                                            Collections.reverse(listDates);
-                                            rio.arrayDates = (String[])listDates.toArray();
-
-                                            CreateGraphs(rio.arrayValues, rio.arrayDates);
-                                        }
-                                    }
-                                });
-                            }
-                        }, 1500);
-                    }else{
-                        EmptyDates();
-                    }
-
-                }
-            }
-
-            //Clear focus and clear keyboard
-            buscaRios_ATV.clearFocus();
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(buscaRios_ATV.getWindowToken(), 0);
-
-        });
-    }
 
     private void DirectionAndColorArrow(){
         if(!variacion_tv.getText().toString().equals("- Mts") && Float.parseFloat(variacion_tv.getText().toString().substring(0,5))<0){
@@ -406,21 +281,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String SortedDateTV(String fecha){
-        String fechaReturn = fecha;
-        String hora = fechaReturn.substring(fechaReturn.length()-4);
-        hora = hora.substring(0,2)+":"+hora.substring(2);
-        fechaReturn = fechaReturn.substring(0,fechaReturn.length()-4)+hora;
-        fechaReturn = fechaReturn.replaceAll("/24-", " ");
-        fechaReturn = fechaReturn.replace("/","-");
-        if(fechaReturn.contains("12:00")){
-            fechaReturn=fechaReturn+" pm";
-        }else{
-            fechaReturn=fechaReturn+" am";
-        }
 
-        return fechaReturn;
-    }
 
     private float getLargestNumber(Float[] arrayfloat){
         Float largestNumber=10f;

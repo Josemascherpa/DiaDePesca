@@ -15,9 +15,8 @@
         android:label="Dia De Pesca"
         android:roundIcon="@mipmap/ic_pesca_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Webscraping"
+        android:theme="@style/Theme.DiadePesca"
         tools:targetApi="31">
-
         <activity
             android:name=".load.Loading"
             android:screenOrientation="portrait"
@@ -33,7 +32,6 @@
                 <data android:scheme="https" android:host="diadepesca.page.link"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
