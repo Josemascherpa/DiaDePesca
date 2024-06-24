@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiteBlack"
+    android:background="@color/blueBlack"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -23,8 +23,8 @@
             android:autoSizeTextType="uniform"
             android:gravity="center|center_vertical"
             android:text="Hola Usuario"
-            android:textColor="@color/black"
-            android:textSize="28dp"
+            android:textColor="@color/greyBlack"
+            android:textSize="30dp"
             android:textStyle="bold" />
 
         <ImageView
@@ -65,43 +65,43 @@
     <!-- RIO FRAMELAYOUT-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:background="@drawable/rounded_corners"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
         <!--Linearlayout buscador rio y favorito-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="100dp"
             android:gravity="center"
             android:orientation="horizontal">
-
             <AutoCompleteTextView
                 android:id="@+id/busca_rio"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
                 android:gravity="center"
-                android:layout_marginStart="60sp"
                 android:hint="Busca tu rio"
                 android:inputType="text"
-                android:textColorHint="@color/whiteBlack" />
-
+                android:textSize="25dp"
+                android:textColorHint="@color/greyBlack"
+                android:textColor="@color/greyBlack"
+                />
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/fav_animation"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="right"
-                android:layout_marginTop="-40dp"
-                app:lottie_rawRes="@raw/favanimations"></com.airbnb.lottie.LottieAnimationView>
-
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                app:lottie_rawRes="@raw/favanimations"
+                android:layout_marginRight="15dp"/>
         </LinearLayout>
         <!--LinearLayout Solo Text Informacion Rio-->
         <LinearLayout
             android:layout_marginTop="-13sp"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="50dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -110,37 +110,71 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="Información Rio"
-                android:textSize="18dp"></TextView>
+                android:textColor="@color/greyBlack"
+                android:textSize="25dp"
+                android:textStyle="bold"></TextView>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_height="match_parent"
+
             android:orientation="vertical">
             <!--Nombre Rio-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                android:orientation="horizontal"                >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="30dp"
-                    android:text="Altura actual:"
-                    android:textSize="18sp"
+                    android:layout_marginStart="15dp"
+                    android:text="Nombre Rio:"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/greyBlack"
+                    ></TextView>
+                <TextView
+                    android:id="@+id/nombre_rio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Nombre"
+                    android:textSize="20sp"
                     android:gravity="left"
                     android:layout_gravity="center_vertical"
+                    android:textColor="@color/greyBlack"
+                    android:layout_marginStart="3dp"
+                    android:maxLines="1"
+                    android:clickable="true"
+                    ></TextView>
+            </LinearLayout>
+            <!--Altura Rio-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:text="Altura actual:"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/greyBlack"
                     ></TextView>
                 <TextView
                     android:id="@+id/altura_rio"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Altura"
-                    android:textSize="18sp"
-                    android:gravity="left"
+                    android:textSize="20sp"
+                    android:gravity="center"
                     android:layout_gravity="center_vertical"
+                    android:textColor="@color/greyBlack"
+                    android:layout_marginStart="3dp"
                     ></TextView>
             </LinearLayout>
             <!--Altura Actual Rio-->
@@ -148,110 +182,104 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="30dp"
+                    android:layout_marginStart="15dp"
                     android:text="Variacion:"
-                    android:textSize="18sp"
-                    android:gravity="left"
+                    android:textSize="20sp"
+                    android:gravity="center"
                     android:layout_gravity="center_vertical"
+                    android:textColor="@color/greyBlack"
                     ></TextView>
                 <TextView
                     android:id="@+id/variacion_rio"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="VariacionRio"
-                    android:textSize="18sp"
-                    android:gravity="left"
+                    android:textSize="20sp"
+                    android:gravity="center"
                     android:layout_gravity="center_vertical"
+                    android:textColor="@color/greyBlack"
+                    android:layout_marginStart="3dp"
                     ></TextView>
+                <ImageView
+                    android:id="@+id/flecha_iv"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    />
             </LinearLayout>
             <!--Variacion Rio-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="30dp"
-                    android:gravity="left"
-                    android:text="Actualización:"
-                    android:textSize="18sp"></TextView>
+                    android:layout_marginStart="15dp"
+                    android:gravity="center"
+                    android:text="Fecha:"
+                    android:textColor="@color/greyBlack"
+                    android:textSize="20sp"></TextView>
 
                 <TextView
                     android:id="@+id/fecha_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="fecha"
-                    android:textSize="18sp"
-                    android:gravity="left"
+                    android:textSize="20sp"
+                    android:gravity="center"
                     android:layout_gravity="center_vertical"
+                    android:textColor="@color/greyBlack"
+                    android:layout_marginStart="3dp"
+                    android:maxLines="1"
                     ></TextView>
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="4dp"
-                android:gravity="center_horizontal">
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="compartir"
-                    ></Button>
-            </LinearLayout>
-
         </LinearLayout>
-
-
-
     </LinearLayout>
 
-    <!-- WEATHER -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_corners">
-
+        android:gravity="center_horizontal">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="hola">
+            android:text="¿Querés compartir con tus amigos de pesca?"
+            android:gravity="center"
+            android:textColor="@color/greyBlack"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:layout_marginTop="30dp"
+            android:id="@+id/textView"/>
 
-        </TextView>
+        <Button
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="300dp"
+            android:layout_height="70dp"
+            android:text="Compartir"
+            android:textSize="20sp"
+            android:id="@+id/compartir"
+            android:layout_below="@id/textView"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/greyBlack"
+            app:strokeColor = "@color/grey"
+            android:backgroundTint="@color/blueLight"
+            />
+    </RelativeLayout>
 
-    </LinearLayout>
 
-    <!--    <LinearLayout-->
-    <!--        android:id="@+id/framePosicionamiento"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:orientation="vertical"-->
-    <!--        android:layout_marginTop="10dp"-->
-    <!--        >-->
-    <!--        <com.androidplot.xy.XYPlot-->
-    <!--            android:id="@+id/plot"-->
-    <!--            style="@style/APDefacto.Dark"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_gravity="center"-->
-    <!--            ap:domainLineColor="@color/ap_transparent"-->
-    <!--            ap:graphMarginBottom="20dp"-->
-    <!--            ap:graphMarginLeft="5dp"-->
-    <!--            ap:graphMarginTop="25dp"-->
-    <!--            ap:legendVisible="false"-->
-    <!--            ap:lineLabelTextSizeBottom="8sp"-->
-    <!--            ap:lineLabelTextSizeLeft="10sp"-->
-    <!--            ap:rangeLineColor="@color/ap_transparent"-->
-    <!--            app:marginLeft="-13dp" />-->
-    <!--    </LinearLayout>-->
 
 
 </LinearLayout>

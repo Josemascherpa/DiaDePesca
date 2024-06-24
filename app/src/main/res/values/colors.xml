@@ -4,12 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorTitles">#637A9F</color>
     <color name="grey">#EBE6E4E4</color>
-    <color name="greyBlack">#F3F1EEEE</color>
-    <color name="whiteBlack">#DAD0BD</color>
-    <color name="light_blue_50">#FFE1F5FE</color>
-    <color name="light_blue_200">#FF81D4FA</color>
-    <color name="light_blue_600">#FF039BE5</color>
-    <color name="light_blue_900">#FF01579B</color>
-    <color name="blue">#1D8BE2</color>
-    <color name="blueTransparent">#3C1573BD</color>
+    <color name="greyBlack">#D5D8DC</color>
+    <color name="blueBlack">#2873A5</color>
+    <color name="blueLight">#2E86C1</color>
+    <color name="colorGreenArrow">#28B725</color>
 </resources>

@@ -48,8 +48,8 @@
         android:layout_height="55dp"
         android:text="Comenzar Aventura"
         android:textAlignment="center"
-        android:textColor="@color/whiteBlack"
-        android:backgroundTint="@color/blue"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/blueLight"
         android:textAppearance="@font/robotoregular"
         />
 

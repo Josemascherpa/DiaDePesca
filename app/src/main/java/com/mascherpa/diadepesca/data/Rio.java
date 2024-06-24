@@ -16,21 +16,17 @@ public class Rio implements Serializable {
     String altura;
     String variacion;
     String fechaUltimaActualizacion;
-    String estado;
-    String linkDatesGraphs;
     String url = "https://contenidosweb.prefecturanaval.gob.ar";
     public String[] arrayDates = new String[10];
 
     public Float[] arrayValues= new Float[10];
 
-    public Rio(String nombreRio,String puerto, String altura, String variacion, String fechaUltimaActualizacion, String estado,String linkDatesGraphs) {
+    public Rio(String nombreRio,String puerto, String altura, String variacion, String fechaUltimaActualizacion) {
         this.nombreRio = "RIO "+nombreRio;
         this.puerto = puerto;
         this.altura = altura;
         this.variacion = variacion;
         this.fechaUltimaActualizacion = fechaUltimaActualizacion;
-        this.estado = estado;
-        this.linkDatesGraphs = linkDatesGraphs;
     }
 
     public String GetNombre(){
@@ -48,12 +44,6 @@ public class Rio implements Serializable {
     public String GetFecha(){
         return fechaUltimaActualizacion;
     }
-    public String GetEstado(){
-        return estado;
-    }
-    public String GetLinkDatesGraphs(){
-        return linkDatesGraphs;
-    }
 
 
 
@@ -62,7 +52,6 @@ public class Rio implements Serializable {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                if(!estado.contains("S/E")){
                     try {
                         Document doc = Jsoup.connect(url + link).get();
                         Element tabla = doc.select("table.fpTable").first();
@@ -85,9 +74,6 @@ public class Rio implements Serializable {
                     }catch(IOException e){
                         Log.i("Error", e.getMessage() + " " + "ERRORRR");
                     }
-
-                }
-
             }
         });
         thread.start();

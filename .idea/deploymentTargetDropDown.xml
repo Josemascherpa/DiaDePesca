@@ -9,13 +9,13 @@
               <type value="RUNNING_DEVICE_TARGET" />
               <deviceKey>
                 <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Usuario\.android\avd\Medium_Phone_API_32.avd" />
+                  <type value="SERIAL_NUMBER" />
+                  <value value="adb-R5CR12ARD9F-MVTCDd._adb-tls-connect._tcp" />
                 </Key>
               </deviceKey>
             </Target>
           </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-05-30T15:05:08.206863500Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-06-24T18:15:35.577447400Z" />
         </State>
       </entry>
     </value>
