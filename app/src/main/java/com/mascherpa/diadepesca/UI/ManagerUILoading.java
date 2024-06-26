@@ -1,7 +1,10 @@
 package com.mascherpa.diadepesca.UI;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -15,34 +18,38 @@ public class ManagerUILoading {
     private LoadinguiBinding binding;
     FrameLayout bottomSheet;
     BottomSheetBehavior<View> bottomSheetBehavior;
-
-    FrameLayout bottomSheetLogin;
-
-
     private FirebaseAnalytics mFirebaseAnalytics;
-    public ManagerUILoading(LoadinguiBinding bindingLoading, Context context){
+    public ManagerUILoading(LoadinguiBinding bindingLoading, Context context, Activity activity){
         this.binding = bindingLoading;
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
-        SetsBottomSheets();
-
+        setsBottomSheets();
+        barBackgroundsBlack(activity);
+        clickButtonRegister(bindingLoading.comenzaraventura);
     }
 
-    public void ClickButtonRegister(Button btnRegister){
+    public void clickButtonRegister(Button btnRegister){
         btnRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SingUp();
+                singUp();
             }
         });
     }
 
+    private void barBackgroundsBlack(Activity activity){
+        Window window = activity.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(0xFF000000);
+    }
 
 
-    private void SingUp(){
+
+    private void singUp(){
         bottomSheet.setVisibility(View.VISIBLE);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
-    private void SetsBottomSheets(){
+    private void setsBottomSheets(){
         bottomSheet = binding.standardBottomSheet;
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -64,15 +71,15 @@ public class ManagerUILoading {
         });
     }
 
-    public void CloseBottomSheetBehavior(){
+    public void closeBottomSheetBehavior(){
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
-    public int ReturnStateBottomSheetsSignUp(){
+    public int returnStateBottomSheetsSignUp(){
         return bottomSheetBehavior.getState();
     }
 
-    public BottomSheetBehavior GetBottomSheetsSign(){
+    public BottomSheetBehavior getBottomSheetsSign(){
         return bottomSheetBehavior;
     }
 

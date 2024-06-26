@@ -20,7 +20,7 @@ public class DataProvider {
         this.url = url;
     }
 
-    public List<Rio> LoadDataRio() {
+    public List<Rio> loadDataRio() {
 
         List<Rio> listRios = new ArrayList<Rio>();
         try {

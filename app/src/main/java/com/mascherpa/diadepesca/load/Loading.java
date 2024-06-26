@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -72,28 +70,27 @@ public class Loading extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = LoadinguiBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //hago ping a google para verificar si tengo internet o no
         checkInternet = new CheckInternet();
-        if(checkInternet.isNetworkAvailable(getApplicationContext()) && checkInternet.isOnline() ){
+        if(checkInternet.isOnline() ){
 
-            database = FirebaseDatabase.getInstance();
-            auth = FirebaseAuth.getInstance();
+            database = FirebaseDatabase.getInstance();//guardo instancia a base de datos
+            auth = FirebaseAuth.getInstance();//guardo instancia de auth
+            managerUI = new ManagerUILoading(binding, this,this);//creo instancia de manager ui
 
-            managerUI = new ManagerUILoading(binding, this);
-            managerUI.ClickButtonRegister(binding.comenzaraventura);
-            BarBackgroundsBlack();
-
-            FirebaseUser currentUser = auth.getCurrentUser();
+            FirebaseUser currentUser = auth.getCurrentUser();//obtengo el usuario actual
             if (currentUser != null) {
-                showLoadingIntent();
-                validateUser(currentUser.getUid(), exist -> {
+                showLoadingIntent();//Muestro ui cargando
+                validateUser(currentUser.getUid(), exist -> {//Valido usuario
                     if (exist) {//Existe usuario
-                        RecoveryDataRiosAndStartMain();
+                        recoveryDataRiosAndStartMain();//scrapeo pagina
                     }else{//no existe usuario
-                        UserNotLoadedInDB();
+                        userNotLoadedInDB();//desconecto usuario, y logueo o registro
                     }
                 });
             } else {
-                LoginOrRegister();
+                loginOrRegister();//logeo o registro
             }
         }else{
             showMessage("no tienes internet. Por favor reinicia la app.");
@@ -101,28 +98,26 @@ public class Loading extends AppCompatActivity {
 
     }
 
-    private void showLoadingIntent(){
+    private void showLoadingIntent(){//UI cargando para escenas donde se necesite
         binding.overlayLoading.setVisibility(View.VISIBLE);
-        managerUI.CloseBottomSheetBehavior();
+        managerUI.closeBottomSheetBehavior();//cierro sheetbehaviour
     }
 
-
-    private void UserNotLoadedInDB(){
+    private void userNotLoadedInDB(){
         auth.signOut();
-        LoginOrRegister();
+        loginOrRegister();
     }
 
-    private void LoginOrRegister(){
-        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.client_id))
-                .requestEmail().build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(),gso);
+    private void loginOrRegister(){
+        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN) //configuro inicio de sesion
+                .requestIdToken(getString(R.string.client_id))//id token del sv
+                .requestEmail().build();//pido el email del usuario
+        mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(),gso);//obtengo el cliente de inicio de sesion
         // Set OnClickListener for login button
         binding.signupGmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                googleSignIn();
+                googleSignIn();//inicio sesion
             }
         });
     }
@@ -182,7 +177,7 @@ public class Loading extends AppCompatActivity {
                         validateUser(user.getUid(), exist -> {
                             if (exist) {
                                 // El usuario existe, continuar con el flujo normal
-                                RecoveryDataRiosAndStartMain();
+                                recoveryDataRiosAndStartMain();
                             } else {
                                 // El usuario no existe, crear una nueva cuenta
                                 createNewAccount(map);
@@ -193,6 +188,7 @@ public class Loading extends AppCompatActivity {
                     }
                 });
     }
+
 
     // Modificamos validateUser para que acepte un Listener para manejar el resultado
     private void validateUser(String firebaseUID, OnUserValidationListener listener) {
@@ -214,6 +210,7 @@ public class Loading extends AppCompatActivity {
             });
         }
     }
+
     // Interfaz para manejar el resultado de la validación del usuario
     interface OnUserValidationListener {
         void onUserValidation(boolean exist);
@@ -227,15 +224,12 @@ public class Loading extends AppCompatActivity {
             usersRef.child(user.getUid()).setValue(userData)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            // Si la creación de la cuenta fue exitosa, redirigir al usuario a la actividad principal
-                            RecoveryDataRiosAndStartMain();
+                            recoveryDataRiosAndStartMain();
                         } else {
-                            // Manejar errores si la creación de la cuenta falla
                             showMessage("Error al crear la cuenta en la base de datos");
                         }
                     });
         } else {
-            // Manejar el caso en el que el usuario no esté autenticado
             showMessage("El usuario no está autenticado");
         }
     }
@@ -245,25 +239,16 @@ public class Loading extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-
-
-    private void BarBackgroundsBlack(){
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(0xFF000000);
-    }
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent event){
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (managerUI.ReturnStateBottomSheetsSignUp()== BottomSheetBehavior.STATE_EXPANDED) {
+            if (managerUI.returnStateBottomSheetsSignUp()== BottomSheetBehavior.STATE_EXPANDED) {
 
                 Rect outRect = new Rect();
                 binding.standardBottomSheet.getGlobalVisibleRect(outRect);
 
                 if(!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
-                    managerUI.GetBottomSheetsSign().setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    managerUI.getBottomSheetsSign().setState(BottomSheetBehavior.STATE_COLLAPSED);
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                 }
@@ -273,12 +258,12 @@ public class Loading extends AppCompatActivity {
     }
 
 
-    public void RecoveryDataRiosAndStartMain(){
+    public void recoveryDataRiosAndStartMain(){
         recoveryData = new DataProvider("https://contenidosweb.prefecturanaval.gob.ar/alturas/");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final List<Rio> data = recoveryData.LoadDataRio();
+                final List<Rio> data = recoveryData.loadDataRio();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

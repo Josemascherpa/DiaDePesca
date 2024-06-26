@@ -22,8 +22,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<Rio> _Rios;
-    String emailUser;
     private ManagerUIMain managerUI;
 
     private MainBinding mainActivityBinding;
@@ -38,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(mainActivityBinding.getRoot());
 
         firebaseManager = new FirebaseManager(getApplicationContext(),getString(R.string.client_id),mainActivityBinding);
-        BarWindowBlack();
-        InitAndCallsManagerUI();
+        barWindowBlack();
+        initAndCallsManagerUI();
     }
     @Override
     public void onBackPressed() {
@@ -70,19 +68,19 @@ public class MainActivity extends AppCompatActivity {
         Context newContext = newBase.createConfigurationContext(configuration);
         super.attachBaseContext(newContext);
     }
-    private void BarWindowBlack() {
+    private void barWindowBlack() {
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(MainActivity.this.getResources().getColor(R.color.black));
     }
 
-    private void InitAndCallsManagerUI(){
+    private void initAndCallsManagerUI(){
         managerUI = new ManagerUIMain(mainActivityBinding,getApplicationContext(),firebaseManager);
-        RecoveryIntentLoading();
+        recoveryIntentLoading();
         managerUI.AutocompleteFilling();
     }
-    private void RecoveryIntentLoading() {
+    private void recoveryIntentLoading() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             managerUI._Rios = (List<Rio>) bundle.getSerializable("listaRios");

@@ -39,7 +39,7 @@ public class FirebaseManager {
         context = getContexts;
         client_id = getClient_id;
         managerUI = binding;
-        GetNameUser();
+        getNameUser();
         getImageUser();
 
     }
@@ -68,7 +68,7 @@ public class FirebaseManager {
 
     }
 
-    public void GetNameUser(){
+    public void getNameUser(){
         DatabaseReference userRef = database.getReference("users").child(auth.getUid()).child("name");
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -95,7 +95,7 @@ public class FirebaseManager {
                                         if (taskDelete.isSuccessful()) {
                                             // El usuario se eliminó correctamente
                                             FirebaseAuth.getInstance().signOut();
-                                            ClearCacheGoogle();
+                                            clearCacheGoogle();
                                             Intent intent = new Intent(context, Loading.class);
                                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             context.startActivity(intent);
@@ -115,7 +115,7 @@ public class FirebaseManager {
     }
 
 
-    public void ClearCacheGoogle(){
+    public void clearCacheGoogle(){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(client_id)
                 .requestEmail()
@@ -124,11 +124,11 @@ public class FirebaseManager {
         mGoogleSignInClient.signOut();
     }
 
-    public void SignOut(Context context) {
+    public void signOut(Context context) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth != null) {
             auth.signOut();
-            ClearCacheGoogle();
+            clearCacheGoogle();
             Intent intent = new Intent(context, Loading.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);//clear tasks
             context.startActivity(intent);

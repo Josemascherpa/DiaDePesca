@@ -1,13 +1,5 @@
 package com.mascherpa.diadepesca.data;
 
-import android.util.Log;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
 import java.io.Serializable;
 
 public class Rio implements Serializable {
@@ -16,10 +8,6 @@ public class Rio implements Serializable {
     String altura;
     String variacion;
     String fechaUltimaActualizacion;
-    String url = "https://contenidosweb.prefecturanaval.gob.ar";
-    public String[] arrayDates = new String[10];
-
-    public Float[] arrayValues= new Float[10];
 
     public Rio(String nombreRio,String puerto, String altura, String variacion, String fechaUltimaActualizacion) {
         this.nombreRio = "RIO "+nombreRio;
@@ -29,55 +17,23 @@ public class Rio implements Serializable {
         this.fechaUltimaActualizacion = fechaUltimaActualizacion;
     }
 
-    public String GetNombre(){
+    public String getNombre(){
         return nombreRio;
     }
-    public String GetPuerto(){
+    public String getPuerto(){
         return puerto;
     }
-    public String GetAltura(){
+    public String getAltura(){
         return altura;
     }
-    public String GetVariacion(){
+    public String getVariacion(){
         return variacion;
     }
-    public String GetFecha(){
+    public String getFecha(){
         return fechaUltimaActualizacion;
     }
 
 
-
-
-    public void ScrapperDate(String link) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                    try {
-                        Document doc = Jsoup.connect(url + link).get();
-                        Element tabla = doc.select("table.fpTable").first();
-                        Elements filas = tabla.select("tbody tr");
-
-                        for (int i = 0; i < 10; i++) {
-                            //0 numero de colas 1 numero de fecha 2 altuas
-
-                            String date = filas.get(i).child(1).text();
-                            if (date.contains("00:00")) {
-                                arrayDates[i] = date.substring(5, 10) + "am";
-                            } else {
-                                arrayDates[i] = date.substring(5, 10) + "pm";
-                            }
-                            String mts = filas.get(i).child(2).text().replaceAll("\\s|Mts", "");
-                            arrayValues[i] = (Float.valueOf(mts));
-
-                        }
-
-                    }catch(IOException e){
-                        Log.i("Error", e.getMessage() + " " + "ERRORRR");
-                    }
-            }
-        });
-        thread.start();
-    }
 
 
 

@@ -31,8 +31,8 @@ public class ManagerUIMain {
     public ManagerUIMain(MainBinding bindingMain, Context context, FirebaseManager firebaseManager){
         this.binding = bindingMain;
         contextMain=context;
-        ButtonSharedFriends();
-        ClickImageUser(firebaseManager);
+        buttonSharedFriends();
+        clickImageUser(firebaseManager);
         setInformationRio("Información Rio");
         clickedNameRio();
 
@@ -40,14 +40,14 @@ public class ManagerUIMain {
     public void AutocompleteFilling() {
         List<String> arrayNombreRios = new ArrayList<>();
         for (int i = 0; i < _Rios.size(); i++) {
-            String nombreAutocompletado = _Rios.get(i).GetNombre() + " " + _Rios.get(i).GetPuerto();
+            String nombreAutocompletado = _Rios.get(i).getNombre() + " " + _Rios.get(i).getPuerto();
             arrayNombreRios.add(nombreAutocompletado);
         }
         CustomAutoCompleteAdapter adapter = new CustomAutoCompleteAdapter(contextMain, arrayNombreRios);
         binding.buscaRio.setAdapter(adapter);
         binding.buscaRio.setThreshold(1); // Configura el número mínimo de caracteres antes de que se muestren sugerencias
         EditUIWithAutocomplete();
-        FavRio();
+        favRio();
     }
 
     private void EditUIWithAutocomplete() {
@@ -58,14 +58,14 @@ public class ManagerUIMain {
             for(int i=0;i<_Rios.size();i++){
                 if(i==MySharedPreferences.getRioFavs(contextMain)){
                     Rio rio = _Rios.get(i);
-                    binding.alturaRio.setText(rio.GetAltura());
-                    binding.variacionRio.setText(rio.GetVariacion() + " Mts");
-                    binding.fechaTv.setText(SortedDateTV(rio.GetFecha()));
-                    binding.nombreRio.setText(rio.GetNombre() + "(" + rio.GetPuerto() + ")");
+                    binding.alturaRio.setText(rio.getAltura());
+                    binding.variacionRio.setText(rio.getVariacion() + " Mts");
+                    binding.fechaTv.setText(sortedDateTV(rio.getFecha()));
+                    binding.nombreRio.setText(rio.getNombre() + "(" + rio.getPuerto() + ")");
                     rioSave = i;
                 }
             }
-            DirectionAndColorArrow();
+            directionAndColorArrow();
             linearInformationVisible();
             setInformationRio("Información Rio");
         }else{
@@ -78,7 +78,7 @@ public class ManagerUIMain {
             String rioSeleccionado = (String) parent.getItemAtPosition(position);
 //            favButton.setVisibility(View.VISIBLE);
             for (int i = 0; i < _Rios.size(); i++) {
-                if (((_Rios.get(i).GetNombre()+ _Rios.get(i).GetPuerto()).replace(" ", "")).equals((rioSeleccionado.replace(" ", "")))) {
+                if (((_Rios.get(i).getNombre()+ _Rios.get(i).getPuerto()).replace(" ", "")).equals((rioSeleccionado.replace(" ", "")))) {
                     if(i!=MySharedPreferences.getRioFavs(contextMain)){
                         binding.favAnimation.setVisibility(View.VISIBLE);
                         binding.favAnimation.setProgress(0);
@@ -90,14 +90,14 @@ public class ManagerUIMain {
                     rioSave = i;
                     Rio rio = _Rios.get(i);
 
-                    binding.alturaRio.setText(rio.GetAltura());
-                    binding.variacionRio.setText(rio.GetVariacion() + " Mts");
-                    binding.fechaTv.setText(SortedDateTV(rio.GetFecha()));
-                    binding.nombreRio.setText(rio.GetNombre() + "(" + rio.GetPuerto() + ")");
+                    binding.alturaRio.setText(rio.getAltura());
+                    binding.variacionRio.setText(rio.getVariacion() + " Mts");
+                    binding.fechaTv.setText(sortedDateTV(rio.getFecha()));
+                    binding.nombreRio.setText(rio.getNombre() + "(" + rio.getPuerto() + ")");
 
                 }
             }
-            DirectionAndColorArrow();
+            directionAndColorArrow();
             //Clear focus and clear keyboard
             binding.buscaRio.clearFocus();
             InputMethodManager imm = (InputMethodManager) contextMain.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -107,7 +107,7 @@ public class ManagerUIMain {
         });
     }
 
-    private String SortedDateTV(String fecha){
+    private String sortedDateTV(String fecha){
         String fechaReturn = fecha;
         String hora = fechaReturn.substring(fechaReturn.length()-4);
         hora = hora.substring(0,2)+":"+hora.substring(2);
@@ -123,7 +123,7 @@ public class ManagerUIMain {
         return fechaReturn;
     }
 
-    private void DirectionAndColorArrow(){
+    private void directionAndColorArrow(){
         if(!binding.variacionRio.getText().toString().equals("- Mts") && Float.parseFloat(binding.variacionRio.getText().toString().substring(0,5))<0){
             binding.variacionRio.setTextColor(Color.parseColor("#D24545"));
             binding.flechaIv.setImageResource(R.drawable.fbajando);
@@ -138,7 +138,7 @@ public class ManagerUIMain {
         }
     }
 
-    public void ButtonSharedFriends() {
+    public void buttonSharedFriends() {
         binding.compartir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,7 +167,7 @@ public class ManagerUIMain {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void FavRio(){
+    private void favRio(){
         binding.favAnimation.setOnClickListener(v -> {
             if(rioSave!=null){
                 binding.favAnimation.playAnimation();
@@ -204,7 +204,7 @@ public class ManagerUIMain {
         });
     }
 
-    private void ClickImageUser(FirebaseManager firebaseManager){
+    private void clickImageUser(FirebaseManager firebaseManager){
         binding.imageUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,7 +214,7 @@ public class ManagerUIMain {
                     public boolean onMenuItemClick(MenuItem item) {
                         int itemId = item.getItemId();
                         if (itemId == R.id.logout_user) {
-                            firebaseManager.SignOut(v.getContext());
+                            firebaseManager.signOut(v.getContext());
                         } else if (itemId == R.id.delete_user) {
                             firebaseManager.deleteAccount(v.getContext());
                         }
