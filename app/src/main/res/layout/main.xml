@@ -32,7 +32,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center_vertical"
-            android:scaleType="centerCrop"></ImageView>
+            android:scaleType="centerCrop"
+            android:clickable="true"></ImageView>
     </LinearLayout>
 
 
@@ -99,6 +100,7 @@
         </LinearLayout>
         <!--LinearLayout Solo Text Informacion Rio-->
         <LinearLayout
+            android:id="@+id/linear_texto_muestra"
             android:layout_marginTop="-13sp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -106,6 +108,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/informacion_rio"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -116,6 +119,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_informacion_rio"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 

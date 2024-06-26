@@ -7,14 +7,11 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +36,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.mascherpa.diadepesca.MainActivity;
 import com.mascherpa.diadepesca.R;
 import com.mascherpa.diadepesca.UI.ManagerUILoading;
 import com.mascherpa.diadepesca.data.Rio;
@@ -55,15 +51,10 @@ public class Loading extends AppCompatActivity {
 
     private DataProvider recoveryData;
 
-    TextView versionTV;
-    String versionApp = "Version 1.0.0";
-    Button comenzarAventurabtn;
-
-    Button ingresarBtn;
-
     private LoadinguiBinding binding;
 
     private ManagerUILoading managerUI;
+    CheckInternet checkInternet;
 
 
     //Firebase
@@ -79,29 +70,35 @@ public class Loading extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = LoadinguiBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        database = FirebaseDatabase.getInstance();
-        auth = FirebaseAuth.getInstance();
+        checkInternet = new CheckInternet();
+        if(checkInternet.isNetworkAvailable(getApplicationContext()) && checkInternet.isOnline() ){
 
-        managerUI = new ManagerUILoading(binding, this);
-        managerUI.ClickButtonRegister(binding.comenzaraventura);
-        BarBackgroundsBlack();
+            database = FirebaseDatabase.getInstance();
+            auth = FirebaseAuth.getInstance();
 
-        FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser != null) {
-            showLoadingIntent();
-            validateUser(currentUser.getUid(), exist -> {
-                if (exist) {//Existe usuario
-                    RecoveryDataRiosAndStartMain();
-                }else{//no existe usuario
-                    UserNotLoadedInDB();
-                }
-            });
-        } else {
-            LoginOrRegister();
+            managerUI = new ManagerUILoading(binding, this);
+            managerUI.ClickButtonRegister(binding.comenzaraventura);
+            BarBackgroundsBlack();
+
+            FirebaseUser currentUser = auth.getCurrentUser();
+            if (currentUser != null) {
+                showLoadingIntent();
+                validateUser(currentUser.getUid(), exist -> {
+                    if (exist) {//Existe usuario
+                        RecoveryDataRiosAndStartMain();
+                    }else{//no existe usuario
+                        UserNotLoadedInDB();
+                    }
+                });
+            } else {
+                LoginOrRegister();
+            }
+        }else{
+            showMessage("no tienes internet. Por favor reinicia la app.");
         }
+
     }
 
     private void showLoadingIntent(){

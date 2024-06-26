@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import com.mascherpa.diadepesca.FavouriteRio.MySharedPreferences;
 import com.mascherpa.diadepesca.R;
 import com.mascherpa.diadepesca.data.Rio;
 import com.mascherpa.diadepesca.databinding.MainBinding;
+import com.mascherpa.diadepesca.firebase.FirebaseManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +28,14 @@ public class ManagerUIMain {
     public List<Rio> _Rios = new ArrayList<>();
     private Context contextMain;
 
-    public ManagerUIMain(MainBinding bindingMain, Context context){
+    public ManagerUIMain(MainBinding bindingMain, Context context, FirebaseManager firebaseManager){
         this.binding = bindingMain;
         contextMain=context;
         ButtonSharedFriends();
+        ClickImageUser(firebaseManager);
+        setInformationRio("Información Rio");
+        clickedNameRio();
+
     }
     public void AutocompleteFilling() {
         List<String> arrayNombreRios = new ArrayList<>();
@@ -46,7 +53,8 @@ public class ManagerUIMain {
     private void EditUIWithAutocomplete() {
         //If I haven't saved anything yet, the integer won't exist, which means GetRioFavs() will return 0, but since a river exists with 0, I set it to return 9999.
         if(MySharedPreferences.getRioFavs(contextMain)!=9999){
-            binding.favAnimation.setProgress(1);
+
+            binding.favAnimation.setVisibility(View.INVISIBLE);
             for(int i=0;i<_Rios.size();i++){
                 if(i==MySharedPreferences.getRioFavs(contextMain)){
                     Rio rio = _Rios.get(i);
@@ -58,6 +66,11 @@ public class ManagerUIMain {
                 }
             }
             DirectionAndColorArrow();
+            linearInformationVisible();
+            setInformationRio("Información Rio");
+        }else{
+            linearInformationOcult();
+            setInformationRio("Selecciona un Rio");
         }
 
         //Set the UI for when a river is selected from the Spinner.
@@ -67,11 +80,11 @@ public class ManagerUIMain {
             for (int i = 0; i < _Rios.size(); i++) {
                 if (((_Rios.get(i).GetNombre()+ _Rios.get(i).GetPuerto()).replace(" ", "")).equals((rioSeleccionado.replace(" ", "")))) {
                     if(i!=MySharedPreferences.getRioFavs(contextMain)){
-
+                        binding.favAnimation.setVisibility(View.VISIBLE);
                         binding.favAnimation.setProgress(0);
 
                     }else{
-                        binding.favAnimation.setProgress(1);
+                        binding.favAnimation.setVisibility(View.INVISIBLE);
                     }
 
                     rioSave = i;
@@ -89,13 +102,8 @@ public class ManagerUIMain {
             binding.buscaRio.clearFocus();
             InputMethodManager imm = (InputMethodManager) contextMain.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(binding.buscaRio.getWindowToken(), 0);
-
-            binding.nombreRio.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showMessage(binding.nombreRio.getText().toString(),contextMain);
-                }
-            });
+            linearInformationVisible();
+            setInformationRio("Información Rio");
         });
     }
 
@@ -165,6 +173,7 @@ public class ManagerUIMain {
                 binding.favAnimation.playAnimation();
                 MySharedPreferences.saveInteger(contextMain,rioSave);
                 Toast.makeText(contextMain,"Agregado a favoritos!!",Toast.LENGTH_LONG).show();
+
 //            favButton.setVisibility(View.GONE);
             }else{
                 showMessage("Por favor, selecciona un rio",contextMain);
@@ -180,7 +189,7 @@ public class ManagerUIMain {
 
             @Override
             public void onAnimationEnd(@NonNull Animator animation) {
-//                favButton.pauseAnimation();
+                binding.favAnimation.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -194,6 +203,48 @@ public class ManagerUIMain {
             }
         });
     }
+
+    private void ClickImageUser(FirebaseManager firebaseManager){
+        binding.imageUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(v.getContext(), v);
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.logout_user) {
+                            firebaseManager.SignOut(v.getContext());
+                        } else if (itemId == R.id.delete_user) {
+                            firebaseManager.deleteAccount(v.getContext());
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
+
+            };
+        });
+    }
+
+    private void linearInformationVisible(){
+        binding.linearInformacionRio.setVisibility(View.VISIBLE);
+    }
+    private void linearInformationOcult(){
+        binding.linearInformacionRio.setVisibility(View.GONE);
+    }
+    private void setInformationRio(String string){
+        binding.informacionRio.setText(string);
+    }
+    private void clickedNameRio(){
+        binding.nombreRio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMessage(binding.nombreRio.getText().toString(),contextMain);
+            }
+        });
+    }
+
 
 
 }

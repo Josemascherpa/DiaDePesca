@@ -79,45 +79,41 @@ public class FirebaseManager {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Manejar errores de lectura de datos, si es necesario
                 Log.e("Error", "Error al leer el valor de la clave 'name': " + databaseError.getMessage());
             }
         });
     }
-    public void changeNameDatabase(String name){
-        DatabaseReference userRef = database.getReference("users").child(auth.getUid()).child("name");
-        userRef.setValue(name);
-        showMessage("nombre cambiado con exito!");
-    }
-
-    public void deleteAccount(String userID) {
+    public void deleteAccount(Context context) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            // Intenta eliminar la cuenta
-            user.delete()
-                    .addOnCompleteListener(taskDelete -> {
-                        if (taskDelete.isSuccessful()) {
-                            DatabaseReference userRef = database.getReference("users").child(userID);
-                            userRef.removeValue().addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {//la cuenta se elimino de la bd
-                                    //redirige a una nueva Activity
-                                    Intent intent = new Intent(context, Loading.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    context.startActivity(intent);
-                                } else {//la cuenta no se pudo elimino de la bd
-                                    showMessage("Error al eliminar el usuario de la base de datos: " + task.getException().getMessage());
-                                }
-                            });
-                            FirebaseAuth.getInstance().signOut();
-                            //Limpiola autenticacion de persistencia de datos de auth para que se pueda volver a elegir cuenta
-                            ClearCacheGoogle();
-                        } else {//error al eliminar la cuenta
-                            showMessage("Error al eliminar la cuenta: " + taskDelete.getException().getMessage());
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+            userRef.removeValue()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            user.delete()
+                                    .addOnCompleteListener(taskDelete -> {
+                                        if (taskDelete.isSuccessful()) {
+                                            // El usuario se eliminó correctamente
+                                            FirebaseAuth.getInstance().signOut();
+                                            ClearCacheGoogle();
+                                            Intent intent = new Intent(context, Loading.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            context.startActivity(intent);
+                                        } else {
+                                            // Error al eliminar el usuario
+                                            showMessage("Error al eliminar el usuario: " + taskDelete.getException().getMessage());
+                                        }
+                                    });
+                        } else {
+                            // Error al eliminar los datos del usuario de la base de datos
+                            showMessage("Error al eliminar el usuario de la base de datos: " + task.getException().getMessage());
                         }
                     });
         } else {
             showMessage("El usuario no está autenticado");
         }
     }
+
 
     public void ClearCacheGoogle(){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -128,8 +124,24 @@ public class FirebaseManager {
         mGoogleSignInClient.signOut();
     }
 
+    public void SignOut(Context context) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth != null) {
+            auth.signOut();
+            ClearCacheGoogle();
+            Intent intent = new Intent(context, Loading.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);//clear tasks
+            context.startActivity(intent);
+        } else {
+            showMessage("Error: FirebaseAuth instance is null");
+        }
+    }
+
     private void showMessage(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
+
+
+
 
 }

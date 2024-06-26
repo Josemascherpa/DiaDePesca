@@ -6,14 +6,12 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.mascherpa.diadepesca.UI.ManagerUIMain;
 import com.mascherpa.diadepesca.data.Rio;
 import com.mascherpa.diadepesca.databinding.MainBinding;
@@ -38,61 +36,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mainActivityBinding = MainBinding.inflate(getLayoutInflater());
         setContentView(mainActivityBinding.getRoot());
+
         firebaseManager = new FirebaseManager(getApplicationContext(),getString(R.string.client_id),mainActivityBinding);
-
-        setButtonDeleteAccount();
-        setButtonSignOut();
-        ChangeName();
         BarWindowBlack();
-
-        //Revisar de hacerlo en el manager ui y lo de abajo
         InitAndCallsManagerUI();
-
-
-
     }
-    private void ChangeName(){
-        mainActivityBinding.changeName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseManager.changeNameDatabase(mainActivityBinding.editTextName.getText().toString());
-            }
-        });
-    }
-    private void setButtonSignOut(){
-        mainActivityBinding.signuout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                firebaseManager.ClearCacheGoogle();
-                finish();
-                Intent intent = new Intent(getApplicationContext(), Loading.class);
-                startActivity(intent);
-            }
-        });
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
     }
 
-    private void setButtonDeleteAccount(){
-        mainActivityBinding.deleteAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseManager.deleteAccount(FirebaseAuth.getInstance().getUid());
-            }
-        });
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Intent intent = new Intent(this, Loading.class);
+        startActivity(intent);
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        finishAffinity();
-//    }
-
-//    @Override
-//    protected void onRestart() {
-//        super.onRestart();
-//        Intent intent = new Intent(this, Loading.class);
-//        startActivity(intent);
-//    }
 
     //ZOOM FIXED
     @Override
@@ -118,11 +78,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void InitAndCallsManagerUI(){
-        managerUI = new ManagerUIMain(mainActivityBinding,getApplicationContext());
+        managerUI = new ManagerUIMain(mainActivityBinding,getApplicationContext(),firebaseManager);
         RecoveryIntentLoading();
         managerUI.AutocompleteFilling();
-
-
     }
     private void RecoveryIntentLoading() {
         Bundle bundle = getIntent().getExtras();
@@ -130,6 +88,12 @@ public class MainActivity extends AppCompatActivity {
             managerUI._Rios = (List<Rio>) bundle.getSerializable("listaRios");
         }
     }
+
+
+
+
+
+
 
 
 
