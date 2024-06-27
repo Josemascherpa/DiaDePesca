@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private void initAndCallsManagerUI(){
         managerUI = new ManagerUIMain(mainActivityBinding,getApplicationContext(),firebaseManager);
         recoveryIntentLoading();
-        managerUI.AutocompleteFilling();
+        managerUI.autocompleteFilling();
     }
     private void recoveryIntentLoading() {
         Bundle bundle = getIntent().getExtras();
@@ -86,19 +86,6 @@ public class MainActivity extends AppCompatActivity {
             managerUI._Rios = (List<Rio>) bundle.getSerializable("listaRios");
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
