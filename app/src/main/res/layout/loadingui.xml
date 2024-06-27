@@ -1,57 +1,134 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black">
+    android:layout_height="match_parent">
 
-    <!-- Contenedor para el contenido -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Contenido centrado -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="LOADING"
-            android:textSize="50dp"
-            android:gravity="center"
-            android:textColor="@color/whiteBlack"
-            android:fontFamily="@font/lemonmilkbold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="URL: contenidosweb.prefecturanaval.gob.ar"
-            android:textStyle="bold"
-            android:textColor="@color/whiteBlack"
-            android:layout_marginTop="15dp" />
-
-    </LinearLayout>
-
-    <!-- LottieAnimationView como fondo -->
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/id_fav"
+    <ImageView
+        android:id="@+id/image_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/fishsloading"
-        android:paddingTop="150dp"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/fondo" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="80dp"
+        android:text="¡Bienvenido!"
+        android:letterSpacing="0.02"
+        android:textSize="60sp"
+        android:textColor="@color/grey"
+        android:textStyle="bold"
+        android:fontFamily="@font/robotoregular" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="Obtén información sobre los ríos para tu jornada de pesca."
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textStyle="bold"
+        android:fontFamily="@font/robotoregular" />
+
+    <Button
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:id="@+id/comenzaraventura"
+        android:layout_gravity="bottom|center"
+        android:textSize="20sp"
+        android:layout_marginBottom="80dp"
+        android:layout_width="250dp"
+        android:layout_height="55dp"
+        android:text="Comenzar"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/blueLight"
+        android:textAppearance="@font/robotoregular"
+        />
+
+
+
+
+    <!-- Bottom sheets -->
+    <FrameLayout
+        android:id="@+id/standard_bottom_sheet"
+        style="@style/Widget.Material3.BottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:behavior_peekHeight="25dp"
+        app:behavior_hideable="false"
+        >
+
+
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/register_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign up with"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center|top" />
+
+        <!-- gmail -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/signupGmail"
+            android:layout_gravity="center"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:clickable="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/gmail_icon"
+            android:background="@color/grey"
+            app:shapeAppearanceOverlay="@style/roundedCorners"
+            />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/overlayLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:alpha="0.7"
+            android:clickable="true"
+            android:focusable="true"/>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/ap_white"/>
+
+
+    </FrameLayout>
+
+
+
+
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

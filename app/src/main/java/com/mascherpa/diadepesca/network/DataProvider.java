@@ -1,8 +1,8 @@
-package com.example.webscraping.network;
+package com.mascherpa.diadepesca.network;
 
 import android.util.Log;
 
-import com.example.webscraping.data.Rio;
+import com.mascherpa.diadepesca.data.Rio;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,7 +20,7 @@ public class DataProvider {
         this.url = url;
     }
 
-    public List<Rio> LoadDataRio() {
+    public List<Rio> loadDataRio() {
 
         List<Rio> listRios = new ArrayList<Rio>();
         try {
@@ -30,7 +30,7 @@ public class DataProvider {
                 // Agarro las celdas de las filas
                 Elements celdas = fila.select("th,td");
 
-                String puerto = "", rio = "", ultimoRegistro = "", variacion = "", fechaHora = "", estado = "",linkDatesGraphs="";
+                String puerto = "", rio = "", ultimoRegistro = "", variacion = "", fechaHora = "", alturaAnterior="";
                 for (int i = 0; i < celdas.size(); i++) {
                     String contenido = celdas.get(i).text();
                     //voy corriendo la columna para ver cada una
@@ -51,22 +51,12 @@ public class DataProvider {
                             fechaHora = contenido;
 
                             break;
-                        case 6:  // Columna "Estado"
-                            estado = contenido;
-                            break;
-                        case 12:
-                            Element enlace = celdas.get(i).selectFirst("a[href]");
-                            String href = enlace.attr("href");
-                            if (href.endsWith("id=")) {
-                                linkDatesGraphs = "empty";
-                            } else {
-                                linkDatesGraphs = href;
-                            }
+
                         default:
                             break;
                     }
                 }
-                Rio rioData = new Rio(rio,puerto,ultimoRegistro,variacion,fechaHora,estado,linkDatesGraphs);
+                Rio rioData = new Rio(rio,puerto,ultimoRegistro,variacion,fechaHora);
                 listRios.add(rioData);
             }
             return listRios;
