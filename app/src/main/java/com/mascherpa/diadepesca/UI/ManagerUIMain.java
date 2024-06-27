@@ -37,7 +37,7 @@ public class ManagerUIMain {
         clickedNameRio();
 
     }
-    public void AutocompleteFilling() {
+    public void autocompleteFilling() {
         List<String> arrayNombreRios = new ArrayList<>();
         for (int i = 0; i < _Rios.size(); i++) {
             String nombreAutocompletado = _Rios.get(i).getNombre() + " " + _Rios.get(i).getPuerto();
@@ -46,11 +46,11 @@ public class ManagerUIMain {
         CustomAutoCompleteAdapter adapter = new CustomAutoCompleteAdapter(contextMain, arrayNombreRios);
         binding.buscaRio.setAdapter(adapter);
         binding.buscaRio.setThreshold(1); // Configura el número mínimo de caracteres antes de que se muestren sugerencias
-        EditUIWithAutocomplete();
+        editUIWithAutocomplete();
         favRio();
     }
 
-    private void EditUIWithAutocomplete() {
+    private void editUIWithAutocomplete() {
         //If I haven't saved anything yet, the integer won't exist, which means GetRioFavs() will return 0, but since a river exists with 0, I set it to return 9999.
         if(MySharedPreferences.getRioFavs(contextMain)!=9999){
 
