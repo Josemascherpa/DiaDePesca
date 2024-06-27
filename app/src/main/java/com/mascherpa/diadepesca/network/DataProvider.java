@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataProvider {
-    String url = "https://contenidosweb.prefecturanaval.gob.ar/alturas/";
+    String url;
 
     public DataProvider(String url) {
         this.url = url;
@@ -23,7 +23,7 @@ public class DataProvider {
     public List<Rio> loadDataRio() {
 
         List<Rio> listRios = new ArrayList<Rio>();
-        try {
+        try {//Screapeo la url, buscando filas, recorriendo las celdas con un for y guardando los datos para crear dps un objeto rio y agregarlos a la lista y retornarla para ser usada
             Document doc = Jsoup.connect(url).get();
             Elements filas = doc.select("tbody tr");
             for (Element fila : filas) {

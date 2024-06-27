@@ -37,12 +37,12 @@ public class ManagerUIMain {
         clickedNameRio();
 
     }
-    public void autocompleteFilling() {
+    public void autocompleteFilling() {//Relleno del buscador con lo scrapeado anteriormente
         List<String> arrayNombreRios = new ArrayList<>();
         for (int i = 0; i < _Rios.size(); i++) {
             String nombreAutocompletado = _Rios.get(i).getNombre() + " " + _Rios.get(i).getPuerto();
             arrayNombreRios.add(nombreAutocompletado);
-        }
+        }//Guardo en el array todos los rios
         CustomAutoCompleteAdapter adapter = new CustomAutoCompleteAdapter(contextMain, arrayNombreRios);
         binding.buscaRio.setAdapter(adapter);
         binding.buscaRio.setThreshold(1); // Configura el número mínimo de caracteres antes de que se muestren sugerencias
@@ -52,7 +52,7 @@ public class ManagerUIMain {
 
     private void editUIWithAutocomplete() {
         //If I haven't saved anything yet, the integer won't exist, which means GetRioFavs() will return 0, but since a river exists with 0, I set it to return 9999.
-        if(MySharedPreferences.getRioFavs(contextMain)!=9999){
+        if(MySharedPreferences.getRioFavs(contextMain)!=9999){//Si tengo un rio en favorito, lo muestro para que aparezca primero
 
             binding.favAnimation.setVisibility(View.INVISIBLE);
             for(int i=0;i<_Rios.size();i++){
@@ -65,16 +65,16 @@ public class ManagerUIMain {
                     rioSave = i;
                 }
             }
-            directionAndColorArrow();
-            linearInformationVisible();
+            directionAndColorArrow();//cambio color y flecha dependiendo la altura
+            linearInformationVisible();//Seteo para ver si tiene que mostrarse o no
             setInformationRio("Información Rio");
         }else{
-            linearInformationOcult();
+            linearInformationOcult();//Oculto linear informacion para que se elija algun rio
             setInformationRio("Selecciona un Rio");
         }
 
         //Set the UI for when a river is selected from the Spinner.
-        binding.buscaRio.setOnItemClickListener((parent, view, position, id) -> {
+        binding.buscaRio.setOnItemClickListener((parent, view, position, id) -> {//Cuando selecciono algun rio
             String rioSeleccionado = (String) parent.getItemAtPosition(position);
 //            favButton.setVisibility(View.VISIBLE);
             for (int i = 0; i < _Rios.size(); i++) {
@@ -87,7 +87,7 @@ public class ManagerUIMain {
                         binding.favAnimation.setVisibility(View.INVISIBLE);
                     }
 
-                    rioSave = i;
+                    rioSave = i;//Guardo en una variable para cuando presione favorito
                     Rio rio = _Rios.get(i);
 
                     binding.alturaRio.setText(rio.getAltura());
@@ -99,15 +99,15 @@ public class ManagerUIMain {
             }
             directionAndColorArrow();
             //Clear focus and clear keyboard
-            binding.buscaRio.clearFocus();
+            binding.buscaRio.clearFocus();//Saco el focus en el buscador
             InputMethodManager imm = (InputMethodManager) contextMain.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(binding.buscaRio.getWindowToken(), 0);
-            linearInformationVisible();
+            linearInformationVisible();//muestro info
             setInformationRio("Información Rio");
         });
     }
 
-    private String sortedDateTV(String fecha){
+    private String sortedDateTV(String fecha){//Configuracion de como debe mostrarse la fecha
         String fechaReturn = fecha;
         String hora = fechaReturn.substring(fechaReturn.length()-4);
         hora = hora.substring(0,2)+":"+hora.substring(2);
@@ -119,11 +119,10 @@ public class ManagerUIMain {
         }else{
             fechaReturn=fechaReturn+" am";
         }
-
         return fechaReturn;
     }
 
-    private void directionAndColorArrow(){
+    private void directionAndColorArrow(){//Color texto y que flecha mostrar en base a la altura
         if(!binding.variacionRio.getText().toString().equals("- Mts") && Float.parseFloat(binding.variacionRio.getText().toString().substring(0,5))<0){
             binding.variacionRio.setTextColor(Color.parseColor("#D24545"));
             binding.flechaIv.setImageResource(R.drawable.fbajando);
@@ -138,12 +137,12 @@ public class ManagerUIMain {
         }
     }
 
-    public void buttonSharedFriends() {
+    public void buttonSharedFriends() {//Boton compartir
         binding.compartir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Context context = view.getContext();
-                if(rioSave!=null){
+                if(rioSave!=null){//Tengo seleccionado un rio
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
                     String infoEnviar = binding.nombreRio.getText() + "\nAltura Actual: " + binding.alturaRio.getText() + "Mts" + " \nVariacion: " + binding.variacionRio.getText() + " \nUltima Actualizacion: " + binding.fechaTv.getText();
@@ -161,20 +160,16 @@ public class ManagerUIMain {
         });
 
     }
-
-
     private void showMessage(String message,Context context) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void favRio(){
+    private void favRio(){//Manejo del boton favorito
         binding.favAnimation.setOnClickListener(v -> {
             if(rioSave!=null){
                 binding.favAnimation.playAnimation();
-                MySharedPreferences.saveInteger(contextMain,rioSave);
-                Toast.makeText(contextMain,"Agregado a favoritos!!",Toast.LENGTH_LONG).show();
-
-//            favButton.setVisibility(View.GONE);
+                MySharedPreferences.saveInteger(contextMain,rioSave);//guardo el numero de rio en el shared preferences
+                showMessage("Agregado a favoritos!!",contextMain);
             }else{
                 showMessage("Por favor, selecciona un rio",contextMain);
             }
@@ -189,7 +184,7 @@ public class ManagerUIMain {
 
             @Override
             public void onAnimationEnd(@NonNull Animator animation) {
-                binding.favAnimation.setVisibility(View.INVISIBLE);
+                binding.favAnimation.setVisibility(View.INVISIBLE);//Termina la animacion y oculto el boton
             }
 
             @Override
@@ -208,21 +203,20 @@ public class ManagerUIMain {
         binding.imageUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(v.getContext(), v);
-                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                PopupMenu popup = new PopupMenu(v.getContext(), v);//Creo popup para el desconectar o eliminar cuenta
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());//hago el inflate
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         int itemId = item.getItemId();
-                        if (itemId == R.id.logout_user) {
+                        if (itemId == R.id.logout_user) {//Si presiono logout cierro sesion
                             firebaseManager.signOut(v.getContext());
-                        } else if (itemId == R.id.delete_user) {
+                        } else if (itemId == R.id.delete_user) {//Si presiono delete borro cuenta
                             firebaseManager.deleteAccount(v.getContext());
                         }
                         return true;
                     }
                 });
-                popup.show();
-
+                popup.show();//muestro popup
             };
         });
     }
@@ -236,7 +230,7 @@ public class ManagerUIMain {
     private void setInformationRio(String string){
         binding.informacionRio.setText(string);
     }
-    private void clickedNameRio(){
+    private void clickedNameRio(){//Por ahi el rio no se ve entero, entonces si clicleas el nombre, muestra el nombre completo
         binding.nombreRio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

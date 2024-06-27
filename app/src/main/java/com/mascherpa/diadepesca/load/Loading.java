@@ -103,7 +103,7 @@ public class Loading extends AppCompatActivity {
         managerUI.closeBottomSheetBehavior();//cierro sheetbehaviour
     }
 
-    private void userNotLoadedInDB(){
+    private void userNotLoadedInDB(){//desconecto usuario, y logueo o registro
         auth.signOut();
         loginOrRegister();
     }
@@ -122,7 +122,7 @@ public class Loading extends AppCompatActivity {
         });
     }
 
-    private void googleSignIn() {
+    private void googleSignIn() {//inicio interfaz de inicio de sesion de google
         Intent intent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(intent,RC_SIGN_IN);
     }
@@ -130,14 +130,14 @@ public class Loading extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RC_SIGN_IN){
-            showLoadingIntent();
+        if(requestCode == RC_SIGN_IN){//Verifico inicio sesion google
+            showLoadingIntent();//Muestro ui de carga
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
+            try {//Obtengo la cuenta de google desde la task
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuth(account.getIdToken());
+                firebaseAuth(account.getIdToken());//autentico usuario con firebase
 
-            }catch (ApiException e){
+            }catch (ApiException e){//manej excepciones
                 int statusCode = e.getStatusCode();
                 switch (statusCode) {
                     case GoogleSignInStatusCodes.SIGN_IN_CANCELLED:
@@ -164,12 +164,12 @@ public class Loading extends AppCompatActivity {
     }
 
     private void firebaseAuth(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        auth.signInWithCredential(credential)
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);//Obtengo credencia
+        auth.signInWithCredential(credential)//Autentico
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = auth.getCurrentUser();
-                        HashMap<String, Object> map = new HashMap<>();
+                        FirebaseUser user = auth.getCurrentUser();//obtengo usuario
+                        HashMap<String, Object> map = new HashMap<>();//almaceno datos del usuario
                         map.put("id", user.getUid());
                         map.put("name", user.getDisplayName());
                         map.put("profile", user.getPhotoUrl().toString());
@@ -180,7 +180,7 @@ public class Loading extends AppCompatActivity {
                                 recoveryDataRiosAndStartMain();
                             } else {
                                 // El usuario no existe, crear una nueva cuenta
-                                createNewAccount(map);
+                                createNewAccount(map);//creo nueva cuenta pasando el map
                             }
                         });
                     } else {
@@ -194,12 +194,12 @@ public class Loading extends AppCompatActivity {
     private void validateUser(String firebaseUID, OnUserValidationListener listener) {
 
         if (database != null) {
-            DatabaseReference usersRef = database.getReference("users");
-            Query query = usersRef.orderByChild("id").equalTo(firebaseUID);
+            DatabaseReference usersRef = database.getReference("users");//referencia a base de datos usuarios
+            Query query = usersRef.orderByChild("id").equalTo(firebaseUID); // mando una query para verificar que exista el id
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    boolean exist = dataSnapshot.exists(); // verifico si el usuario existe
+                    boolean exist = dataSnapshot.exists(); // verifico si el usuario existe y devuelvo true or false
                     listener.onUserValidation(exist); // notifico el resultado al Listener
 
                 }
@@ -224,7 +224,7 @@ public class Loading extends AppCompatActivity {
             usersRef.child(user.getUid()).setValue(userData)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            recoveryDataRiosAndStartMain();
+                            recoveryDataRiosAndStartMain();//obtengo data
                         } else {
                             showMessage("Error al crear la cuenta en la base de datos");
                         }
@@ -240,10 +240,9 @@ public class Loading extends AppCompatActivity {
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent event){
+    public boolean dispatchTouchEvent(MotionEvent event){//Metodo para cuando se toque fuera del area del bottomsheets se cierre, obteniendo el rect que ocupa la barra
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (managerUI.returnStateBottomSheetsSignUp()== BottomSheetBehavior.STATE_EXPANDED) {
-
                 Rect outRect = new Rect();
                 binding.standardBottomSheet.getGlobalVisibleRect(outRect);
 
@@ -263,10 +262,10 @@ public class Loading extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final List<Rio> data = recoveryData.loadDataRio();
+                final List<Rio> data = recoveryData.loadDataRio();//Screapeo en otro hilo para no trabar la ui
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
+                    public void run() {//cargo main activity ya con ls datos guardados y los mando a la main
                         Class MainActivity = com.mascherpa.diadepesca.MainActivity.class;
                         Intent intent = new Intent(Loading.this,MainActivity);
                         Bundle bundle = new Bundle();
@@ -277,12 +276,10 @@ public class Loading extends AppCompatActivity {
                 });
             }
         }).start();
-
-
     }
 
     @Override
-    protected void attachBaseContext(Context newBase) {
+    protected void attachBaseContext(Context newBase) {//ajusto config de densiidad de pantalla y la escala de la fuente, por si el telefono la tiene editada y se vea mal
         final Configuration configuration = newBase.getResources().getConfiguration();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

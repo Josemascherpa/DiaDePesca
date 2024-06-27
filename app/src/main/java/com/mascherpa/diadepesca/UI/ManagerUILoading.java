@@ -35,16 +35,14 @@ public class ManagerUILoading {
         });
     }
 
-    private void barBackgroundsBlack(Activity activity){
+    private void barBackgroundsBlack(Activity activity){//Pinto de oclor negro la barra de notif
         Window window = activity.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(0xFF000000);
     }
 
-
-
-    private void singUp(){
+    private void singUp(){//expando bottom sheets
         bottomSheet.setVisibility(View.VISIBLE);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
@@ -52,7 +50,7 @@ public class ManagerUILoading {
     private void setsBottomSheets(){
         bottomSheet = binding.standardBottomSheet;
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {//oculto o muestro boton de comenzar
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if(newState==BottomSheetBehavior.STATE_EXPANDED){

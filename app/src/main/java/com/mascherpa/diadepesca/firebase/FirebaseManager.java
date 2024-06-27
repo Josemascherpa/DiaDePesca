@@ -44,14 +44,14 @@ public class FirebaseManager {
 
     }
 
-    private void getImageUser() {
+    private void getImageUser() {//Obtengo referencia a base de datos, para obtener el link de la imagen
         DatabaseReference imageRef = database.getReference("users").child(auth.getUid()).child("profile");
         imageRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Obtener el valor de la clave "name"
                 String linkimage = dataSnapshot.getValue(String.class);
-                Glide.with(context)
+                Glide.with(context)//usando glide, seteo la imagen de usuario del gmail
                         .load(linkimage)
                         .placeholder(R.drawable.refreshwidget)
                         .error(R.drawable.app_widget_background)
@@ -68,7 +68,7 @@ public class FirebaseManager {
 
     }
 
-    public void getNameUser(){
+    public void getNameUser(){//Obtengo ref a la base de datos, para obtener el nombre de usuario y setearlo al inicio
         DatabaseReference userRef = database.getReference("users").child(auth.getUid()).child("name");
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -83,7 +83,7 @@ public class FirebaseManager {
             }
         });
     }
-    public void deleteAccount(Context context) {
+    public void deleteAccount(Context context) { //eliminar cuenta, obtengo refencia al usuario, lo borro de la base de datos y luego la auth, y vuelvo a la activity primera
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
@@ -97,7 +97,7 @@ public class FirebaseManager {
                                             FirebaseAuth.getInstance().signOut();
                                             clearCacheGoogle();
                                             Intent intent = new Intent(context, Loading.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);//cierro tareas
                                             context.startActivity(intent);
                                         } else {
                                             // Error al eliminar el usuario
@@ -115,7 +115,7 @@ public class FirebaseManager {
     }
 
 
-    public void clearCacheGoogle(){
+    public void clearCacheGoogle(){ //creo un cliente sign in para limpiar el cacehe y estado de sesion
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(client_id)
                 .requestEmail()
@@ -124,7 +124,7 @@ public class FirebaseManager {
         mGoogleSignInClient.signOut();
     }
 
-    public void signOut(Context context) {
+    public void signOut(Context context) {//cierro sesion, limpio tareas y vuelvo a la activity de inicio
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth != null) {
             auth.signOut();
